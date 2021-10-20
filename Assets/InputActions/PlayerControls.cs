@@ -6,14 +6,12 @@ using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
-namespace Game.Input
+public class @PlayerControls : IInputActionCollection, IDisposable
 {
-    public class @PlayerControls : IInputActionCollection, IDisposable
+    public InputActionAsset asset { get; }
+    public @PlayerControls()
     {
-        public InputActionAsset asset { get; }
-        public @PlayerControls()
-        {
-            asset = InputActionAsset.FromJson(@"{
+        asset = InputActionAsset.FromJson(@"{
     ""name"": ""PlayerControls"",
     ""maps"": [
         {
@@ -131,100 +129,99 @@ namespace Game.Input
     ],
     ""controlSchemes"": []
 }");
-            // Navigation
-            m_Navigation = asset.FindActionMap("Navigation", throwIfNotFound: true);
-            m_Navigation_Movement = m_Navigation.FindAction("Movement", throwIfNotFound: true);
-            m_Navigation_Attack = m_Navigation.FindAction("Attack", throwIfNotFound: true);
-        }
-
-        public void Dispose()
-        {
-            UnityEngine.Object.Destroy(asset);
-        }
-
-        public InputBinding? bindingMask
-        {
-            get => asset.bindingMask;
-            set => asset.bindingMask = value;
-        }
-
-        public ReadOnlyArray<InputDevice>? devices
-        {
-            get => asset.devices;
-            set => asset.devices = value;
-        }
-
-        public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
-
-        public bool Contains(InputAction action)
-        {
-            return asset.Contains(action);
-        }
-
-        public IEnumerator<InputAction> GetEnumerator()
-        {
-            return asset.GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public void Enable()
-        {
-            asset.Enable();
-        }
-
-        public void Disable()
-        {
-            asset.Disable();
-        }
-
         // Navigation
-        private readonly InputActionMap m_Navigation;
-        private INavigationActions m_NavigationActionsCallbackInterface;
-        private readonly InputAction m_Navigation_Movement;
-        private readonly InputAction m_Navigation_Attack;
-        public struct NavigationActions
+        m_Navigation = asset.FindActionMap("Navigation", throwIfNotFound: true);
+        m_Navigation_Movement = m_Navigation.FindAction("Movement", throwIfNotFound: true);
+        m_Navigation_Attack = m_Navigation.FindAction("Attack", throwIfNotFound: true);
+    }
+
+    public void Dispose()
+    {
+        UnityEngine.Object.Destroy(asset);
+    }
+
+    public InputBinding? bindingMask
+    {
+        get => asset.bindingMask;
+        set => asset.bindingMask = value;
+    }
+
+    public ReadOnlyArray<InputDevice>? devices
+    {
+        get => asset.devices;
+        set => asset.devices = value;
+    }
+
+    public ReadOnlyArray<InputControlScheme> controlSchemes => asset.controlSchemes;
+
+    public bool Contains(InputAction action)
+    {
+        return asset.Contains(action);
+    }
+
+    public IEnumerator<InputAction> GetEnumerator()
+    {
+        return asset.GetEnumerator();
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    public void Enable()
+    {
+        asset.Enable();
+    }
+
+    public void Disable()
+    {
+        asset.Disable();
+    }
+
+    // Navigation
+    private readonly InputActionMap m_Navigation;
+    private INavigationActions m_NavigationActionsCallbackInterface;
+    private readonly InputAction m_Navigation_Movement;
+    private readonly InputAction m_Navigation_Attack;
+    public struct NavigationActions
+    {
+        private @PlayerControls m_Wrapper;
+        public NavigationActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_Navigation_Movement;
+        public InputAction @Attack => m_Wrapper.m_Navigation_Attack;
+        public InputActionMap Get() { return m_Wrapper.m_Navigation; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(NavigationActions set) { return set.Get(); }
+        public void SetCallbacks(INavigationActions instance)
         {
-            private @PlayerControls m_Wrapper;
-            public NavigationActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
-            public InputAction @Movement => m_Wrapper.m_Navigation_Movement;
-            public InputAction @Attack => m_Wrapper.m_Navigation_Attack;
-            public InputActionMap Get() { return m_Wrapper.m_Navigation; }
-            public void Enable() { Get().Enable(); }
-            public void Disable() { Get().Disable(); }
-            public bool enabled => Get().enabled;
-            public static implicit operator InputActionMap(NavigationActions set) { return set.Get(); }
-            public void SetCallbacks(INavigationActions instance)
+            if (m_Wrapper.m_NavigationActionsCallbackInterface != null)
             {
-                if (m_Wrapper.m_NavigationActionsCallbackInterface != null)
-                {
-                    @Movement.started -= m_Wrapper.m_NavigationActionsCallbackInterface.OnMovement;
-                    @Movement.performed -= m_Wrapper.m_NavigationActionsCallbackInterface.OnMovement;
-                    @Movement.canceled -= m_Wrapper.m_NavigationActionsCallbackInterface.OnMovement;
-                    @Attack.started -= m_Wrapper.m_NavigationActionsCallbackInterface.OnAttack;
-                    @Attack.performed -= m_Wrapper.m_NavigationActionsCallbackInterface.OnAttack;
-                    @Attack.canceled -= m_Wrapper.m_NavigationActionsCallbackInterface.OnAttack;
-                }
-                m_Wrapper.m_NavigationActionsCallbackInterface = instance;
-                if (instance != null)
-                {
-                    @Movement.started += instance.OnMovement;
-                    @Movement.performed += instance.OnMovement;
-                    @Movement.canceled += instance.OnMovement;
-                    @Attack.started += instance.OnAttack;
-                    @Attack.performed += instance.OnAttack;
-                    @Attack.canceled += instance.OnAttack;
-                }
+                @Movement.started -= m_Wrapper.m_NavigationActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_NavigationActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_NavigationActionsCallbackInterface.OnMovement;
+                @Attack.started -= m_Wrapper.m_NavigationActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_NavigationActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_NavigationActionsCallbackInterface.OnAttack;
+            }
+            m_Wrapper.m_NavigationActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
             }
         }
-        public NavigationActions @Navigation => new NavigationActions(this);
-        public interface INavigationActions
-        {
-            void OnMovement(InputAction.CallbackContext context);
-            void OnAttack(InputAction.CallbackContext context);
-        }
+    }
+    public NavigationActions @Navigation => new NavigationActions(this);
+    public interface INavigationActions
+    {
+        void OnMovement(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
     }
 }
