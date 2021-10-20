@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 9178090177391721267}
   - component: {fileID: 9178090177391721266}
+  - component: {fileID: 1368127752708086733}
   - component: {fileID: 3228293697900545761}
   - component: {fileID: 1758284771190787943}
-  - component: {fileID: 1368127752708086733}
   m_Layer: 0
   m_Name: Kindergartner
   m_TagString: Untagged
@@ -54,6 +54,17 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!210 &1368127752708086733
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9178090177391721229}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!50 &3228293697900545761
 Rigidbody2D:
   serializedVersion: 4
@@ -88,17 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
---- !u!210 &1368127752708086733
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9178090177391721229}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  isPlayerControlled: 0
+  followSpeed: 4
 --- !u!1001 &9178090179350834362
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -44,9 +44,15 @@ public class CharacterManager : MonoBehaviour
         _controls.Navigation.SwapOffField.Disable();
     }
 
+    private void Update()
+    {
+        party[0].isPlayerControlled = true;
+    }
+
     private void FixedUpdate()
     {
         party[0].Move(_movement.ReadValue<Vector2>());
+        party[1].Move(_movement.ReadValue<Vector2>());
     }
 
     private void Attack(InputAction.CallbackContext obj)
@@ -61,6 +67,7 @@ public class CharacterManager : MonoBehaviour
         party[1] = temp;
 
         party[0].transform.position = party[1].transform.position;
+        party[1].isPlayerControlled = false;
         party[0].ChangeSortingOrder(1);
         party[1].ChangeSortingOrder(0);
     }
@@ -75,6 +82,8 @@ public class CharacterManager : MonoBehaviour
         
         party[0].transform.position = party[2].transform.position;
         
+        party[2].isPlayerControlled = false;
+
         party[0].ChangeSortingOrder(1);
         party[2].ChangeSortingOrder(0);
         

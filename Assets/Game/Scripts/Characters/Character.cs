@@ -4,9 +4,11 @@ namespace Game.Characters
 {
     public abstract class Character : MonoBehaviour
     {
-        [Header("Movement")]
-        [SerializeField] private float movementSpeed;
-        private Rigidbody2D _rigidbody;
+        [Header("Character Class", order = 0)]
+        
+        [Header("Movement", order = 1)]
+        [SerializeField] protected float movementSpeed;
+        protected Rigidbody2D _rigidbody;
 
         [Header("Animations")]
         protected Animator _animator;

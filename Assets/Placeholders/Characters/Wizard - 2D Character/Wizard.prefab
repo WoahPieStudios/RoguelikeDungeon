@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 4105362945620786471}
   - component: {fileID: 4105362945620786468}
+  - component: {fileID: 8766023446135019329}
   - component: {fileID: -1818295323740153451}
   - component: {fileID: 7281170803067961238}
-  - component: {fileID: 8766023446135019329}
   m_Layer: 0
   m_Name: Wizard
   m_TagString: Untagged
@@ -54,6 +54,17 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!210 &8766023446135019329
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4105362945620786469}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!50 &-1818295323740153451
 Rigidbody2D:
   serializedVersion: 4
@@ -88,17 +99,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
---- !u!210 &8766023446135019329
-SortingGroup:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4105362945620786469}
-  m_Enabled: 1
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  isPlayerControlled: 0
+  followSpeed: 4
 --- !u!1001 &4105362946132217688
 PrefabInstance:
   m_ObjectHideFlags: 0
