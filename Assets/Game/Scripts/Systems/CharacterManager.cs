@@ -21,12 +21,21 @@ public class CharacterManager : MonoBehaviour
 
         _controls.Navigation.Attack.performed += Attack;
         _controls.Navigation.Attack.Enable();
+
+        _controls.Navigation.SwapAssist.performed += SwapAssist;
+        _controls.Navigation.SwapAssist.Enable();
+        
+        _controls.Navigation.SwapOffField.performed += SwapOffField;
+        _controls.Navigation.SwapOffField.Enable();
+
     }
 
     private void OnDisable()
     {
         _movement.Disable();
         _controls.Navigation.Attack.Disable();
+        _controls.Navigation.SwapAssist.Disable();
+        _controls.Navigation.SwapOffField.Disable();
     }
 
     private void FixedUpdate()
@@ -37,5 +46,19 @@ public class CharacterManager : MonoBehaviour
     private void Attack(InputAction.CallbackContext obj)
     {
         party[0].Attack();
+    }
+    
+    private void SwapAssist(InputAction.CallbackContext obj)
+    {
+        var temp = party[0];
+        party[0] = party[1];
+        party[1] = temp;
+    }
+    
+    private void SwapOffField(InputAction.CallbackContext obj)
+    {
+        var temp = party[0];
+        party[0] = party[2];
+        party[2] = temp;
     }
 }

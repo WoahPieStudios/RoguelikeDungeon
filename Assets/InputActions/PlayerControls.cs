@@ -33,6 +33,22 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Swap Assist"",
+                    ""type"": ""Button"",
+                    ""id"": ""39d53d7b-79b8-42a7-965b-513a9052d080"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Swap Off-Field"",
+                    ""type"": ""Button"",
+                    ""id"": ""ddaa23a9-7b43-4cc4-b1f0-52cbbdb34b2e"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -123,6 +139,28 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                     ""action"": ""Attack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""162d17fc-6c36-4388-8414-9e5c8f3d5576"",
+                    ""path"": ""<Keyboard>/1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Swap Assist"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0f8891fc-5c05-41d9-80c7-d813e4de1023"",
+                    ""path"": ""<Keyboard>/2"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Swap Off-Field"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -133,6 +171,8 @@ public class @PlayerControls : IInputActionCollection, IDisposable
         m_Navigation = asset.FindActionMap("Navigation", throwIfNotFound: true);
         m_Navigation_Movement = m_Navigation.FindAction("Movement", throwIfNotFound: true);
         m_Navigation_Attack = m_Navigation.FindAction("Attack", throwIfNotFound: true);
+        m_Navigation_SwapAssist = m_Navigation.FindAction("Swap Assist", throwIfNotFound: true);
+        m_Navigation_SwapOffField = m_Navigation.FindAction("Swap Off-Field", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -184,12 +224,16 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     private INavigationActions m_NavigationActionsCallbackInterface;
     private readonly InputAction m_Navigation_Movement;
     private readonly InputAction m_Navigation_Attack;
+    private readonly InputAction m_Navigation_SwapAssist;
+    private readonly InputAction m_Navigation_SwapOffField;
     public struct NavigationActions
     {
         private @PlayerControls m_Wrapper;
         public NavigationActions(@PlayerControls wrapper) { m_Wrapper = wrapper; }
         public InputAction @Movement => m_Wrapper.m_Navigation_Movement;
         public InputAction @Attack => m_Wrapper.m_Navigation_Attack;
+        public InputAction @SwapAssist => m_Wrapper.m_Navigation_SwapAssist;
+        public InputAction @SwapOffField => m_Wrapper.m_Navigation_SwapOffField;
         public InputActionMap Get() { return m_Wrapper.m_Navigation; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -205,6 +249,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Attack.started -= m_Wrapper.m_NavigationActionsCallbackInterface.OnAttack;
                 @Attack.performed -= m_Wrapper.m_NavigationActionsCallbackInterface.OnAttack;
                 @Attack.canceled -= m_Wrapper.m_NavigationActionsCallbackInterface.OnAttack;
+                @SwapAssist.started -= m_Wrapper.m_NavigationActionsCallbackInterface.OnSwapAssist;
+                @SwapAssist.performed -= m_Wrapper.m_NavigationActionsCallbackInterface.OnSwapAssist;
+                @SwapAssist.canceled -= m_Wrapper.m_NavigationActionsCallbackInterface.OnSwapAssist;
+                @SwapOffField.started -= m_Wrapper.m_NavigationActionsCallbackInterface.OnSwapOffField;
+                @SwapOffField.performed -= m_Wrapper.m_NavigationActionsCallbackInterface.OnSwapOffField;
+                @SwapOffField.canceled -= m_Wrapper.m_NavigationActionsCallbackInterface.OnSwapOffField;
             }
             m_Wrapper.m_NavigationActionsCallbackInterface = instance;
             if (instance != null)
@@ -215,6 +265,12 @@ public class @PlayerControls : IInputActionCollection, IDisposable
                 @Attack.started += instance.OnAttack;
                 @Attack.performed += instance.OnAttack;
                 @Attack.canceled += instance.OnAttack;
+                @SwapAssist.started += instance.OnSwapAssist;
+                @SwapAssist.performed += instance.OnSwapAssist;
+                @SwapAssist.canceled += instance.OnSwapAssist;
+                @SwapOffField.started += instance.OnSwapOffField;
+                @SwapOffField.performed += instance.OnSwapOffField;
+                @SwapOffField.canceled += instance.OnSwapOffField;
             }
         }
     }
@@ -223,5 +279,7 @@ public class @PlayerControls : IInputActionCollection, IDisposable
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnAttack(InputAction.CallbackContext context);
+        void OnSwapAssist(InputAction.CallbackContext context);
+        void OnSwapOffField(InputAction.CallbackContext context);
     }
 }
