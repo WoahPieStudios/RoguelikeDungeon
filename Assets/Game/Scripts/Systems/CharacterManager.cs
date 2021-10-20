@@ -1,3 +1,4 @@
+using System;
 using Game.Characters;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -12,6 +13,11 @@ public class CharacterManager : MonoBehaviour
     private void Awake()
     {
         _controls = new PlayerControls();
+    }
+
+    private void Start()
+    {
+        party[2].gameObject.SetActive(false);
     }
 
     private void OnEnable()
@@ -53,12 +59,25 @@ public class CharacterManager : MonoBehaviour
         var temp = party[0];
         party[0] = party[1];
         party[1] = temp;
+
+        party[0].transform.position = party[1].transform.position;
+        party[0].ChangeSortingOrder(1);
+        party[1].ChangeSortingOrder(0);
     }
     
     private void SwapOffField(InputAction.CallbackContext obj)
     {
+        party[2].gameObject.SetActive(true);
+        
         var temp = party[0];
         party[0] = party[2];
         party[2] = temp;
+        
+        party[0].transform.position = party[2].transform.position;
+        
+        party[0].ChangeSortingOrder(1);
+        party[2].ChangeSortingOrder(0);
+        
+        party[2].gameObject.SetActive(false);
     }
 }

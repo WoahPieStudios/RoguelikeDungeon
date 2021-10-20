@@ -94,6 +94,7 @@ GameObject:
   - component: {fileID: 2053518115102101878}
   - component: {fileID: -4241878819282374158}
   - component: {fileID: -263344402809918992}
+  - component: {fileID: 5289575867505911346}
   m_Layer: 0
   m_Name: CollegeStudent
   m_TagString: Untagged
@@ -170,6 +171,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 5
+--- !u!210 &5289575867505911346
+SortingGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2053518115102101880}
+  m_Enabled: 1
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
 --- !u!1001 &2053518113545207968
 PrefabInstance:
   m_ObjectHideFlags: 0
