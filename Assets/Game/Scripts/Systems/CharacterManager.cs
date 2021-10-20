@@ -1,6 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using Game.Characters;
 using UnityEngine;
 using UnityEngine.InputSystem;
 

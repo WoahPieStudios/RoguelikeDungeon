@@ -1,20 +1,48 @@
-using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Character : MonoBehaviour
+    public abstract class Character : MonoBehaviour
     {
-        void Start()
+        [Header("Movement")]
+        [SerializeField] private float movementSpeed;
+        private Rigidbody2D _rigidbody;
+
+        [Header("Animations")]
+        protected Animator _animator;
+        private bool _isFlipped;
+
+        protected virtual void Awake()
         {
-            
+            _animator = GetComponent<Animator>();
+            _rigidbody = GetComponent<Rigidbody2D>();
         }
 
-        void Update()
+        public virtual void Move(Vector2 direction)
         {
+            _animator.SetBool("isRun", direction != Vector2.zero);
+            OrientPlayer(direction);
+
+            _rigidbody.MovePosition(_rigidbody.position + direction * movementSpeed * Time.fixedDeltaTime);
+        }
+
+        protected virtual void OrientPlayer(Vector2 direction)
+        {
+            if (direction.x < 0)
+            {
+                _isFlipped = true;
+            }
+            else if (direction.x > 0)
+            {
+                _isFlipped = false;
+            }
             
+            transform.rotation = _isFlipped ? Quaternion.Euler(0, 180, 0) : Quaternion.identity;
+        }
+
+        public virtual void Attack()
+        {
+            _animator.SetTrigger("attack");
         }
     }
 }
