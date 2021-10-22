@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public abstract class Action : ScriptableObject
+    public abstract class Action<T> : ScriptableObject, ICopyable<T> where T : Object
     {
         bool _IsActive = false;
 
         public bool isActive => _IsActive;
 
-        protected void StartAction()
+        protected void Begin()
         {
             _IsActive = true;
         }
@@ -20,7 +20,11 @@ namespace Game.Characters
             _IsActive = false;
         }
 
-        public abstract void CanUse();
         public abstract void Tick();
+
+        public virtual T CreateCopy()
+        {
+            return Instantiate(this) as T;
+        }
     }
 }

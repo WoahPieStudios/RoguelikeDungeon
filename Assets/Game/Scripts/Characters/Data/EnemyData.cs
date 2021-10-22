@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class EnemyData : CharacterData
+    public class EnemyData : CharacterData<Enemy>
     {
         
     }

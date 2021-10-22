@@ -7,9 +7,8 @@ namespace Game.Characters
     [System.Flags]
     public enum TrackAction
     {
-        Movement = 0,
-        Attack = 1,
-        Skill = 2,
-        Ultimate = 4
+        Attack = 0,
+        Skill = 1,
+        Ultimate = 2
     }
 }

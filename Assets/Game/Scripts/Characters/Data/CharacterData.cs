@@ -6,7 +6,8 @@ using UnityEngine.Animations;
 
 namespace Game.Characters
 {
-    public class CharacterData : ScriptableObject
+    public class CharacterData<TCharacter> : ScriptableObject
+        where TCharacter : Character<TCharacter>
     {
         [SerializeField]
         int _MaxHealth;
@@ -17,11 +18,9 @@ namespace Game.Characters
         [SerializeField]
         float  _AttackRange;
         [SerializeField]
-        Attack _Attack;
+        Attack<TCharacter> _Attack;
         [SerializeField]
-        RuntimeAnimatorController _AnimatorController; 
-        [SerializeField]
-        Texture2D _Icon;
+        Sprite _Icon;
 
         public int maxHealth => _MaxHealth;
         
@@ -29,10 +28,8 @@ namespace Game.Characters
 
         public int attackDamage => _AttackDamage;
         public float attackRange => _AttackRange;
-        public Attack attack => _Attack;
-
-        public RuntimeAnimatorController animatorController => _AnimatorController;
+        public Attack<TCharacter> attack => _Attack;
         
-        public Texture2D icon => _Icon; 
+        public Sprite icon => _Icon;
     }
 }

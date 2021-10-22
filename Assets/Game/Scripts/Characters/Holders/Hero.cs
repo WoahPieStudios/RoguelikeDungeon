@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Hero : Character
+    public class Hero : Character<Hero>
     {
         int _CurrentMana;
 
         public int currentMana => _CurrentMana;
-        public int maxMana => ((HeroData)characterData).maxMana;
+        public int maxMana => data.maxMana;
 
         public void AddMana(int mana)
         {

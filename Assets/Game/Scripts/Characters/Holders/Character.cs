@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Character : MonoBehaviour
+    public class Character<T> : MonoBehaviour
+        where T : Character<T> 
     {
         // Health
         int _CurrentHealth = 0;
@@ -15,28 +16,28 @@ namespace Game.Characters
         Vector2 _Velocity;
         
         // Effects
-        List<Effect> _EffectList;
+        List<Effect<T>> _EffectList;
 
         // Character Data
-        CharacterData _CharacterData;
+        T _Data;
 
         // Health
-        public int maxHealth => _CharacterData.maxHealth;
+        public int maxHealth => _Data.maxHealth;
         public bool isAlive => _CurrentHealth > 0;
 
         // Movement
         public Vector2 velocity => _Velocity;
 
         // Effects
-        public Effect[] effects => _EffectList.ToArray();
+        public Effect<T>[] effects => _EffectList.ToArray();
 
         // Attack
-        public int attackDamage => _CharacterData.attackDamage;
-        public float attackRange => _CharacterData.attackRange;
-        public Attack attack => _CharacterData.attack;
+        public int attackDamage => _Data.attackDamage;
+        public float attackRange => _Data.attackRange;
+        public Attack<T> attack => _Data.attack;
         
         // Character Data
-        protected CharacterData characterData => _CharacterData;
+        protected T data => _Data;
 
         // Health
         public virtual void AddHealth(int health)
@@ -55,12 +56,12 @@ namespace Game.Characters
         }
 
         // Effects
-        public virtual void AddEffect(Effect effect)
+        public virtual void AddEffect(Effect<T> effect)
         {
             _EffectList.Add(effect);
         }
 
-        public virtual void RemoveEffect(Effect effect)
+        public virtual void RemoveEffect(Effect<T> effect)
         {
             if(_EffectList.Contains(effect))
                 _EffectList.Remove(effect);
@@ -75,9 +76,9 @@ namespace Game.Characters
         }
 
         // Character Data
-        protected virtual void AssignCharacter(CharacterData characterData)
+        protected virtual void AssignCharacter(T characterData)
         {
-            _CharacterData = characterData;
+            _Data = characterData;
         } 
     }
 }
