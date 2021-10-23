@@ -4,29 +4,25 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public abstract class Ultimate : Action<Ultimate>
+    public abstract class Ultimate : CoolDownAction
     {
         [SerializeField]
-        int _ManaRequired;
+        int _ManaCost;
 
-        Hero _Hero;
+        public int manaCost => _ManaCost;
 
-        protected Hero hero => _Hero;
-
-        public int manaRequired => _ManaRequired;
 
         public virtual void Activate(Hero hero)
         {
-            _Hero = hero;
-
-            hero.UseMana(_ManaRequired);
+            hero.UseMana(_ManaCost);
             
-            Begin();
+            Begin(hero);
         }
 
         public virtual bool CanUse(Hero hero)
         {
-            return !isActive && hero.currentMana >= _ManaRequired;
+            return !isActive && hero.currentMana >= _ManaCost && !isCoolingDown;
         }
+
     }
 }

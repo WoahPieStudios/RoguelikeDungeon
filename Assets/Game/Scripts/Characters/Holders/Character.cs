@@ -5,80 +5,59 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Character<T> : MonoBehaviour
-        where T : Character<T> 
+    public class Character<TData> : CharacterBase, IAttack
+        where TData : CharacterData
     {
         // Health
         int _CurrentHealth = 0;
 
-        // Movement
-        float _MoveSpeed = 0;
-        Vector2 _Velocity;
-        
-        // Effects
-        List<Effect<T>> _EffectList;
-
         // Character Data
-        T _Data;
+        TData _Data;
 
         // Health
-        public int maxHealth => _Data.maxHealth;
-        public bool isAlive => _CurrentHealth > 0;
+        public override int maxHealth => _Data.maxHealth;
+        public override int currentHealth => _CurrentHealth;
+        public override bool isAlive => _CurrentHealth > 0;
 
-        // Movement
-        public Vector2 velocity => _Velocity;
-
-        // Effects
-        public Effect<T>[] effects => _EffectList.ToArray();
 
         // Attack
-        public int attackDamage => _Data.attackDamage;
-        public float attackRange => _Data.attackRange;
-        public Attack<T> attack => _Data.attack;
+        public Attack attack => _Data.attack;
         
         // Character Data
-        protected T data => _Data;
-
+        public TData data => _Data;
+        
         // Health
-        public virtual void AddHealth(int health)
+        public override void AddHealth(int health)
         {
             int newHealth = _CurrentHealth + health;
 
             _CurrentHealth = newHealth > maxHealth ? maxHealth : newHealth;
         }
 
-        // Movement
-        public virtual void Move(Vector2 direction)
-        {
-            _Velocity = direction * _MoveSpeed;
-
-            transform.position += (Vector3)_Velocity * Time.fixedDeltaTime;
-        }
-
-        // Effects
-        public virtual void AddEffect(Effect<T> effect)
-        {
-            _EffectList.Add(effect);
-        }
-
-        public virtual void RemoveEffect(Effect<T> effect)
-        {
-            if(_EffectList.Contains(effect))
-                _EffectList.Remove(effect);
-        }
-
-        // Attack
-        public virtual void Damage(int damage)
+        public override void Damage(int damage)
         {
             int newHealth = _CurrentHealth - damage;
 
-            _CurrentHealth = newHealth > 0 ? newHealth : 0;            
+            _CurrentHealth = newHealth < 0 ? 0 : newHealth;
+        }
+        
+        // Character Data
+        public virtual void AssignData(TData data)
+        {
+            _Data = data;
+
+            _CurrentHealth = maxHealth;
         }
 
-        // Character Data
-        protected virtual void AssignCharacter(T characterData)
+        // Attack
+        public virtual bool Attack()
         {
-            _Data = characterData;
-        } 
+            bool canAttack = attack && attack.CanUse();
+
+            if(canAttack)
+                attack.Use(this);
+
+            return canAttack;
+        }
     }
 }

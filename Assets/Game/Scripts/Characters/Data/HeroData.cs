@@ -4,13 +4,12 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    [CreateAssetMenu(menuName = "Data/HeroData")]
-    public class HeroData : CharacterData<Hero>
+    public class HeroData : CharacterData
     {
         [SerializeField]
         int _MaxMana;
         [SerializeField]
-        Passive<Hero>[] _Passives;
+        PassiveEffect[] _PassiveEffects;
         [SerializeField]
         Skill _Skill;
         [SerializeField]
@@ -18,7 +17,7 @@ namespace Game.Characters
 
         public int maxMana => _MaxMana;
 
-        public Passive<Hero>[] passives => _Passives;
+        public PassiveEffect[] passiveEffects => _PassiveEffects;
 
         public Skill skill => _Skill;
 

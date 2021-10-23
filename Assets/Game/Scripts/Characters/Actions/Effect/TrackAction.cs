@@ -4,14 +4,11 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    
     [System.Flags]
-    public enum RestrictAction
+    public enum TrackAction
     {
-        Movement = 0,
         Attack = 1,
-        Passive = 2,
-        Skill = 4,
-        Ultimate = 8
+        Skill = 2,
+        Ultimate = 4
     }
 }

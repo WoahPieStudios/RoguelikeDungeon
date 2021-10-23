@@ -6,30 +6,34 @@ using UnityEngine.Animations;
 
 namespace Game.Characters
 {
-    public class CharacterData<TCharacter> : ScriptableObject
-        where TCharacter : Character<TCharacter>
+    public class CharacterData : ScriptableObject, IIcon
     {
-        [SerializeField]
-        int _MaxHealth;
-        [SerializeField]
-        float _MoveSpeed;
-        [SerializeField]
-        int _AttackDamage;
-        [SerializeField]
-        float  _AttackRange;
-        [SerializeField]
-        Attack<TCharacter> _Attack;
+        [Header("Icon")]
         [SerializeField]
         Sprite _Icon;
 
+        [Header("Health")]
+        [SerializeField]
+        int _MaxHealth;
+
+        [Header("Move")]
+        [SerializeField]
+        float _MoveSpeed;
+
+        [Header("Attack")]
+        [SerializeField]
+        Attack _Attack;
+
+        // Health
         public int maxHealth => _MaxHealth;
         
+        // Move
         public float moveSpeed => _MoveSpeed;
 
-        public int attackDamage => _AttackDamage;
-        public float attackRange => _AttackRange;
-        public Attack<TCharacter> attack => _Attack;
+        // Attack
+        public Attack attack => _Attack;
         
+        // Icon
         public Sprite icon => _Icon;
     }
 }

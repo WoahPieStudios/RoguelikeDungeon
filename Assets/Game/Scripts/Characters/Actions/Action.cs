@@ -4,27 +4,40 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public abstract class Action<T> : ScriptableObject, ICopyable<T> where T : Object
+    public abstract class Action : ScriptableObject, IIcon
     {
+        [SerializeField]
+        Sprite _Icon;
+
         bool _IsActive = false;
+
+        Coroutine _TickCoroutine;
+
+        CharacterBase _CharacterBase;
 
         public bool isActive => _IsActive;
 
-        protected void Begin()
+        public Sprite icon => _Icon;
+
+        protected CharacterBase characterBase => _CharacterBase;
+
+        protected void Begin(CharacterBase characterBase)
         {
             _IsActive = true;
+
+            _CharacterBase = characterBase;
+
+            _TickCoroutine = characterBase.StartCoroutine(Tick());
         }
 
         public virtual void End()
         {
             _IsActive = false;
+
+            if(_TickCoroutine != null)
+                _CharacterBase.StopCoroutine(_TickCoroutine);
         }
 
-        public abstract void Tick();
-
-        public virtual T CreateCopy()
-        {
-            return Instantiate(this) as T;
-        }
+        public abstract IEnumerator Tick();
     }
 }
