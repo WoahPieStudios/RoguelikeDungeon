@@ -21,7 +21,7 @@ namespace Game.Characters
 
     public interface IAttack
     {
-        bool Attack();
+        bool UseAttack();
     }
 
     public interface IHealth

@@ -42,9 +42,9 @@ namespace Game.Characters
             _CurrentMana = newMana > 0 ? newMana : 0;
         }
 
-        public override bool Attack()
+        public override bool UseAttack()
         {
-            bool canAttack = base.Attack();
+            bool canAttack = base.UseAttack();
 
             if(canAttack)
             {

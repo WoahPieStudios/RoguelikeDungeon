@@ -50,7 +50,7 @@ namespace Game.Characters
         }
 
         // Attack
-        public virtual bool Attack()
+        public virtual bool UseAttack()
         {
             bool canAttack = attack && attack.CanUse();
 
