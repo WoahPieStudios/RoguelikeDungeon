@@ -8,18 +8,25 @@ using Game.Characters;
 [CreateAssetMenu(menuName = "Data/TestActive")]
 public class TestActiveEffect : ActiveEffect
 {
+    [SerializeField]
+    RestrictAction _RestictAction;
+    int _StackCount = 0;
     public override bool isStackable => true;
 
-    public override void Stack(Effect effect)
-    {
-        
-    }
+    public override RestrictAction restrictAction => _RestictAction;
 
-    public override IEnumerator Tick()
+    protected override IEnumerator Tick()
     {
         Debug.Log("Active Effect");
-        yield return null;
+        yield return new WaitForSeconds(5);
+        Debug.Log("End Active Effect");
 
         End();
+    }
+
+    public override void Stack(params Effect[] effects)
+    {
+        _StackCount += effects.Length;
+        Debug.Log(effects.Length);
     }
 }

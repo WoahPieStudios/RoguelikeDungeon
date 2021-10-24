@@ -15,7 +15,7 @@ MonoBehaviour:
   _Icon: {fileID: 0}
   _MaxHealth: 0
   _MoveSpeed: 0
-  _Attack: {fileID: 0}
+  _Attack: {fileID: 11400000, guid: 550d6f838f7a34e4faf594955e807b60, type: 2}
   _MaxMana: 3
   _PassiveEffects:
   - {fileID: 11400000, guid: 3b18a608602b74e47acf37fc7743456f, type: 2}

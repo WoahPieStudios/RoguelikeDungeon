@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public abstract class CoolDownAction : Action
+    public abstract class CoolDownAction : Action, ICoolDown
     {
         [SerializeField]
         float _CoolDownTime;
@@ -20,9 +20,12 @@ namespace Game.Characters
 
         public bool isCoolingDown => _IsCoolingDown;
 
-        public abstract void OnCooldown();
 
-        IEnumerator CoolDown()
+        // Called whenever it's cooling down. Could be removed one day if no one uses it
+        protected abstract void OnCooldown();
+
+        // Cool Down Sequence
+        protected virtual IEnumerator CoolDown()
         {
             _CurrentCoolDownTime  = _CoolDownTime;
 
