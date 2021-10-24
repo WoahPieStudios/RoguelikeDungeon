@@ -9,22 +9,26 @@ using Game.Characters;
 public class TestPassive : PassiveEffect
 {
     [SerializeField]
+    TrackAction _TrackAction;
+    [SerializeField]
     ActiveEffect _ActiveEffect;
 
-    public override bool isStackable => true;
+    public override bool isStackable => false;
 
-    public override void Stack(Effect effect)
-    {
+    public override TrackAction trackAction => _TrackAction;
 
-    }
-
-    public override IEnumerator Tick()
+    protected override IEnumerator Tick()
     {
         Debug.Log("Passive");
 
         characterBase.AddEffects(_ActiveEffect);
-        yield return null;
+        yield return new WaitForSeconds(3);
 
         End();
+    }
+
+    public override void Stack(params Effect[] effects)
+    {
+        Debug.Log("passive stacked");
     }
 }

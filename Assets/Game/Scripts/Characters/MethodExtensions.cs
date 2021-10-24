@@ -6,9 +6,15 @@ namespace Game.Characters
 {
     public static class MethodExtensions
     {
-        public static T CreateCopy<T>(this T original) where T : ScriptableObject 
-        {
-            return original ? Object.Instantiate(original) as T : null;
-        }
+        // Creates Copy.
+        // public static T CreateCopy<T>(this T original) where T : ScriptableObject, ICopyable 
+        // {
+        //     T copy = original ? Object.Instantiate(original) as T : null;
+
+        //     if(copy)
+        //         copy.isCopied = true;
+
+        //     return copy;
+        // }
     }
 }

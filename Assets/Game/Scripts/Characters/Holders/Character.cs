@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Character<TData> : CharacterBase, IAttack
+    public class Character<TData> : CharacterBase
         where TData : CharacterData
     {
         // Health
@@ -19,13 +19,15 @@ namespace Game.Characters
         public override int currentHealth => _CurrentHealth;
         public override bool isAlive => _CurrentHealth > 0;
 
+        // Move
+        public override float moveSpeed => _Data.moveSpeed;
 
         // Attack
-        public Attack attack => _Data.attack;
+        public override Attack attack => _Data.attack;
         
         // Character Data
         public TData data => _Data;
-        
+
         // Health
         public override void AddHealth(int health)
         {
@@ -50,9 +52,9 @@ namespace Game.Characters
         }
 
         // Attack
-        public virtual bool UseAttack()
+        public override bool UseAttack()
         {
-            bool canAttack = attack && attack.CanUse();
+            bool canAttack = attack && attack.CanUse() && !restrictedActions.HasFlag(RestrictAction.Attack);
 
             if(canAttack)
                 attack.Use(this);

@@ -6,9 +6,11 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Hero : Character<HeroData>, ISkill, IUltimate
+    public class Hero : Character<HeroData>, ISkill, IUltimate, IPassiveEffects
     {
         int _CurrentMana;
+
+        Dictionary<TrackAction, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackAction, PassiveEffect[]>();
 
         IEnumerable<PassiveEffect> _AttackPassives;
         IEnumerable<PassiveEffect> _SkillPassives;
@@ -18,14 +20,25 @@ namespace Game.Characters
 
         Ultimate _Ultimate;
 
+        // Skill
+        public Skill skill => _Skill;
+
+        // Ultimate
+        public Ultimate ultimate => _Ultimate;
+
+        // Mana
         public int currentMana => _CurrentMana;
         public int maxMana => data.maxMana;
 
-        void SetupPassives(IEnumerable<PassiveEffect> passives)
+        // Passives
+        public Dictionary<TrackAction, PassiveEffect[]> trackActionPassiveEffects => _TrackActionPassiveEffects;
+        public PassiveEffect[] passiveEffects => data.passiveEffects;
+
+        void SetupPassives(IEnumerable<PassiveEffect> passiveEffects)
         {
-            _AttackPassives = passives.Where(passives => passives.trackAction.HasFlag(TrackAction.Attack));
-            _SkillPassives = passives.Where(passives => passives.trackAction.HasFlag(TrackAction.Skill));
-            _UltimatePassives = passives.Where(passives => passives.trackAction.HasFlag(TrackAction.Ultimate));
+            _AttackPassives = passiveEffects.Where(passives => passives.trackAction.HasFlag(TrackAction.Attack));
+            _SkillPassives = passiveEffects.Where(passives => passives.trackAction.HasFlag(TrackAction.Skill));
+            _UltimatePassives = passiveEffects.Where(passives => passives.trackAction.HasFlag(TrackAction.Ultimate));
         }
 
         public virtual void AddMana(int mana)
@@ -48,11 +61,10 @@ namespace Game.Characters
 
             if(canAttack)
             {
-                foreach(PassiveEffect passiveEffect in _AttackPassives)
-                {
-                    if(!passiveEffect.isActive)
-                        passiveEffect.Initialize(this);
-                }
+                if(_AttackPassives.Any())
+                    AddEffects(_AttackPassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Attack))
+                //     AddEffects(_TrackActionPassiveEffects[TrackAction.Attack].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
 
             return canAttack;
@@ -60,17 +72,16 @@ namespace Game.Characters
 
         public virtual bool UseSkill()
         {
-            bool canUse = _Skill && _Skill.CanUse();
+            bool canUse = _Skill && _Skill.CanUse() && !restrictedActions.HasFlag(RestrictAction.Skill);
 
             if(canUse)
             {
                 _Skill.Use(this);
 
-                foreach(PassiveEffect passiveEffect in _SkillPassives)
-                {
-                    if(!passiveEffect.isActive)
-                        passiveEffect.Initialize(this);
-                }
+                if(_SkillPassives.Any())
+                    AddEffects(_SkillPassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Skill))
+                //     AddEffects(_TrackActionPassiveEffects[TrackAction.Skill].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
 
             return canUse;
@@ -78,17 +89,16 @@ namespace Game.Characters
 
         public virtual bool UseUltimate()
         {
-            bool canUse = _Ultimate && _Ultimate.CanUse(this);
+            bool canUse = _Ultimate && _Ultimate.CanUse(this) && !restrictedActions.HasFlag(RestrictAction.Ultimate);
 
             if(canUse)
             {
                 _Ultimate.Activate(this);
-
-                foreach(PassiveEffect passiveEffect in _UltimatePassives)
-                {
-                    if(!passiveEffect.isActive)
-                        passiveEffect.Initialize(this);
-                }
+                
+                if(_UltimatePassives.Any())
+                    AddEffects(_UltimatePassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Ultimate))
+                //     AddEffects(_TrackActionPassiveEffects[TrackAction.Ultimate].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
 
             return canUse;
@@ -98,13 +108,13 @@ namespace Game.Characters
         {
             base.AssignData(data);
 
-            SetupPassives(data.passiveEffects.Select(passive => passive.CreateCopy()));
+            SetupPassives(data.passiveEffects.Select(passive => passive.CreateCopy<PassiveEffect>()));
 
             _CurrentMana = data.maxMana;
 
-            _Skill = data.skill.CreateCopy();
+            _Skill = data.skill.CreateCopy<Skill>();
 
-            _Ultimate = data.ultimate.CreateCopy();
+            _Ultimate = data.ultimate.CreateCopy<Ultimate>();
         }
     }
 }

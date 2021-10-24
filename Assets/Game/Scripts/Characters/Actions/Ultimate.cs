@@ -11,7 +11,6 @@ namespace Game.Characters
 
         public int manaCost => _ManaCost;
 
-
         public virtual void Activate(Hero hero)
         {
             hero.UseMana(_ManaCost);
@@ -19,10 +18,10 @@ namespace Game.Characters
             Begin(hero);
         }
 
+        // To check if it can be used. VERY IMPORTANT. Actually everything is important. 
         public virtual bool CanUse(Hero hero)
         {
             return !isActive && hero.currentMana >= _ManaCost && !isCoolingDown;
         }
-
     }
 }

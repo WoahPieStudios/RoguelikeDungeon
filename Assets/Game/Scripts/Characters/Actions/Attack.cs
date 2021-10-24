@@ -13,15 +13,16 @@ namespace Game.Characters
         [SerializeField]
         float _Speed = 0;
         [SerializeField]
-        ActiveEffect[] _Effects;
+        ActiveEffect[] _ActiveEffects; // Well its actually for Knockback but eh~
 
         protected int damage => _Damage;
         protected float range => _Range;
         protected float speed => _Speed;
-        protected ActiveEffect[] effects => _Effects;
+        protected ActiveEffect[] activeEffects => _ActiveEffects;
 
         public abstract bool CanUse();
 
+        // I didn't add the effects yet because I think you should add it yourself at your own time.
         public virtual void Use(CharacterBase attacker)
         {
             Begin(attacker);

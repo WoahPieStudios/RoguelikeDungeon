@@ -8,17 +8,17 @@ using Game.Characters;
 [CreateAssetMenu(menuName = "Data/TestAttack")]
 public class TestAttack : Attack
 {
-    public override bool CanUse()
-    {
-        return true;
-    }
-
-    public override IEnumerator Tick()
+    protected override IEnumerator Tick()
     {
         Debug.Log("Attack");
         
         yield return null;
 
         End();
+    }
+
+    public override bool CanUse()
+    {
+        return true;
     }
 }
