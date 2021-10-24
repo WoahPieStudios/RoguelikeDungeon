@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Game.Characters
+namespace Game.Characters.Temp
 {
     public abstract class Character : MonoBehaviour
     {

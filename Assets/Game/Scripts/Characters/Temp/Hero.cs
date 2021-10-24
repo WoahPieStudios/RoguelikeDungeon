@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering;
 
-namespace Game.Characters
+namespace Game.Characters.Temp
 {
     public class Hero : Character
     {

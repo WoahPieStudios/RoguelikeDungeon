@@ -1,5 +1,5 @@
 using System;
-using Game.Characters;
+using Game.Characters.Temp;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
