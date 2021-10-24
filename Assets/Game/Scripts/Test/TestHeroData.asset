@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cdff842523e1e448af9a4db7d464847, type: 3}
+  m_Name: TestHeroData
+  m_EditorClassIdentifier: 
+  _Icon: {fileID: 0}
+  _MaxHealth: 0
+  _MoveSpeed: 0
+  _Attack: {fileID: 0}
+  _MaxMana: 3
+  _PassiveEffects:
+  - {fileID: 11400000, guid: 3b18a608602b74e47acf37fc7743456f, type: 2}
+  _Skill: {fileID: 11400000, guid: 2b3a23cfe11dafa41abc928f5aee711d, type: 2}
+  _Ultimate: {fileID: 11400000, guid: c9e1c5cbbdfd70b489bbc9c7d30e1761, type: 2}
