@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8cdff842523e1e448af9a4db7d464847, type: 3}
+  m_Name: MagicianData
+  m_EditorClassIdentifier: 
+  _Icon: {fileID: 0}
+  _MaxHealth: 100
+  _MoveSpeed: 5
+  _Attack: {fileID: 11400000, guid: ffcb5ef249c7bfc48a770efcf8a623e4, type: 2}
+  _MaxMana: 100
+  _PassiveEffects:
+  - {fileID: 11400000, guid: 60bfe041ef1c10e469344bd02a2ab5b8, type: 2}
+  _Skill: {fileID: 11400000, guid: 34dd539384787ba429e021bb2058d130, type: 2}
+  _Ultimate: {fileID: 11400000, guid: 53d8844888cb9d9469d3f55823691b65, type: 2}
