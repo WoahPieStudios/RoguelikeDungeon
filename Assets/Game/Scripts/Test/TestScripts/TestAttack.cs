@@ -16,9 +16,4 @@ public class TestAttack : Attack
 
         End();
     }
-
-    public override bool CanUse()
-    {
-        return true;
-    }
 }

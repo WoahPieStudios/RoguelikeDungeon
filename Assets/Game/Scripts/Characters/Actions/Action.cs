@@ -15,11 +15,11 @@ namespace Game.Characters
 
         CharacterBase _CharacterBase;
 
+        protected CharacterBase characterBase => _CharacterBase;
+
         public bool isActive => _IsActive;
 
         public Sprite icon => _Icon;
-
-        protected CharacterBase characterBase => _CharacterBase;
 
         public bool isCopied { get; set; }
 

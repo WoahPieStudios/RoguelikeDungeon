@@ -12,7 +12,7 @@ namespace Game.Characters
         }
 
         // To check if it can be used. VERY IMPORTANT. Actually everything is important. 
-        public virtual bool CanUse()
+        public virtual bool CanUse(Hero hero)
         {
             return !isActive && !isCoolingDown;
         }

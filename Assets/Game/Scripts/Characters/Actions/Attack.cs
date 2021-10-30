@@ -20,7 +20,10 @@ namespace Game.Characters
         protected float speed => _Speed;
         protected ActiveEffect[] activeEffects => _ActiveEffects;
 
-        public abstract bool CanUse();
+        public virtual bool CanUse(CharacterBase attacker)
+        {
+            return !isActive;
+        }
 
         // I didn't add the effects yet because I think you should add it yourself at your own time.
         public virtual void Use(CharacterBase attacker)

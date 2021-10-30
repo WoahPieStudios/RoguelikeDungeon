@@ -54,7 +54,7 @@ namespace Game.Characters
         // Attack
         public override bool UseAttack()
         {
-            bool canAttack = attack && attack.CanUse() && !restrictedActions.HasFlag(RestrictAction.Attack);
+            bool canAttack = attack && attack.CanUse(this) && !restrictedActions.HasFlag(RestrictAction.Attack);
 
             if(canAttack)
                 attack.Use(this);

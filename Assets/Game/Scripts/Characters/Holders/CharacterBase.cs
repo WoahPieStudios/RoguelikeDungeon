@@ -57,16 +57,20 @@ namespace Game.Characters
         public abstract bool UseAttack();
 
         // Movement
-        public virtual void Move(Vector2 direction)
+        public virtual bool Move(Vector2 direction)
         {
+            bool canMove = !_RestrictedActions.HasFlag(RestrictAction.Movement); 
+            
             // Checks first if this is restricted
-            if(!_RestrictedActions.HasFlag(RestrictAction.Movement))
+            if(canMove)
             {
                 // Definitely expecting this to be replaced or to have its own class
                 _Velocity = direction * moveSpeed * Time.fixedDeltaTime;
 
                 transform.position += (Vector3)_Velocity;
             }
+
+            return canMove;
         }
 
         // Effects

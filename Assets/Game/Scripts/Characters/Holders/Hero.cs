@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Hero : Character<HeroData>, ISkill, IUltimate, IPassiveEffects
+    public class Hero : Character<HeroData>, ISkillUser, IUltimateUser, IPassiveEffects
     {
         int _CurrentMana;
 
@@ -41,6 +41,7 @@ namespace Game.Characters
             _UltimatePassives = passiveEffects.Where(passives => passives.trackAction.HasFlag(TrackAction.Ultimate));
         }
 
+        // Mana
         public virtual void AddMana(int mana)
         {
             int newMana = _CurrentMana + mana;
@@ -55,6 +56,7 @@ namespace Game.Characters
             _CurrentMana = newMana > 0 ? newMana : 0;
         }
 
+        // Attack
         public override bool UseAttack()
         {
             bool canAttack = base.UseAttack();
@@ -70,9 +72,10 @@ namespace Game.Characters
             return canAttack;
         }
 
+        // Skill
         public virtual bool UseSkill()
         {
-            bool canUse = _Skill && _Skill.CanUse() && !restrictedActions.HasFlag(RestrictAction.Skill);
+            bool canUse = _Skill && _Skill.CanUse(this) && !restrictedActions.HasFlag(RestrictAction.Skill);
 
             if(canUse)
             {
@@ -87,6 +90,7 @@ namespace Game.Characters
             return canUse;
         }
 
+        // Ultimate
         public virtual bool UseUltimate()
         {
             bool canUse = _Ultimate && _Ultimate.CanUse(this) && !restrictedActions.HasFlag(RestrictAction.Ultimate);

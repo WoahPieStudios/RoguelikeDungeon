@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Active
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-  _RestrictAction: 0
+  _RestictAction: 0
