@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public abstract class PassiveEffect : Effect, ITrackAction
+    public abstract class PassiveEffect : Effect, ITrackActionEffect
     {
         // To Track an Action. I suggest you don't SerializeField a TrackAction variable. My system expects all classes derived from this to have their own consistent TrackAction. 
         // E.G. public override TrackAction trackAction => TrackAction.Skill | TrackAction.Ultiamate;

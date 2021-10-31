@@ -27,19 +27,19 @@ namespace Game.Characters
     }
 
     // Interface for not forgetting Track Action
-    public interface ITrackAction
+    public interface ITrackActionEffect
     {
         TrackAction trackAction { get; }
     }
 
     // Interface for not forgetting Stackables
-    public interface IRestrainAction
+    public interface IRestrainActionEffect
     {
         RestrictAction restrictAction { get; }
     }
 
     // Interface for not forgetting Stackables
-    public interface IStackable
+    public interface IStackableEffect
     {
         bool isStackable { get; }
 

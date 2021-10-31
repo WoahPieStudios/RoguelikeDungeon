@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public abstract class Effect : Action, IStackable
+    public abstract class Effect : Action, IStackableEffect
     { 
         // To Check if Class stackable, I suggest to assign it directly since I made the system to check if an effect class is stackable. E.G. public override bool isStackable => true;
         public abstract bool isStackable { get; }

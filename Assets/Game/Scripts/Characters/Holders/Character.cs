@@ -8,6 +8,8 @@ namespace Game.Characters
     public class Character<TData> : CharacterBase
         where TData : CharacterData
     {
+        // Attack
+        Attack _Attack;
         // Health
         int _CurrentHealth = 0;
 
@@ -23,7 +25,7 @@ namespace Game.Characters
         public override float moveSpeed => _Data.moveSpeed;
 
         // Attack
-        public override Attack attack => _Data.attack;
+        public override Attack attack => _Attack;
         
         // Character Data
         public TData data => _Data;
@@ -49,6 +51,8 @@ namespace Game.Characters
             _Data = data;
 
             _CurrentHealth = maxHealth;
+
+            _Attack = data.attack.CreateCopy<Attack>();
         }
 
         // Attack

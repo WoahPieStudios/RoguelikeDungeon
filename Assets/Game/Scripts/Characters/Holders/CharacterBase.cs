@@ -47,7 +47,7 @@ namespace Game.Characters
             RestrictAction RestrainedActions = default(RestrictAction);
 
             // Adds Restrict Actions to RestrainedActions
-            foreach(RestrictAction r in  _EffectList.Where(effect => effect.GetType().IsSubclassOf(typeof(ActiveEffect))).Select(effect => (effect as ActiveEffect).restrictAction))
+            foreach(RestrictAction r in _EffectList.Where(effect => effect.GetType() is IRestrainActionEffect).Select(effect => (effect as IRestrainActionEffect).restrictAction))//_EffectList.Where(effect => effect.GetType().IsSubclassOf(typeof(ActiveEffect))).Select(effect => (effect as ActiveEffect).restrictAction))
                 RestrainedActions |= r;
 
             _RestrictedActions = RestrainedActions;
@@ -76,15 +76,12 @@ namespace Game.Characters
         // Effects
         public virtual void AddEffects(params Effect[] effects)
         {
-            Effect effect;
-            Effect effectCopy;
-            Effect[] effectsArray;
             IEnumerable<Effect> effectsInList;
 
             // I create a copy of the effects otherwise all effects will go haywire with other Characters as they would only reference 1.
             foreach(IGrouping<System.Type, Effect> group in effects.GroupBy(effect => effect.GetType()))
             {
-                effect = group.First();
+                Effect effect = group.First();
                 
                 // If effect is stackable
                 if(effect.isStackable)
@@ -99,7 +96,8 @@ namespace Game.Characters
                     // If not, stack the first one with the rest of the effects then add to the list
                     else
                     {
-                        effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
+                        Effect effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
+                        Effect[] effectsArray;
                         
                         effectCopy.StartEffect(this);
 
@@ -112,15 +110,24 @@ namespace Game.Characters
                     }
                 }
 
-                // If not, add them normally
+                // If not, End current one and add new one
                 else
                 {
-                    foreach(Effect e in group.Select(effect => !effect.isCopied ? effect.CreateCopy<Effect>() : effect))
-                    {
-                        effect.StartEffect(this);
+                    effectsInList = _EffectList.Where(effect => effect.GetType() == group.Key);
 
-                        _EffectList.Add(effect);
+                    if(effectsInList.Any())
+                    {
+                        Effect tempEffect = effectsInList.First();
+
+                        if(tempEffect) 
+                            tempEffect.End();
                     }
+
+                    Effect effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
+
+                    effectCopy.StartEffect(this);
+                    
+                    _EffectList.Add(effectCopy);
                 }
             }
 
