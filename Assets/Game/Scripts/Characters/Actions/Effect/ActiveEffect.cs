@@ -14,7 +14,7 @@ namespace Game.Characters
         {
             base.End();
 
-            characterBase.RemoveEffects(this);
+            target.RemoveEffects(this);
         }
     }
 }

@@ -13,9 +13,9 @@ namespace Game.Characters
 
         Coroutine _TickCoroutine;
 
-        CharacterBase _CharacterBase;
+        CharacterBase _Target;
 
-        protected CharacterBase characterBase => _CharacterBase;
+        protected CharacterBase target => _Target;
 
         public bool isActive => _IsActive;
 
@@ -28,13 +28,13 @@ namespace Game.Characters
         protected abstract IEnumerator Tick();
 
         // To Start Action and Setup Variables and Tick.
-        protected void Begin(CharacterBase characterBase)
+        protected void Begin(CharacterBase target)
         {
             _IsActive = true;
 
-            _CharacterBase = characterBase;
+            _Target = target;
 
-            _TickCoroutine = characterBase.StartCoroutine(Tick());
+            _TickCoroutine = target.StartCoroutine(Tick());
         }
 
         // To End Action and stop Tick if still running, you have to End action yourself.
@@ -43,7 +43,7 @@ namespace Game.Characters
             _IsActive = false;
 
             if(_TickCoroutine != null)
-                _CharacterBase.StopCoroutine(_TickCoroutine);
+                _Target.StopCoroutine(_TickCoroutine);
         }
 
         public T CreateCopy<T>() where T : ScriptableObject, ICopyable

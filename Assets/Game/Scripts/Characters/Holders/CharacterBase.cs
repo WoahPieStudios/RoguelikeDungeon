@@ -74,7 +74,7 @@ namespace Game.Characters
         }
 
         // Effects
-        public virtual void AddEffects(params Effect[] effects)
+        public virtual void AddEffects(CharacterBase sender, params Effect[] effects)
         {
             IEnumerable<Effect> effectsInList;
 
@@ -99,7 +99,7 @@ namespace Game.Characters
                         Effect effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
                         Effect[] effectsArray;
                         
-                        effectCopy.StartEffect(this);
+                        effectCopy.StartEffect(sender, this);
 
                         effectsArray = group.Where(e => e != effect).ToArray();
 
@@ -125,7 +125,7 @@ namespace Game.Characters
 
                     Effect effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
 
-                    effectCopy.StartEffect(this);
+                    effectCopy.StartEffect(sender, this);
                     
                     _EffectList.Add(effectCopy);
                 }

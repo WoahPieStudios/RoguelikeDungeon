@@ -49,7 +49,7 @@ namespace Game.Characters
         {
             base.End();
 
-            _CoolDownCoroutine = characterBase.StartCoroutine(CoolDown());
+            _CoolDownCoroutine = target.StartCoroutine(CoolDown());
         }
     }
 }

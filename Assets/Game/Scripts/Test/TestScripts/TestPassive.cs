@@ -21,7 +21,7 @@ public class TestPassive : PassiveEffect
     {
         Debug.Log("Passive");
 
-        characterBase.AddEffects(_ActiveEffect);
+        target.AddEffects(sender, _ActiveEffect);
         yield return new WaitForSeconds(3);
 
         End();

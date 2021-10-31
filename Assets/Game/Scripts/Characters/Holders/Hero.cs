@@ -64,7 +64,7 @@ namespace Game.Characters
             if(canAttack)
             {
                 if(_AttackPassives.Any())
-                    AddEffects(_AttackPassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                    AddEffects(this, _AttackPassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
                 // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Attack))
                 //     AddEffects(_TrackActionPassiveEffects[TrackAction.Attack].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
@@ -82,7 +82,7 @@ namespace Game.Characters
                 _Skill.Use(this);
 
                 if(_SkillPassives.Any())
-                    AddEffects(_SkillPassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                    AddEffects(this, _SkillPassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
                 // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Skill))
                 //     AddEffects(_TrackActionPassiveEffects[TrackAction.Skill].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
@@ -100,7 +100,7 @@ namespace Game.Characters
                 _Ultimate.Activate(this);
                 
                 if(_UltimatePassives.Any())
-                    AddEffects(_UltimatePassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                    AddEffects(this, _UltimatePassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
                 // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Ultimate))
                 //     AddEffects(_TrackActionPassiveEffects[TrackAction.Ultimate].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
