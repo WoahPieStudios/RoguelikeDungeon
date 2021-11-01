@@ -97,7 +97,7 @@ namespace Game.Characters
     {
         RestrictAction restrictedActions { get; }
         Effect[] effects { get; }
-        void AddEffects(CharacterBase user, params Effect[] effects);
+        void AddEffects(CharacterBase sender, params Effect[] effects);
         void RemoveEffects(params Effect[] effects);
     }
 

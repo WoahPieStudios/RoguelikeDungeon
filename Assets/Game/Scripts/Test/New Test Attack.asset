@@ -9,9 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: afc6a7eb6205ba9449ca1104872ac57c, type: 3}
-  m_Name: TestUltimate
+  m_Script: {fileID: 11500000, guid: af7040878b03be44cae39d783f7884ad, type: 3}
+  m_Name: New Test Attack
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-  _CoolDownTime: 1
-  _ManaCost: 2
+  _Damage: 15
+  _Range: 20
+  _Speed: 10
+  _ActiveEffects:
+  - {fileID: 11400000, guid: 3994e68009de6fb42be7c410ff5db2c4, type: 2}
+  _EnemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 8

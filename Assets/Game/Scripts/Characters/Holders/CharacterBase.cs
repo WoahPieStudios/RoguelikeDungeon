@@ -6,39 +6,81 @@ using UnityEngine;
 
 namespace Game.Characters
 {
+    [RequireComponent(typeof(SpriteRenderer))]
     public abstract class CharacterBase : MonoBehaviour, IHealth, IMove, IEffectable, IDirectional, IAttack
     {
         // Movement
         Vector2 _Velocity;
 
         // Direction
-        Vector2Int _FaceDirection;
+        Vector2Int _FaceDirection = Vector2Int.right;
 
         // Effects
         RestrictAction _RestrictedActions;
         List<Effect> _EffectList = new List<Effect>();
 
-       // Health
+        // Health
+        /// <summary>
+        /// Max Health of the Character
+        /// </summary>
         public abstract int maxHealth { get; }
+        
+        /// <summary>
+        /// Current Health of the Character 
+        /// </summary>
         public abstract int currentHealth { get; }
+
+        /// <summary>
+        /// Checks if the Character is Alive
+        /// </summary>
         public abstract bool isAlive { get; }
 
         // Attack
+        /// <summary>
+        /// Attack of the Character
+        /// </summary>
         public abstract Attack attack { get; }
 
         // Effects
+        /// <summary>
+        /// Restricted Actions of the Character
+        /// </summary>
         public RestrictAction restrictedActions => _RestrictedActions;
+
+        /// <summary>
+        /// Effects casted upon the Character.
+        /// </summary>
+        /// <returns></returns>
         public Effect[] effects => _EffectList.ToArray();
 
         // Movement
+        /// <summary>
+        /// Move Speed of the Character
+        /// </summary>
         public abstract float moveSpeed { get; }
+
+        /// <summary>
+        /// Velocity of the Character.
+        /// </summary>
         public Vector2 velocity => _Velocity;
 
         // Direction
+        /// <summary>
+        /// Direction of the Character is currently facing.
+        /// </summary>
         public Vector2Int faceDirection => _FaceDirection;
 
         // Health
+        /// <summary>
+        /// Adds to the Health of the Character
+        /// </summary>
+        /// <param name="health">Amount to be added</param>
         public abstract void AddHealth(int health);
+
+        /// <summary>
+        /// Reduces the Health of the Character
+        /// </summary>
+        /// <param name="damage">Amount to be reduced the health by</param>
         public abstract void Damage(int damage);
 
         // Effects
@@ -54,9 +96,18 @@ namespace Game.Characters
         }
 
         // Attack
+        /// <summary>
+        /// Starts the Attack.
+        /// </summary>
+        /// <returns>if the Attack can be used</returns>
         public abstract bool UseAttack();
 
         // Movement
+        /// <summary>
+        /// Moves the Character. **TO BE DECIDED IF THIS STAYS OR NOT**
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
         public virtual bool Move(Vector2 direction)
         {
             bool canMove = !_RestrictedActions.HasFlag(RestrictAction.Movement); 
@@ -72,8 +123,13 @@ namespace Game.Characters
 
             return canMove;
         }
-
+        
         // Effects
+        /// <summary>
+        /// Adds the effects to this Character.
+        /// </summary>
+        /// <param name="sender">The one who sent the effect</param>
+        /// <param name="effects">The one who is casted upon</param>
         public virtual void AddEffects(CharacterBase sender, params Effect[] effects)
         {
             IEnumerable<Effect> effectsInList;
@@ -134,6 +190,10 @@ namespace Game.Characters
             UpdateRestrainedActions();
         }
 
+        /// <summary>
+        /// Removed the Effect
+        /// </summary>
+        /// <param name="effects"></param>
         public virtual void RemoveEffects(params Effect[] effects)
         {
             foreach(Effect effect in effects.Where(effect => _EffectList.Contains(effect)))
@@ -143,6 +203,10 @@ namespace Game.Characters
         }
 
         // Direction
+        /// <summary>
+        /// Orients the Character to the direction.
+        /// </summary>
+        /// <param name="faceDirection"></param>
         public virtual void Orient(Vector2Int faceDirection) // Saw it from Jolo's Code
         {
             _FaceDirection = faceDirection;

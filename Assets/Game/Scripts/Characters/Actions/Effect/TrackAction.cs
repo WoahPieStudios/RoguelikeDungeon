@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Game.Characters
 {
+    /// <summary>
+    /// Flags Actions to be Tracked.
+    /// </summary>
     [System.Flags]
     public enum TrackAction
     {

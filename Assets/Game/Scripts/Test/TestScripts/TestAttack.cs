@@ -8,9 +8,11 @@ using Game.Characters;
 [CreateAssetMenu(menuName = "Data/TestAttack")]
 public class TestAttack : Attack
 {
+    [SerializeField]
+    LayerMask _EnemyLayerMask;
     protected override IEnumerator Tick()
     {
-        Debug.Log("Attack");
+        Debug.Log(target.FaceNearestEnemy(range, _EnemyLayerMask));
         
         yield return null;
 

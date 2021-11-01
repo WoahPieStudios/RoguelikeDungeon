@@ -6,15 +6,25 @@ namespace Game.Characters
 {
     public abstract class PassiveEffect : Effect, ITrackActionEffect
     {
-        // To Track an Action. I suggest you don't SerializeField a TrackAction variable. My system expects all classes derived from this to have their own consistent TrackAction. 
-        // E.G. public override TrackAction trackAction => TrackAction.Skill | TrackAction.Ultiamate;
-        public abstract TrackAction trackAction { get; }
+        [SerializeField]
+        TrackAction _TrackAction;
+        
+        /// <summary>
+        /// Flags the Actions of the Hero to be tracked.
+        /// </summary>
+        public TrackAction trackAction => _TrackAction;
 
+        /// <summary>
+        /// Checks if the passive effect can be used.
+        /// </summary>
         public virtual bool CanUse(Hero hero)
         {
             return !isActive;
         }
         
+        /// <summary>
+        /// Ends Passive Effect.
+        /// </summary>
         public override void End()
         {
             base.End();

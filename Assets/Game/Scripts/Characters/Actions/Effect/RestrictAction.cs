@@ -4,7 +4,9 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    
+    /// <summary>
+    /// Flags Actions to be Restricted.
+    /// </summary>
     [System.Flags]
     public enum RestrictAction
     {
