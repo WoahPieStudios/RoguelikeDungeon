@@ -824,7 +824,7 @@ GameObject:
   - component: {fileID: 1620450722}
   - component: {fileID: 1620450724}
   m_Layer: 5
-  m_Name: Ult Off-Field
+  m_Name: Ult Assist
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

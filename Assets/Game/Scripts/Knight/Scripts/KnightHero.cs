@@ -21,6 +21,18 @@ public class KnightHero : Hero
         return base.UseAttack();
     }
 
+    public override bool UseSkill()
+    {
+        _animator.SetTrigger("Attack2");
+        return base.UseSkill();
+    }
+
+    public override bool UseUltimate()
+    {
+        _animator.SetTrigger("Attack3");
+        return base.UseUltimate();
+    }
+
     public override bool Move(Vector2 direction)
     {
         _animator.SetInteger("AnimState", direction != Vector2.zero ? 1 : 0);

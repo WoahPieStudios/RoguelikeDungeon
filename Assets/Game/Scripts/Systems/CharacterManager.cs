@@ -28,6 +28,15 @@ public class CharacterManager : MonoBehaviour
         _controls.Navigation.Attack.performed += Attack;
         _controls.Navigation.Attack.Enable();
 
+        _controls.Navigation.Skill.performed += Skill;
+        _controls.Navigation.Skill.Enable();
+
+        _controls.Navigation.Ultimate.performed += Ultimate;
+        _controls.Navigation.Ultimate.Enable();
+        
+        _controls.Navigation.UltimateAssist.performed += UltimateAssist;
+        _controls.Navigation.UltimateAssist.Enable();
+        
         _controls.Navigation.SwapAssist.performed += SwapAssist;
         _controls.Navigation.SwapAssist.Enable();
         
@@ -39,7 +48,12 @@ public class CharacterManager : MonoBehaviour
     private void OnDisable()
     {
         _movement.Disable();
+        
         _controls.Navigation.Attack.Disable();
+        _controls.Navigation.Skill.Disable();
+        _controls.Navigation.Ultimate.Disable();
+        _controls.Navigation.UltimateAssist.Disable();
+        
         _controls.Navigation.SwapAssist.Disable();
         _controls.Navigation.SwapOffField.Disable();
     }
@@ -58,6 +72,21 @@ public class CharacterManager : MonoBehaviour
     private void Attack(InputAction.CallbackContext obj)
     {
         party[0].UseAttack();
+    }
+    
+    private void Skill(InputAction.CallbackContext obj)
+    {
+        party[0].UseSkill();
+    }
+
+    private void Ultimate(InputAction.CallbackContext obj)
+    {
+        party[0].UseUltimate();
+    }
+
+    private void UltimateAssist(InputAction.CallbackContext obj)
+    {
+        party[1].UseUltimate();
     }
     
     private void SwapAssist(InputAction.CallbackContext obj)

@@ -14,14 +14,6 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Attack",
-                    "type": "Button",
-                    "id": "7369f48a-81e5-4a58-a6d6-fb83a8665651",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": ""
-                },
-                {
                     "name": "Swap Assist",
                     "type": "Button",
                     "id": "39d53d7b-79b8-42a7-965b-513a9052d080",
@@ -33,6 +25,38 @@
                     "name": "Swap Off-Field",
                     "type": "Button",
                     "id": "ddaa23a9-7b43-4cc4-b1f0-52cbbdb34b2e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Attack",
+                    "type": "Button",
+                    "id": "7369f48a-81e5-4a58-a6d6-fb83a8665651",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Skill",
+                    "type": "Button",
+                    "id": "3c49c4cb-f151-4411-8a31-8d1d19eb5d9d",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Ultimate",
+                    "type": "Button",
+                    "id": "9dd8f99c-c611-4b30-8d0c-61151d0f024e",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
+                    "name": "Ultimate Assist",
+                    "type": "Button",
+                    "id": "d2334f3e-0ef7-4367-b338-2855547b0a38",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": ""
@@ -107,28 +131,6 @@
                 },
                 {
                     "name": "",
-                    "id": "f89ec8a5-f073-4486-a4d2-a788dab29840",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "d4df272b-dc30-4511-9e76-5895daeb6f04",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Attack",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "162d17fc-6c36-4388-8414-9e5c8f3d5576",
                     "path": "<Keyboard>/1",
                     "interactions": "",
@@ -168,6 +170,94 @@
                     "processors": "",
                     "groups": "",
                     "action": "Swap Off-Field",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6ef9f24d-4fd4-46d3-9946-ef159e7bf6a7",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "362453bc-c4f8-484a-9892-563bcc107965",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Skill",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f89ec8a5-f073-4486-a4d2-a788dab29840",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "d4df272b-dc30-4511-9e76-5895daeb6f04",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Attack",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7f93b772-e324-451f-b0c2-0c3bed2616bb",
+                    "path": "<Mouse>/middleButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ultimate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "872d773e-13e9-44a1-9c96-2917b18ff935",
+                    "path": "<Gamepad>/buttonNorth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ultimate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "920e1e96-a1bf-48ff-a1e3-053cb81100a3",
+                    "path": "<Mouse>/forwardButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ultimate Assist",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b8a5d94f-cdc9-4d54-98a7-fa810d6bc1cc",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ultimate Assist",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
