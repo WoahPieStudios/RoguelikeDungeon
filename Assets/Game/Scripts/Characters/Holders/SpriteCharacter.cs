@@ -11,9 +11,13 @@ namespace Game.Characters
 
         SpriteRenderer spriteRenderer => _SpriteRenderer;
 
-        protected virtual void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+
             _SpriteRenderer = GetComponent<SpriteRenderer>();
+
+            boxCollider2D.size = _SpriteRenderer.size;
         }
 
         public override void Orient(Vector2Int faceDirection)

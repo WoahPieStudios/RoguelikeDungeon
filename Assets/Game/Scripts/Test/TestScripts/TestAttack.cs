@@ -9,10 +9,10 @@ using Game.Characters;
 public class TestAttack : Attack
 {
     [SerializeField]
-    LayerMask _EnemyLayerMask;
+    LayerMask _CharacterLayer;
     protected override IEnumerator Tick()
     {
-        Debug.Log(target.FaceNearestEnemy(range, _EnemyLayerMask));
+        Debug.Log(target.FaceNearestCharacter(range, _CharacterLayer));
         
         yield return null;
 

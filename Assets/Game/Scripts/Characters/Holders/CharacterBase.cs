@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    [RequireComponent(typeof(SpriteRenderer))]
+    [RequireComponent(typeof(BoxCollider2D))]
     public abstract class CharacterBase : MonoBehaviour, IHealth, IMove, IEffectable, IDirectional, IAttack
     {
         // Movement
@@ -18,6 +18,9 @@ namespace Game.Characters
         // Effects
         RestrictAction _RestrictedActions;
         List<Effect> _EffectList = new List<Effect>();
+
+        // Collider
+        BoxCollider2D _BoxCollider;
 
         // Health
         /// <summary>
@@ -69,6 +72,14 @@ namespace Game.Characters
         /// Direction of the Character is currently facing.
         /// </summary>
         public Vector2Int faceDirection => _FaceDirection;
+
+        // Collider
+        public BoxCollider2D boxCollider2D => _BoxCollider;
+
+        protected virtual void Awake()
+        {
+            _BoxCollider = GetComponent<BoxCollider2D>();
+        }
 
         // Health
         /// <summary>

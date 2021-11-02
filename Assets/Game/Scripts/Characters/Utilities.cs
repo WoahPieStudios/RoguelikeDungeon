@@ -8,22 +8,34 @@ namespace Game.Characters
 {
     public static class Utilities
     {
-        public static Enemy GetNearestEnemy(Vector3 center, float radius, LayerMask enemyLayer)
+        public static T GetNearestCharacter<T>(Vector3 center, float radius, LayerMask characterLayer) where T : CharacterBase
         {
-            IEnumerable<Tuple<Enemy, float>> enemyHits = Physics2D.CircleCastAll(center, radius, Vector2.zero).
-                Where(hit => hit.collider.TryGetComponent<Enemy>(out Enemy enemy)).
-                Select(hit => new Tuple<Enemy, float>(hit.collider.GetComponent<Enemy>(), hit.distance));
+            IEnumerable<(T, float)> characterHits = GetCharacters(center, radius, characterLayer).
+                Select(hit =>(hit.collider.GetComponent<T>(), hit.distance));
 
-            Enemy enemy = null;
+            T nearestCharacter = null;
 
-            if(enemyHits.Any())
+            if(characterHits.Any())
             {
-                float minDistance = enemyHits.Min(enemyHit => enemyHit.Item2);
+                float minDistance = characterHits.Min(enemyHit => enemyHit.Item2);
 
-                enemy = enemyHits.First(enemyHit => enemyHit.Item2 == minDistance).Item1;
+                nearestCharacter = characterHits.First(enemyHit => enemyHit.Item2 == minDistance).Item1;
             }
 
-            return enemy;
+            return nearestCharacter;
+        }
+
+        public static RaycastHit2D[] GetCharacters(Vector3 center, float radius, LayerMask characterLayer)
+        {
+            return Physics2D.CircleCastAll(center, radius, Vector2.zero, 0, characterLayer).Where(hit => hit.collider.TryGetComponent<CharacterBase>(out CharacterBase nearest)).ToArray();
+        }
+
+        public static T[] GetCharacters<T>(Vector3 center, float radius, LayerMask characterLayer) where T : CharacterBase
+        {
+            IEnumerable<T> characterHits = GetCharacters(center, radius, characterLayer).
+                Select(hit => hit.collider.GetComponent<T>());
+
+            return characterHits.ToArray();
         }
     }
 }
