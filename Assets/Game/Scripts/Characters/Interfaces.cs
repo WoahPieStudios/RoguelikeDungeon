@@ -27,19 +27,19 @@ namespace Game.Characters
     }
 
     // Interface for not forgetting Track Action
-    public interface ITrackAction
+    public interface ITrackActionEffect
     {
         TrackAction trackAction { get; }
     }
 
     // Interface for not forgetting Stackables
-    public interface IRestrainAction
+    public interface IRestrainActionEffect
     {
         RestrictAction restrictAction { get; }
     }
 
     // Interface for not forgetting Stackables
-    public interface IStackable
+    public interface IStackableEffect
     {
         bool isStackable { get; }
 
@@ -53,14 +53,14 @@ namespace Game.Characters
     }
 
     // Interface for not forgetting Ultimate
-    public interface IUltimate
+    public interface IUltimateUser
     {
         Ultimate ultimate { get; }
         bool UseUltimate();
     }
 
     // Interface for not forgetting Skill
-    public interface ISkill
+    public interface ISkillUser
     {
         Skill skill { get; }
         bool UseSkill();
@@ -78,12 +78,13 @@ namespace Game.Characters
     {
         int maxHealth { get; }
         int currentHealth { get; }
+        bool isAlive { get; }
         void AddHealth(int health);
         void Damage(int damage);
     }
 
     // Interface for not forgetting Mana
-    public interface IMana
+    public interface IManaUser
     {
         int maxMana { get; }
         int currentMana { get; }
@@ -96,7 +97,7 @@ namespace Game.Characters
     {
         RestrictAction restrictedActions { get; }
         Effect[] effects { get; }
-        void AddEffects(params Effect[] effects);
+        void AddEffects(CharacterBase sender, params Effect[] effects);
         void RemoveEffects(params Effect[] effects);
     }
 
@@ -105,7 +106,7 @@ namespace Game.Characters
     {
         float moveSpeed { get; }
         Vector2 velocity { get; }
-        void Move(Vector2 direction);
+        bool Move(Vector2 direction);
     }
 
     // Interface for not forgetting Face Directions

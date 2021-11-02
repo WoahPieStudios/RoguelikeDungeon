@@ -10,8 +10,10 @@ public class TestHero : Hero
     [SerializeField]
     HeroData _HeroData;
 
-    void Awake() 
+    protected override void Awake() 
     {
+        base.Awake();
+        
         AssignData(_HeroData);    
     }
 
@@ -25,5 +27,7 @@ public class TestHero : Hero
         
         if(Input.GetKeyDown(KeyCode.S))
             Debug.Log("Attack " + UseAttack());
+
+        
     }
 }

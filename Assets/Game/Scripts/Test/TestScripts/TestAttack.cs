@@ -8,17 +8,17 @@ using Game.Characters;
 [CreateAssetMenu(menuName = "Data/TestAttack")]
 public class TestAttack : Attack
 {
+    [SerializeField]
+    LayerMask _CharacterLayer;
     protected override IEnumerator Tick()
     {
-        Debug.Log("Attack");
+        Debug.Log(target.FaceNearestCharacter(range, _CharacterLayer));
+
+        // target.FaceNearestCharacter(range, _CharacterLayer);
+        // target.FaceNearestCharacter<CharacterBase>(range, _CharacterLayer);
         
         yield return null;
 
         End();
-    }
-
-    public override bool CanUse()
-    {
-        return true;
     }
 }

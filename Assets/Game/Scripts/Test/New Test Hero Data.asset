@@ -10,14 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8cdff842523e1e448af9a4db7d464847, type: 3}
-  m_Name: TestHeroData
+  m_Name: New Test Hero Data
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-  _MaxHealth: 0
-  _MoveSpeed: 0
-  _Attack: {fileID: 11400000, guid: 550d6f838f7a34e4faf594955e807b60, type: 2}
-  _MaxMana: 3
+  _MaxHealth: 15
+  _MoveSpeed: 5
+  _Attack: {fileID: 11400000, guid: 7585672fcd661014882840e741bc7103, type: 2}
+  _MaxMana: 20
   _PassiveEffects:
-  - {fileID: 11400000, guid: 3b18a608602b74e47acf37fc7743456f, type: 2}
-  _Skill: {fileID: 11400000, guid: 2b3a23cfe11dafa41abc928f5aee711d, type: 2}
-  _Ultimate: {fileID: 11400000, guid: c9e1c5cbbdfd70b489bbc9c7d30e1761, type: 2}
+  - {fileID: 11400000, guid: fd3d6233e7281364aa6b9f5c562926bd, type: 2}
+  _Skill: {fileID: 11400000, guid: fd9b2cc6067ce57429a2791791acbc51, type: 2}
+  _Ultimate: {fileID: 11400000, guid: 5ba929c4b85e3424ab3d6d80ee5c2333, type: 2}

@@ -15,16 +15,31 @@ namespace Game.Characters
 
         Coroutine _CoolDownCoroutine;
         
+        /// <summary>
+        /// Cool Down Time after ending the Action.
+        /// </summary>
         public float coolDownTime => _CoolDownTime;
+
+        /// <summary>
+        /// Current Time of the cooldown;
+        /// </summary>
         public float currentCoolDownTime => _CurrentCoolDownTime;
 
+        /// <summary>
+        /// Determines if the Actino is Coolin Down.
+        /// </summary>
         public bool isCoolingDown => _IsCoolingDown;
 
 
-        // Called whenever it's cooling down. Could be removed one day if no one uses it
+        /// <summary>
+        /// Is called whenever the Action is cooling down. **Could be removed one day if no one uses it**
+        /// </summary>
         protected abstract void OnCooldown();
 
-        // Cool Down Sequence
+        /// <summary>
+        /// Cool Down Sequence.
+        /// </summary>
+        /// <returns></returns>
         protected virtual IEnumerator CoolDown()
         {
             _CurrentCoolDownTime  = _CoolDownTime;
@@ -45,11 +60,14 @@ namespace Game.Characters
             _IsCoolingDown = false;
         }
 
+        /// <summary>
+        /// Ends Action. Cool Down Starts afterwards.
+        /// </summary>
         public override void End()
         {
             base.End();
 
-            _CoolDownCoroutine = characterBase.StartCoroutine(CoolDown());
+            _CoolDownCoroutine = target.StartCoroutine(CoolDown());
         }
     }
 }

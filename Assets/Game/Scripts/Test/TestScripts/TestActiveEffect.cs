@@ -8,13 +8,7 @@ using Game.Characters;
 [CreateAssetMenu(menuName = "Data/TestActive")]
 public class TestActiveEffect : ActiveEffect
 {
-    [SerializeField]
-    RestrictAction _RestictAction;
     int _StackCount = 0;
-    public override bool isStackable => true;
-
-    public override RestrictAction restrictAction => _RestictAction;
-
     protected override IEnumerator Tick()
     {
         Debug.Log("Active Effect");

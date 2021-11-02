@@ -4,17 +4,24 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public abstract class ActiveEffect : Effect, IRestrainAction
+    public abstract class ActiveEffect : Effect, IRestrainActionEffect
     {
-        // To Restrain an Action. I suggest you don't SerializeField a RestrictAction variable. My system expects all classes derived from this to have their own consistent RestrictAction. 
-        // E.G. public override RestrictAction restrictAction => RestrictAction.Movement | RestrictAction.Skill;
-        public abstract RestrictAction restrictAction { get; }
+        [SerializeField]
+        RestrictAction _RestictAction;
+        
+        /// <summary>
+        /// Restricts the actions of whomever is casted upon.
+        /// </summary>
+        public RestrictAction restrictAction => _RestictAction;
 
+        /// <summary>
+        /// Ends effect and is Removed from the effect list of whomever is casted upon.
+        /// </summary>
         public override void End()
         {
             base.End();
 
-            characterBase.RemoveEffects(this);
+            target.RemoveEffects(this);
         }
     }
 }
