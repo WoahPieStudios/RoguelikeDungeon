@@ -18,6 +18,6 @@ MonoBehaviour:
   _Speed: 10
   _ActiveEffects:
   - {fileID: 11400000, guid: 3994e68009de6fb42be7c410ff5db2c4, type: 2}
-  _EnemyLayerMask:
+  _CharacterLayer:
     serializedVersion: 2
     m_Bits: 8

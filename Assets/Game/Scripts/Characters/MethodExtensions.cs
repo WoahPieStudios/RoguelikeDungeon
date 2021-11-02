@@ -18,17 +18,24 @@ namespace Game.Characters
         /// <returns>Returns the Nearest T Character</returns>
         public static T FaceNearestCharacter<T>(this CharacterBase characterBase, float radius, LayerMask characterLayer) where T : CharacterBase
         {
-            IEnumerable<(T, float)> characterHits = Utilities.GetCharacters(characterBase.transform.position, radius, characterLayer).
-                Where(character => character != characterBase).
-                Select(hit => (hit.collider.GetComponent<T>(), hit.distance));
+            IEnumerable<Tuple<T, float>> characterHits = Utilities.GetCharacters(characterBase.transform.position, radius, characterLayer).
+                Where(character => character.collider != characterBase.boxCollider2D).
+                Select(hit => new Tuple<T, float>(hit.collider.GetComponent<T>(), hit.distance));
 
-            T nearestCharacter = characterHits.First(c => characterHits.Min(c => c.Item2) == c.Item2).Item1;
+            T nearestCharacter = null;
 
-            if(nearestCharacter)
+            if(characterHits.Any())
             {
-                Vector2 direction = nearestCharacter.transform.position - characterBase.transform.position;
+                Tuple<T, float> nearestCharacterByDistance = characterHits.First(c => characterHits.Min(characterMin => characterMin.Item2) == c.Item2);
 
-                characterBase.Orient(Vector2Int.RoundToInt(direction.normalized));
+                nearestCharacter = nearestCharacterByDistance != null ? nearestCharacterByDistance.Item1 : null;
+
+                if(nearestCharacter)
+                {
+                    Vector2 direction = nearestCharacter.transform.position - characterBase.transform.position;
+
+                    characterBase.Orient(Vector2Int.RoundToInt(direction.normalized));
+                }
             }
 
             return nearestCharacter;
@@ -44,18 +51,23 @@ namespace Game.Characters
         public static CharacterBase FaceNearestCharacter(this CharacterBase characterBase, float radius, LayerMask characterLayer)
         {
             IEnumerable<Tuple<CharacterBase, float>> characterHits = Utilities.GetCharacters(characterBase.transform.position, radius, characterLayer).
-                Where(character => character.collider.GetComponent<CharacterBase>() != characterBase).
+                Where(character => character.collider != characterBase.boxCollider2D).
                 Select(hit => new Tuple<CharacterBase, float>(hit.collider.GetComponent<CharacterBase>(), hit.distance));
 
-            Tuple<CharacterBase, float> nearestCharacterByDistance = characterHits.First(c => characterHits.Min(characterMin => characterMin.Item2) == c.Item2);
+            CharacterBase nearestCharacter = null;
 
-            CharacterBase nearestCharacter = nearestCharacterByDistance != null ? nearestCharacterByDistance.Item1 : null;
-
-            if(nearestCharacter)
+            if(characterHits.Any())
             {
-                Vector2 direction = nearestCharacter.transform.position - characterBase.transform.position;
+                Tuple<CharacterBase, float> nearestCharacterByDistance = characterHits.First(c => characterHits.Min(characterMin => characterMin.Item2) == c.Item2);
 
-                characterBase.Orient(Vector2Int.FloorToInt(direction.normalized));
+                nearestCharacter = nearestCharacterByDistance != null ? nearestCharacterByDistance.Item1 : null;
+
+                if(nearestCharacter)
+                {
+                    Vector2 direction = nearestCharacter.transform.position - characterBase.transform.position;
+
+                    characterBase.Orient(Vector2Int.FloorToInt(direction.normalized));
+                }
             }
 
             return nearestCharacter;

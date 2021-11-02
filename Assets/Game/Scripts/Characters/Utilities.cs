@@ -34,7 +34,7 @@ namespace Game.Characters
         }
 
         /// <summary>
-        /// Gets the characters inside the circle.
+        /// Gets the characters inside the circle but returns an array of RaycastHit2D.
         /// </summary>
         /// <param name="center">Center of the circle.</param>
         /// <param name="radius">Radius of the circle</param>
@@ -46,7 +46,7 @@ namespace Game.Characters
         }
 
         /// <summary>
-        /// Gets the characters inside the circle.
+        /// Gets the T characters inside the circle.
         /// </summary>
         /// <param name="center">Center of the circle.</param>
         /// <param name="radius">Radius of the circle</param>

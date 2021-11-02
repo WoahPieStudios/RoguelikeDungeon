@@ -12,9 +12,10 @@ public class TestAttack : Attack
     LayerMask _CharacterLayer;
     protected override IEnumerator Tick()
     {
-        
-        target.FaceNearestCharacter(range, _CharacterLayer);
-        target.FaceNearestCharacter<CharacterBase>(range, _CharacterLayer);
+        Debug.Log(target.FaceNearestCharacter(range, _CharacterLayer));
+
+        // target.FaceNearestCharacter(range, _CharacterLayer);
+        // target.FaceNearestCharacter<CharacterBase>(range, _CharacterLayer);
         
         yield return null;
 
