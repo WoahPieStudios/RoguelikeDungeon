@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af41438a1d5b4e68b7c8223b555fd91b, type: 3}
+  m_Name: New Knight Hero Data
+  m_EditorClassIdentifier: 
+  _Icon: {fileID: 0}
+  _MaxHealth: 0
+  _MoveSpeed: 1
+  _Attack: {fileID: 11400000, guid: 7eab0b5973e01014295687e226238bab, type: 2}
+  _MaxMana: 0
+  _PassiveEffects: []
+  _Skill: {fileID: 11400000, guid: 5ef95fc7862fd8948a24ec8aacfbf36a, type: 2}
+  _Ultimate: {fileID: 11400000, guid: a08d64d82d87afc46be8eb6efeed44a4, type: 2}
