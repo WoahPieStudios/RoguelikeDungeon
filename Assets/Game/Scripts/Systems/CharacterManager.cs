@@ -1,5 +1,5 @@
 using System;
-using Game.Characters.Temp;
+using Game.Characters;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -46,7 +46,7 @@ public class CharacterManager : MonoBehaviour
 
     private void Update()
     {
-        party[0].isPlayerControlled = true;
+        //party[0].isPlayerControlled = true;
     }
 
     private void FixedUpdate()
@@ -57,7 +57,7 @@ public class CharacterManager : MonoBehaviour
 
     private void Attack(InputAction.CallbackContext obj)
     {
-        party[0].Attack();
+        party[0].UseAttack();
     }
     
     private void SwapAssist(InputAction.CallbackContext obj)
@@ -67,9 +67,9 @@ public class CharacterManager : MonoBehaviour
         party[1] = temp;
 
         party[0].transform.position = party[1].transform.position;
-        party[1].isPlayerControlled = false;
-        party[0].ChangeSortingOrder(1);
-        party[1].ChangeSortingOrder(0);
+        // party[1].isPlayerControlled = false;
+        // party[0].ChangeSortingOrder(1);
+        // party[1].ChangeSortingOrder(0);
     }
     
     private void SwapOffField(InputAction.CallbackContext obj)
@@ -82,10 +82,10 @@ public class CharacterManager : MonoBehaviour
         
         party[0].transform.position = party[2].transform.position;
         
-        party[2].isPlayerControlled = false;
-
-        party[0].ChangeSortingOrder(1);
-        party[2].ChangeSortingOrder(0);
+        // party[2].isPlayerControlled = false;
+        
+        // party[0].ChangeSortingOrder(1);
+        // party[2].ChangeSortingOrder(0);
         
         party[2].gameObject.SetActive(false);
     }
