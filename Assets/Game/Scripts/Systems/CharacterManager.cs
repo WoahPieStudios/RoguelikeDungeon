@@ -17,7 +17,7 @@ public class CharacterManager : MonoBehaviour
 
     private void Start()
     {
-        party[2].gameObject.SetActive(false);
+        //party[2].gameObject.SetActive(false);
     }
 
     private void OnEnable()
