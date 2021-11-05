@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25c046ba3745a1c4eb8a194b67559cf4, type: 3}
-  m_Name: TestPassive
+  m_Script: {fileID: 11500000, guid: 4d74a1a248d4b5740936c2bf08fc09ff, type: 3}
+  m_Name: New Test Enemy Data
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-  _TrackAction: -1
-  _ActiveEffect: {fileID: 11400000, guid: 58dc3ed1d7291634480aca0aa60612b5, type: 2}
+  _MaxHealth: 0
+  _MoveSpeed: 0
+  _Attack: {fileID: 0}

@@ -4,18 +4,24 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public abstract class ActiveEffect : Effect
+    public abstract class ActiveEffect : Effect, IRestrainActionEffect
     {
         [SerializeField]
-        RestrictAction _RestrictAction;
+        RestrictAction _RestictAction;
+        
+        /// <summary>
+        /// Restricts the actions of whomever is casted upon.
+        /// </summary>
+        public RestrictAction restrictAction => _RestictAction;
 
-        public RestrictAction restrictAction => _RestrictAction;
-
+        /// <summary>
+        /// Ends effect and is Removed from the effect list of whomever is casted upon.
+        /// </summary>
         public override void End()
         {
             base.End();
 
-            characterBase.RemoveEffects(this);
+            target.RemoveEffects(this);
         }
     }
 }

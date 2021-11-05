@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46375a0ce55d81543bb16ceb0befc5a8, type: 3}
-  m_Name: TestSkill
+  m_Script: {fileID: 11500000, guid: 79077074f503dee4fa8c995bb75a47e4, type: 3}
+  m_Name: New Test Active Effect
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-  _CoolDownTime: 1
+  _IsStackable: 0
+  _RestictAction: 3

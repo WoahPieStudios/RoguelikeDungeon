@@ -8,14 +8,16 @@ using Game.Characters;
 [CreateAssetMenu(menuName = "Data/TestAttack")]
 public class TestAttack : Attack
 {
-    public override bool CanUse()
+    [SerializeField]
+    LayerMask _CharacterLayer;
+    protected override IEnumerator Tick()
     {
-        return true;
-    }
+        target.FaceNearestCharacter(range, _CharacterLayer);
+        target.FaceNearestCharacter<CharacterBase>(range, _CharacterLayer);
 
-    public override IEnumerator Tick()
-    {
-        Debug.Log("Attack");
+        Utilities.GetCharacters(Vector3.zero, 5, _CharacterLayer);
+        Utilities.GetCharacters<CharacterBase>(Vector3.zero, 5, _CharacterLayer);
+        Utilities.GetNearestCharacter<CharacterBase>(Vector3.zero, 5, _CharacterLayer);
         
         yield return null;
 

@@ -10,10 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af7040878b03be44cae39d783f7884ad, type: 3}
-  m_Name: TestAttack
+  m_Name: New Test Attack
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-  _Damage: 0
-  _Range: 0
-  _Speed: 0
-  _Effects: []
+  _Damage: 15
+  _Range: 20
+  _Speed: 10
+  _ActiveEffects:
+  - {fileID: 11400000, guid: 3994e68009de6fb42be7c410ff5db2c4, type: 2}
+  _CharacterLayer:
+    serializedVersion: 2
+    m_Bits: 8

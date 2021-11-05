@@ -11,20 +11,23 @@ public class TestPassive : PassiveEffect
     [SerializeField]
     ActiveEffect _ActiveEffect;
 
-    public override bool isStackable => true;
-
-    public override void Stack(Effect effect)
-    {
-
-    }
-
-    public override IEnumerator Tick()
+    protected override IEnumerator Tick()
     {
         Debug.Log("Passive");
 
-        characterBase.AddEffects(_ActiveEffect);
-        yield return null;
+        target.AddEffects(sender, _ActiveEffect);
+        yield return new WaitForSeconds(3);
 
         End();
+    }
+
+    public override void Stack(params Effect[] effects)
+    {
+        Debug.Log("passive stacked");
+    }
+
+    public override bool CanUse(Hero hero)
+    {
+        return base.CanUse(hero);
     }
 }

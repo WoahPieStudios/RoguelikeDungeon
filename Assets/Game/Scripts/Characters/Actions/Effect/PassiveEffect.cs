@@ -4,16 +4,32 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public abstract class PassiveEffect : Effect
+    public abstract class PassiveEffect : Effect, ITrackActionEffect
     {
         [SerializeField]
         TrackAction _TrackAction;
-
+        
+        /// <summary>
+        /// Flags the Actions of the Hero to be tracked.
+        /// </summary>
         public TrackAction trackAction => _TrackAction;
 
-        public virtual void Initialize(CharacterBase effected)
+        /// <summary>
+        /// Checks if the passive effect can be used.
+        /// </summary>
+        public virtual bool CanUse(Hero hero)
         {
-            Begin(effected);
+            return !isActive;
+        }
+        
+        /// <summary>
+        /// Ends Passive Effect.
+        /// </summary>
+        public override void End()
+        {
+            base.End();
+
+            target.RemoveEffects(this);
         }
     }
 }
