@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: af7040878b03be44cae39d783f7884ad, type: 3}
   m_Name: New Test Attack
   m_EditorClassIdentifier: 
-  _Icon: {fileID: 0}
+  _Icon: {fileID: -6407341208919860682, guid: 82f63f579cc2aca4d8574cf956db85e8, type: 3}
   _Damage: 15
   _Range: 20
   _Speed: 10

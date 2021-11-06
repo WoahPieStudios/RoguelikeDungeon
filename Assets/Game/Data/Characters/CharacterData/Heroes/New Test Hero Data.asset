@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8cdff842523e1e448af9a4db7d464847, type: 3}
   m_Name: New Test Hero Data
   m_EditorClassIdentifier: 
-  _Icon: {fileID: 0}
-  _MaxHealth: 15
+  _Icon: {fileID: 1814985696275974519, guid: 82f63f579cc2aca4d8574cf956db85e8, type: 3}
+  _MaxHealth: 20
   _MoveSpeed: 5
   _Attack: {fileID: 11400000, guid: 7585672fcd661014882840e741bc7103, type: 2}
   _MaxMana: 20
