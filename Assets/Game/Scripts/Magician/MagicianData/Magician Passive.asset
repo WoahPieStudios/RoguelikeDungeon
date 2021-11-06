@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
   _IsStackable: 0
-  _TrackAction: -1
+  _TrackAction: 0
   _ActiveEffect: {fileID: 0}
