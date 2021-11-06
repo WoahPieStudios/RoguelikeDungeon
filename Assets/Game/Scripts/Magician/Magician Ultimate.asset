@@ -9,9 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 25c046ba3745a1c4eb8a194b67559cf4, type: 3}
-  m_Name: PassiveData
+  m_Script: {fileID: 11500000, guid: 55706c885f516ad449dcd8b9e59e7dc2, type: 3}
+  m_Name: Magician Ultimate
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-  _TrackAction: 0
-  _ActiveEffect: {fileID: 0}
+  _CoolDownTime: 0
+  _ManaCost: 0

@@ -5,11 +5,13 @@ using Game.Characters;
 
 public class Magician : Hero
 {
-    [SerializeField] HeroData heroData;
+    [SerializeField] HeroData _HeroData;
 
-    private void Awake()
+    protected override void Awake()
     {
-        AssignData(heroData);
+        base.Awake();
+
+        AssignData(_HeroData);
     }
 
     void Update()
