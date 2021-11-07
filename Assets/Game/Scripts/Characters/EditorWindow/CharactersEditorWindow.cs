@@ -21,7 +21,8 @@ namespace Game.CharactersEditor
         SerializedAssetData _SelectedData = null;
 
         Vector2 _ExplorerScrollPosition;
-        Vector2 _ContentScrollPosition;
+        Vector2 _ContentScrollPosition; 
+
 
         [MenuItem("Window/Characters Window")]
         static CharactersEditorWindow OpenWindow()
@@ -51,20 +52,9 @@ namespace Game.CharactersEditor
                 return false;
         }
 
-        void OnGUI() 
-        {
-            EditorGUILayout.BeginVertical();
-
-            DrawMenuBar();
-
-            DrawContent();
-
-            EditorGUILayout.EndVertical();
-        } 
-
         void OnEnable() 
         {
-            _SelectedData = null;    
+            _SelectedData = null;
             
             RefreshDatabase();
         }
@@ -74,6 +64,19 @@ namespace Game.CharactersEditor
             _ExplorerScrollPosition = Vector2.zero;
             _ContentScrollPosition = Vector2.zero;
         }
+
+        void OnGUI() 
+        {
+            EditorGUILayout.BeginVertical();
+
+            DrawMenuBar();
+
+            DrawContent();
+
+            EditorGUILayout.EndVertical();
+
+            CheckAndDrawContextMenu();
+        } 
         
         void DrawMenuBar()
         {
@@ -111,6 +114,7 @@ namespace Game.CharactersEditor
             {
                 // TEMP SOLUTION FOR REMOVING UNEXPECTED DELETION OF ASSET
                 _SerializedAssetDatas = _SerializedAssetDatas.Where(data => data.assetObject).ToArray();
+
 
                 foreach(SerializedAssetData data in _SerializedAssetDatas)
                 {
@@ -169,6 +173,29 @@ namespace Game.CharactersEditor
                 Where(assetObject => assetObject is IIcon).
                 Select(assetObject => new SerializedAssetData(assetObject)).
                 ToArray();
+        }
+
+        void CheckAndDrawContextMenu()
+        {
+            Rect controlRect = EditorGUILayout.GetControlRect();
+
+            Event currentEvent = Event.current; 
+
+            if(currentEvent.type == EventType.ContextClick)
+            {
+                GenericMenu menu = new GenericMenu();
+
+                menu.AddDisabledItem(new GUIContent("I clicked on a thing"));
+                menu.AddItem(new GUIContent("Do a thing"), false, DoSomething, "Blah");
+                menu.ShowAsContext();
+
+                Debug.Log("Blah");
+            }
+        }
+
+        void DoSomething(object o)
+        {
+            Debug.Log(o);
         }
     }
 }

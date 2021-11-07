@@ -20,15 +20,19 @@ namespace Game.CharactersEditor
 
         SerializedAssetData _NewSerializedAssetData;
 
+        static Type[] _RootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
+
         void OnEnable() 
         {
-            _CreatableAssetTypes = GetAllCreatableAsset();
+            _CreatableAssetTypes = Utilities.GetAllCreatableAssetTypes().ToArray();
 
             _CreatableAssetTypeNames = _CreatableAssetTypes.Select(t => CompileInheritedClassNames(t)).ToArray();
 
             _CurrentSelectedTypeIndex = 0;
             
             _NewSerializedAssetData = CreateNewAssetData(_CreatableAssetTypes[_CurrentSelectedTypeIndex]);
+
+            Debug.Log("Blah");
         }
 
         void OnGUI() 
@@ -48,64 +52,20 @@ namespace Game.CharactersEditor
 
             if(GUILayout.Button("Save"))
             {
-                AssetDatabase.CreateAsset(_NewSerializedAssetData.assetObject, $"Assets/Game/{_NewSerializedAssetData.name}.asset");
-
+                SaveFile(_NewSerializedAssetData);
+ 
                 Close();
             }
-
-            if(GUILayout.Button("Test"))
-            {
-                foreach(Type t in typeof(TestPassive).GetBaseTypes(typeof(Characters.Action)))
-                {
-                    Debug.Log(t);
-                }
-            }
-        }
-
-        Type[] GetAllCreatableAsset()
-        {
-            List<Type> typeList = new List<Type>();
-            
-            typeList.AddRange(Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => !t.IsAbstract && typeof(IIcon).IsAssignableFrom(t)));
-            typeList.AddRange(Assembly.GetAssembly(typeof(CharacterData)).GetTypes().Where(t => !t.IsAbstract && typeof(IIcon).IsAssignableFrom(t)));
-
-            return typeList.ToArray();
         }
 
         string CompileInheritedClassNames(Type type)
         {
-            string compiledClassNames = "";
-
-            foreach(string typeName in type.Assembly.GetTypes().Where(t => type.IsSubclassOf(t)).Select(t => t.Name))
-                compiledClassNames += typeName + "/";
-
-            compiledClassNames += type.Name;
-            
-            return compiledClassNames;
+            return type.GetBaseTypes(_RootTypes).Select(t => t.Name).Reverse().Concat("/") + type.Name;
         }
 
         SerializedAssetData CreateNewAssetData(Type type)
         {
             return new SerializedAssetData(ScriptableObject.CreateInstance(type));
-        }
-
-        void DrawSerializedAssetData(SerializedAssetData serializedAssetData)
-        {
-            SerializedProperty property = serializedAssetData.serializedObject.GetIterator();
-
-            EditorGUI.BeginChangeCheck();
-
-            property.NextVisible(true);
-
-            serializedAssetData.assetObject.name = EditorGUILayout.TextField("Name", serializedAssetData.name);
-
-            while(property.NextVisible(true))
-                EditorGUILayout.PropertyField(property);
-
-            if(EditorGUI.EndChangeCheck())
-            {
-                serializedAssetData.UpdateData();
-            }
         }
 
         SerializedAssetData CopyOverData(SerializedAssetData fromData, SerializedAssetData toData)
@@ -128,6 +88,39 @@ namespace Game.CharactersEditor
             toData.assetObject.name = fromDataName;
 
             return toData;
+        }
+
+        void DrawSerializedAssetData(SerializedAssetData serializedAssetData)
+        {
+            SerializedProperty property = serializedAssetData.serializedObject.GetIterator();
+
+            EditorGUI.BeginChangeCheck();
+
+            property.NextVisible(true);
+
+            serializedAssetData.assetObject.name = EditorGUILayout.TextField("Name", serializedAssetData.name);
+
+            while(property.NextVisible(true))
+                EditorGUILayout.PropertyField(property);
+
+            if(EditorGUI.EndChangeCheck())
+            {
+                serializedAssetData.UpdateData();
+            }
+        }
+
+        void SaveFile(SerializedAssetData serializedAssetData)
+        {
+            Type type = serializedAssetData.assetObject.GetType();
+            string path = "Assets/Game/Data/Characters/" + type.GetBaseTypes(Utilities.creatableAssetRootTypes).Select(t => t.Name).Reverse().Concat("/") + type.Name;
+
+            if(serializedAssetData.name != "")
+            {
+                if(!AssetDatabase.IsValidFolder(path))
+                    Utilities.CreateFolder(path);
+                
+                AssetDatabase.CreateAsset(serializedAssetData.assetObject, $"{path}/{serializedAssetData.name}.asset");
+            }
         }
     }
 }

@@ -6,29 +6,45 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using UnityEditor;
+
+using Game.Characters;
+
 namespace Game.CharactersEditor
 {
     public static class Utilities 
     {
-        public static IEnumerable<Type> GetBaseTypes(this Type type)
-        {
-            if(type.BaseType == null) 
-                return null;
-
-            return Enumerable.Repeat(type.BaseType, 1).Concat(type.BaseType.GetBaseTypes());
-        }
+        static Type[] _CreatableAssetRootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
         
-        public static IEnumerable<Type> GetBaseTypes(this Type type, params Type[] rootTypes)
-        {
-            int i = 0;
-            
-            while(type.BaseType != null && !rootTypes.Contains(type.BaseType))
-            {
-                if(i > 50)
-                    break;
+        public static Type[] creatableAssetRootTypes => _CreatableAssetRootTypes;
 
-                yield return type.BaseType;
+        public static void CreateFolder(string path)
+        {
+            string currentPath = "";
+            string tempPath = "";
+
+            foreach(string s in path.Split('/'))
+            {
+                tempPath = currentPath;
+
+                currentPath += (tempPath.Length > 0 ? "/" : "") + s;
+
+                if(tempPath != string.Empty && !AssetDatabase.IsValidFolder(currentPath))
+                    AssetDatabase.CreateFolder(tempPath, s);
+
+                tempPath = currentPath;
             }
+
+            AssetDatabase.Refresh();
+        }
+
+        public static IEnumerable<Type> GetAllCreatableAssetTypes()
+        {
+            foreach(Type t in Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => !t.IsAbstract && typeof(IIcon).IsAssignableFrom(t)))
+                yield return t;
+
+            foreach(Type t in Assembly.GetAssembly(typeof(CharacterData)).GetTypes().Where(t => !t.IsAbstract && typeof(IIcon).IsAssignableFrom(t)))
+                yield return t;
         }
     }
 }
