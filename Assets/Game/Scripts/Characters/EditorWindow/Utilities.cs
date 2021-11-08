@@ -40,11 +40,11 @@ namespace Game.CharactersEditor
 
         public static IEnumerable<Type> GetAllCreatableAssetTypes()
         {
-            foreach(Type t in Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => !t.IsAbstract && typeof(IIcon).IsAssignableFrom(t)))
+            foreach(Type t in Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(Characters.Action)) || t.IsSubclassOf(typeof(CharacterData)))))
                 yield return t;
 
-            foreach(Type t in Assembly.GetAssembly(typeof(CharacterData)).GetTypes().Where(t => !t.IsAbstract && typeof(IIcon).IsAssignableFrom(t)))
-                yield return t;
+            // foreach(Type t in Assembly.GetAssembly(typeof(CharacterData)).GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(CharacterData))))
+            //     yield return t;
         }
     }
 }

@@ -188,8 +188,6 @@ namespace Game.CharactersEditor
                 menu.AddDisabledItem(new GUIContent("I clicked on a thing"));
                 menu.AddItem(new GUIContent("Do a thing"), false, DoSomething, "Blah");
                 menu.ShowAsContext();
-
-                Debug.Log("Blah");
             }
         }
 

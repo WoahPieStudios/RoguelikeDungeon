@@ -20,6 +20,8 @@ namespace Game.CharactersEditor
 
         SerializedAssetData _NewSerializedAssetData;
 
+        bool _IsNameEmpty = false;
+
         static Type[] _RootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
 
         void OnEnable() 
@@ -32,14 +34,16 @@ namespace Game.CharactersEditor
             
             _NewSerializedAssetData = CreateNewAssetData(_CreatableAssetTypes[_CurrentSelectedTypeIndex]);
 
-            Debug.Log("Blah");
+            _IsNameEmpty = false;
         }
 
         void OnGUI() 
         {
             int tempSelectedTypeIndex = _CurrentSelectedTypeIndex;
 
-            tempSelectedTypeIndex = EditorGUILayout.Popup(_CurrentSelectedTypeIndex, _CreatableAssetTypeNames);
+            tempSelectedTypeIndex = EditorGUILayout.Popup("Asset Type", _CurrentSelectedTypeIndex, _CreatableAssetTypeNames);
+
+            EditorGUILayout.Space();
 
             if(tempSelectedTypeIndex != _CurrentSelectedTypeIndex)
             {
@@ -52,9 +56,20 @@ namespace Game.CharactersEditor
 
             if(GUILayout.Button("Save"))
             {
-                SaveFile(_NewSerializedAssetData);
- 
-                Close();
+                if(_NewSerializedAssetData.name != "")
+                {
+                    SaveFile(_NewSerializedAssetData);
+    
+                    Close();
+                }
+
+                else
+                    _IsNameEmpty = true;
+            }
+
+            if(_IsNameEmpty)
+            {
+                EditorGUILayout.LabelField("Name must not be empty!");
             }
         }
 
