@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using UnityEditor;
+using UnityEditor.Callbacks;
 
 using Game.Characters;
 
@@ -23,6 +24,12 @@ namespace Game.CharactersEditor
         bool _IsNameEmpty = false;
 
         static Type[] _RootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
+
+        [MenuItem("Window/Characters Asset Creation Window")]
+        static void OpenWindow()
+        {
+            CreateAssetWindow.GetWindow<CreateAssetWindow>("Characters Asset Creation Window");
+        }
 
         void OnEnable() 
         {
