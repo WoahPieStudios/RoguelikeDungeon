@@ -20,4 +20,4 @@ MonoBehaviour:
   _PassiveEffects:
   - {fileID: 11400000, guid: 5932ed2f1392524498ba54d3a1578332, type: 2}
   _Skill: {fileID: 11400000, guid: 07607897e48242e46817b915a8e8486a, type: 2}
-  _Ultimate: {fileID: 0}
+  _Ultimate: {fileID: 11400000, guid: 8739b4f6f7e8da2478b3f58a34263dee, type: 2}
