@@ -34,12 +34,13 @@ public class TestPassive : PassiveEffect, IAttackBonus
 
     public override void StartEffect(CharacterBase sender, CharacterBase effected)
     {
-        if(sender.attack is IReceiveAttackBonus)
+        base.StartEffect(sender, effected);
+
+        if(target.attack is IReceiveAttackBonus)
         {
-            (sender.attack as IReceiveAttackBonus).AddAttackBonus(this);
+            (target.attack as IReceiveAttackBonus).AddAttackBonus(this);
         }
 
-        base.StartEffect(sender, effected);
     }
 
     public override void End()
