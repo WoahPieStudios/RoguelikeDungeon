@@ -11,6 +11,10 @@ namespace Game.Characters
 
         bool _IsActive = false;
 
+        bool _IsCopy;
+
+        int _InstanceId;
+
         Coroutine _TickCoroutine;
 
         CharacterBase _Target;
@@ -34,9 +38,14 @@ namespace Game.Characters
         /// To determine if Action is a copy or not. **DO NOT CHANGE THE VALUE**
         /// </summary>
         /// <value></value>
-        public bool isCopied { get; set; }
+        public bool isCopied => _IsCopy;
 
-        
+        /// <summary>
+        /// Unique ID of the Action. **DO NOT CHANGE THE VALUE**
+        /// </summary>
+        /// <returns></returns>
+        public int instanceId => _InstanceId;
+
         // Tick, to update your action, also in IEnumerator for to set update in Fixed or normal Update. **DO NOT SETACTIVE(FALSE) GAMEOBJECT AS IT WILL STOP ALL TICKS**
         /// <summary>
         /// Updates the action. **DO NOT SETACTIVE(FALSE) GAMEOBJECT AS IT WILL STOP ALL TICKS**
@@ -73,11 +82,12 @@ namespace Game.Characters
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T CreateCopy<T>() where T : ScriptableObject, ICopyable
+        public T CreateCopy<T>() where T : Action
         {
             T copy = Instantiate(this) as T;
 
-            copy.isCopied = true;
+            copy._InstanceId = GetInstanceID();
+            copy._IsCopy = true;
 
             return copy;
         }
