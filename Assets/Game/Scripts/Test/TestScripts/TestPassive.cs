@@ -6,16 +6,17 @@ using UnityEngine;
 using Game.Characters;
 
 [CreateAssetMenu(menuName = "Data/TestPassive")]
-public class TestPassive : PassiveEffect
+public class TestPassive : PassiveEffect, IAttackBonus
 {
-    [SerializeField]
-    ActiveEffect _ActiveEffect;
+
+    public int damageBonus => 5;
+
+    public float rangeBonus => 5;
+
+    public float speedBonus => 5;
 
     protected override IEnumerator Tick()
     {
-        Debug.Log("Passive");
-
-        target.AddEffects(sender, _ActiveEffect);
         yield return new WaitForSeconds(3);
 
         End();
@@ -29,5 +30,25 @@ public class TestPassive : PassiveEffect
     public override bool CanUse(Hero hero)
     {
         return base.CanUse(hero);
+    }
+
+    public override void StartEffect(CharacterBase sender, CharacterBase effected)
+    {
+        if(sender.attack is IReceiveAttackBonus)
+        {
+            (sender.attack as IReceiveAttackBonus).AddAttackBonus(this);
+        }
+
+        base.StartEffect(sender, effected);
+    }
+
+    public override void End()
+    {
+        if(target.attack is IReceiveAttackBonus)
+        {
+            (target.attack as IReceiveAttackBonus).RemoveAttackBonus(this);
+        }
+
+        base.End();
     }
 }
