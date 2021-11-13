@@ -10,9 +10,9 @@ namespace Game.Characters
     [System.Flags]
     public enum TrackAction
     {
-        None = 0x00,
-        Attack = 0x01,
-        Skill = 0x02,
-        Ultimate = 0x03
+        None = 0,
+        Attack = 1 << 1,
+        Skill = 1 << 2,
+        Ultimate = 1 << 3
     }
 }
