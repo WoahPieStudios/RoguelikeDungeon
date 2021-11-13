@@ -85,7 +85,7 @@ namespace Game.CharactersEditor
                 textStyle.normal.textColor = Color.white;
                 textStyle.clipping = TextClipping.Clip;
 
-                if(size > 0.1f)
+                if(size > 40f)
                 {
                     textStyle.alignment = TextAnchor.MiddleCenter;
 
@@ -171,7 +171,7 @@ namespace Game.CharactersEditor
 
         void DrawExplorerArea()
         {
-            float itemSize = Mathf.Lerp(20, 100, _ItemScale);
+            float itemSize = Mathf.Lerp(40, 100, _ItemScale);
 
             EditorGUILayout.BeginVertical();
 
@@ -200,6 +200,8 @@ namespace Game.CharactersEditor
 
         void DrawAssetContent()
         {
+            EditorGUILayout.BeginVertical("box");
+
             if(_SelectedData != null && _SelectedData.assetObject)
             {
                 EditorGUI.BeginChangeCheck();
@@ -226,6 +228,8 @@ namespace Game.CharactersEditor
                     DrawExplorerArea();
                 }
             }
+
+            EditorGUILayout.EndVertical();
         }
 
         void RefreshDatabase()
