@@ -15,4 +15,4 @@ MonoBehaviour:
   _Icon: {fileID: 0}
   _IsStackable: 0
   _TrackAction: -1
-  _ActiveEffect: {fileID: 0}
+  _ActiveEffect: {fileID: 11400000, guid: 3caf44480e9c0ab429521ad8b067f016, type: 2}

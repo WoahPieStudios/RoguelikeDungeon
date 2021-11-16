@@ -16,7 +16,8 @@ MonoBehaviour:
   _Damage: 5
   _Range: 5
   _Speed: 5
-  _ActiveEffects: []
+  _ActiveEffects:
+  - {fileID: 11400000, guid: 3caf44480e9c0ab429521ad8b067f016, type: 2}
   _CharacterLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
