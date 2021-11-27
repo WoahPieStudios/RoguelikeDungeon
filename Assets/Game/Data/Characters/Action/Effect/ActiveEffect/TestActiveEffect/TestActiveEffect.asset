@@ -13,9 +13,5 @@ MonoBehaviour:
   m_Name: TestActiveEffect
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-<<<<<<< HEAD
-  _IsStackable: 1
-=======
   _IsStackable: 0
->>>>>>> 2ffa8cfd832a2e6ef998973712a5ebdee8861d5e
   _RestictAction: -1

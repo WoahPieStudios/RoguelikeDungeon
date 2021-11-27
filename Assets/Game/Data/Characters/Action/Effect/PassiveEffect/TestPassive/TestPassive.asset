@@ -13,10 +13,6 @@ MonoBehaviour:
   m_Name: TestPassive
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-<<<<<<< HEAD
-  _IsStackable: 1
-=======
   _IsStackable: 0
->>>>>>> 2ffa8cfd832a2e6ef998973712a5ebdee8861d5e
   _TrackAction: -1
   _ActiveEffect: {fileID: 11400000, guid: 3caf44480e9c0ab429521ad8b067f016, type: 2}
