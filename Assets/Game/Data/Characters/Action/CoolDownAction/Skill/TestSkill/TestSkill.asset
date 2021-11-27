@@ -13,4 +13,8 @@ MonoBehaviour:
   m_Name: TestSkill
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
+<<<<<<< HEAD
   _CoolDownTime: 0
+=======
+  _CoolDownTime: 2
+>>>>>>> 2ffa8cfd832a2e6ef998973712a5ebdee8861d5e

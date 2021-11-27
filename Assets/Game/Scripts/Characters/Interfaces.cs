@@ -5,11 +5,11 @@ using UnityEngine;
 namespace Game.Characters
 {
     // I honestly have no idea why I added lots of interfaces but yeah~ I just added the not forgetting so that it sounds like there's a purpose
-    
     public interface ICopyable
     {
-        bool isCopied { get; set; }
-        T CreateCopy<T>() where T : ScriptableObject, ICopyable;
+        int instanceId { get; }
+        bool isCopied { get; }
+        T CreateCopy<T>() where T : Action;
     }
 
     public interface IPassiveEffects

@@ -21,6 +21,6 @@ public class TestActiveEffect : ActiveEffect
     public override void Stack(params Effect[] effects)
     {
         _StackCount += effects.Length;
-        Debug.Log(effects.Length);
+        Debug.LogWarning("test active stacked!");
     }
 }

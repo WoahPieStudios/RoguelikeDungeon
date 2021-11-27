@@ -16,7 +16,7 @@ namespace Game.Characters
 
         protected override void OnCooldown()
         {
-            Debug.Log(currentCoolDownTime);
+            
         }
     }
 }
