@@ -14,6 +14,13 @@ namespace Game.CharactersEditor
 {
     public static class MethodExtensions
     {
+        public static bool IsSameType<T>(this IEnumerable<T> source)
+        {
+            Type type = source.First().GetType();
+
+            return !(source.Where(o => o.GetType() != type).Count() > 0);
+        }
+
         public static string Concat(this IEnumerable<string> source, string seperator)
         {
             string result = "";

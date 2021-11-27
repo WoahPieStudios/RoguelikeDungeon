@@ -33,7 +33,7 @@ namespace Game.CharactersEditor
 
         void OnEnable() 
         {
-            _CreatableAssetTypes = Utilities.GetAllCreatableAssetTypes().ToArray();
+            _CreatableAssetTypes = CharactersUtilities.GetAllCreatableAssetTypes().ToArray();
 
             _CreatableAssetTypeNames = _CreatableAssetTypes.Select(t => CompileInheritedClassNames(t)).ToArray();
 
@@ -134,12 +134,12 @@ namespace Game.CharactersEditor
         void SaveFile(SerializedAssetData serializedAssetData)
         {
             Type type = serializedAssetData.assetObject.GetType();
-            string path = "Assets/Game/Data/Characters/" + type.GetBaseTypes(Utilities.creatableAssetRootTypes).Select(t => t.Name).Reverse().Concat("/") + type.Name;
+            string path = "Assets/Game/Data/Characters/" + type.GetBaseTypes(CharactersUtilities.creatableAssetRootTypes).Select(t => t.Name).Reverse().Concat("/") + type.Name;
 
             if(serializedAssetData.name != "")
             {
                 if(!AssetDatabase.IsValidFolder(path))
-                    Utilities.CreateFolder(path);
+                    AssetUtilities.CreateFolder(path);
                 
                 AssetDatabase.CreateAsset(serializedAssetData.assetObject, $"{path}/{serializedAssetData.name}.asset");
             }
