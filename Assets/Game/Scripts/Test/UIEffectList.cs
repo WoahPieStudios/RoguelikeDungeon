@@ -9,9 +9,9 @@ using Game.Characters;
 public class UIEffectList : MonoBehaviour
 {
     [SerializeField]
-    Text _Text;
+    readonly Text _Text;
     [SerializeField]
-    TestHero _TestHero;
+    readonly TestHero _TestHero;
 
     // Start is called before the first frame update
     void Start()

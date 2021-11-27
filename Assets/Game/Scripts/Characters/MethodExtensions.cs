@@ -28,7 +28,7 @@ namespace Game.Characters
             {
                 Tuple<T, float> nearestCharacterByDistance = characterHits.First(c => characterHits.Min(characterMin => characterMin.Item2) == c.Item2);
 
-                nearestCharacter = nearestCharacterByDistance != null ? nearestCharacterByDistance.Item1 : null;
+                nearestCharacter = nearestCharacterByDistance?.Item1;
 
                 if(nearestCharacter)
                 {

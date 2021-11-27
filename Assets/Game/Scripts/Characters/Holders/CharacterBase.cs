@@ -17,7 +17,7 @@ namespace Game.Characters
 
         // Effects
         RestrictAction _RestrictedActions;
-        List<Effect> _EffectList = new List<Effect>();
+        readonly List<Effect> _EffectList = new List<Effect>();
 
         // Collider
         BoxCollider2D _BoxCollider;
@@ -97,7 +97,7 @@ namespace Game.Characters
         // Effects
         void UpdateRestrainedActions()
         {
-            RestrictAction RestrainedActions = default(RestrictAction);
+            RestrictAction RestrainedActions = default;
 
             // Adds Restrict Actions to RestrainedActions
             foreach(RestrictAction r in _EffectList.Where(effect => effect.GetType() is IRestrainActionEffect).Select(effect => (effect as IRestrainActionEffect).restrictAction))//_EffectList.Where(effect => effect.GetType().IsSubclassOf(typeof(ActiveEffect))).Select(effect => (effect as ActiveEffect).restrictAction))

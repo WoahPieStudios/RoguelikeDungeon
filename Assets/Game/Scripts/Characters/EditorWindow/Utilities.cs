@@ -14,14 +14,14 @@ namespace Game.CharactersEditor
 {
     public static class Utilities 
     {
-        static Type[] _CreatableAssetRootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
+        static readonly Type[] _CreatableAssetRootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
         
         public static Type[] creatableAssetRootTypes => _CreatableAssetRootTypes;
 
         public static void CreateFolder(string path)
         {
             string currentPath = "";
-            string tempPath = "";
+            string tempPath;
 
             foreach(string s in path.Split('/'))
             {

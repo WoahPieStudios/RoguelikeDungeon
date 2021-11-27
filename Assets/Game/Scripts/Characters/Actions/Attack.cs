@@ -7,13 +7,13 @@ namespace Game.Characters
     public abstract class Attack : Action
     {
         [SerializeField]
-        int _Damage = 0;
+        readonly int _Damage = 0;
         [SerializeField]
-        float _Range = 0;
+        readonly float _Range = 0;
         [SerializeField]
-        float _Speed = 0;
+        readonly float _Speed = 0;
         [SerializeField]
-        ActiveEffect[] _ActiveEffects;
+        readonly ActiveEffect[] _ActiveEffects;
 
         /// <summary>
         /// Damage of the Attack.

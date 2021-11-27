@@ -22,13 +22,12 @@ namespace Game.CharactersEditor
         SerializedAssetData _NewSerializedAssetData;
 
         bool _IsNameEmpty = false;
-
-        static Type[] _RootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
+        static readonly Type[] _RootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
 
         [MenuItem("Window/Characters Asset Creation Window")]
         static void OpenWindow()
         {
-            CreateAssetWindow.GetWindow<CreateAssetWindow>("Characters Asset Creation Window");
+            GetWindow<CreateAssetWindow>("Characters Asset Creation Window");
         }
 
         void OnEnable() 
@@ -46,9 +45,7 @@ namespace Game.CharactersEditor
 
         void OnGUI() 
         {
-            int tempSelectedTypeIndex = _CurrentSelectedTypeIndex;
-
-            tempSelectedTypeIndex = EditorGUILayout.Popup("Asset Type", _CurrentSelectedTypeIndex, _CreatableAssetTypeNames);
+            int tempSelectedTypeIndex = EditorGUILayout.Popup("Asset Type", _CurrentSelectedTypeIndex, _CreatableAssetTypeNames);
 
             EditorGUILayout.Space();
 

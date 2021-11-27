@@ -56,8 +56,7 @@ namespace Game.CharactersEditor
         class AssetItem
         {
             Rect _Rect;
-
-            SerializedAssetData _SerializedAssetData;
+            readonly SerializedAssetData _SerializedAssetData;
 
             public SerializedAssetData serializedAssetData => _SerializedAssetData;
             
@@ -71,7 +70,7 @@ namespace Game.CharactersEditor
             {
                 GUIContent content = new GUIContent(text);
 
-                Vector2 size = GUI.skin.label.CalcSize(content);
+                // Vector2 size = GUI.skin.label.CalcSize(content);
 
                 return content;
             }
@@ -80,7 +79,7 @@ namespace Game.CharactersEditor
             {
                 GUIStyle textStyle = new GUIStyle();
 
-                bool isSelected = false;
+                bool isSelected;
 
                 textStyle.normal.textColor = Color.white;
                 textStyle.clipping = TextClipping.Clip;
