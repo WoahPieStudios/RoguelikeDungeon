@@ -14,13 +14,6 @@ namespace Game.CharactersEditor
 {
     public static class AssetUtilities 
     {
-<<<<<<< HEAD:Assets/Game/Scripts/Characters/EditorWindow/AssetUtilities.cs
-=======
-        static readonly Type[] _CreatableAssetRootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
-        
-        public static Type[] creatableAssetRootTypes => _CreatableAssetRootTypes;
-
->>>>>>> ee4d850124339e48857a7472963abbf7e8acd4ca:Assets/Game/Scripts/Characters/EditorWindow/Utilities.cs
         public static void CreateFolder(string path)
         {
             string currentPath = "";
