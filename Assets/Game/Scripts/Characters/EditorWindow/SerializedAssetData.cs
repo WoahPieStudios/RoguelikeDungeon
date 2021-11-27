@@ -15,7 +15,7 @@ namespace Game.CharactersEditor
     public class SerializedAssetData
     {
         Texture2D _Icon;
-        readonly SerializedObject _SerializedObject;
+        SerializedObject _SerializedObject;
 
         public Texture2D icon => _Icon;
         public string name => assetObject.name;

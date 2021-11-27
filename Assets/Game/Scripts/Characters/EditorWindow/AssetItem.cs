@@ -10,25 +10,23 @@ namespace Game.CharactersEditor
     public class AssetItem
     {
         Rect _Rect;
-
         SerializedAssetData _SerializedAssetData;
-
         string _Path;
 
         public SerializedAssetData serializedAssetData => _SerializedAssetData;
-        public UnityEngine.Object assetObject => _SerializedAssetData.assetObject;
+        public Object assetObject => _SerializedAssetData.assetObject;
         public string name => _SerializedAssetData.name;
         public Texture icon => _SerializedAssetData.icon;
         public string path => _Path;
 
         public bool isSelected { get; set; } = false;
         
-        public AssetItem(UnityEngine.Object assetObject)
+        public AssetItem(Object assetObject)
         {
             _SerializedAssetData = new SerializedAssetData(assetObject);
         }
 
-        public AssetItem(UnityEngine.Object assetObject, string path)
+        public AssetItem(Object assetObject, string path)
         {
             _SerializedAssetData = new SerializedAssetData(assetObject);
 
@@ -39,7 +37,7 @@ namespace Game.CharactersEditor
         {
             GUIContent content = new GUIContent(text);
 
-            Vector2 size = GUI.skin.label.CalcSize(content);
+            // Vector2 size = GUI.skin.label.CalcSize(content);
 
             return content;
         }

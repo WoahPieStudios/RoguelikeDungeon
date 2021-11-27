@@ -9,7 +9,7 @@ namespace Game.Characters
     public class Hero : Character<HeroData>, ISkillUser, IUltimateUser, IPassiveEffects
     {
         int _CurrentMana;
-        readonly Dictionary<TrackAction, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackAction, PassiveEffect[]>();
+        Dictionary<TrackAction, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackAction, PassiveEffect[]>();
 
         IEnumerable<PassiveEffect> _AttackPassives;
         IEnumerable<PassiveEffect> _SkillPassives;

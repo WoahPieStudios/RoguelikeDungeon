@@ -7,7 +7,7 @@ namespace Game.Characters
     public abstract class CoolDownAction : Action, ICoolDown
     {
         [SerializeField]
-        readonly float _CoolDownTime;
+        float _CoolDownTime;
 
         float _CurrentCoolDownTime;
 

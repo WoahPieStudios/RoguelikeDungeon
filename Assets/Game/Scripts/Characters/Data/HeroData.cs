@@ -7,13 +7,13 @@ namespace Game.Characters
     public class HeroData : CharacterData
     {
         [SerializeField]
-        readonly int _MaxMana;
+        int _MaxMana;
         [SerializeField]
-        readonly PassiveEffect[] _PassiveEffects;
+        PassiveEffect[] _PassiveEffects;
         [SerializeField]
-        readonly Skill _Skill;
+        Skill _Skill;
         [SerializeField]
-        readonly Ultimate _Ultimate;
+        Ultimate _Ultimate;
 
         /// <summary>
         /// Max Mana of the Hero

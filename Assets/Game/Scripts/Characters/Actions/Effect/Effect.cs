@@ -7,7 +7,7 @@ namespace Game.Characters
     public abstract class Effect : Action, IStackableEffect
     { 
         [SerializeField]
-        readonly bool _IsStackable;
+        bool _IsStackable;
 
         CharacterBase _Sender;
 

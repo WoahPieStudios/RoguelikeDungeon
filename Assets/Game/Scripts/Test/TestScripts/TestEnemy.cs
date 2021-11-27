@@ -7,7 +7,7 @@ namespace Game.Characters
     public class TestEnemy : Enemy
     {
         [SerializeField]
-        readonly EnemyData _EnemyData;
+        EnemyData _EnemyData;
         
         protected override void Awake()
         {

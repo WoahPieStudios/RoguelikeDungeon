@@ -7,7 +7,7 @@ namespace Game.Characters
     public abstract class Action : ScriptableObject, IIcon, ICopyable
     {
         [SerializeField]
-        readonly Sprite _Icon;
+        Sprite _Icon;
 
         bool _IsActive = false;
 

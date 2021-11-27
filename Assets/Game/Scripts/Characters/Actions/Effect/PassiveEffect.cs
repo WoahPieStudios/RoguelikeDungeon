@@ -7,7 +7,7 @@ namespace Game.Characters
     public abstract class PassiveEffect : Effect, ITrackActionEffect
     {
         [SerializeField]
-        readonly TrackAction _TrackAction;
+        TrackAction _TrackAction;
         
         /// <summary>
         /// Flags the Actions of the Hero to be tracked.

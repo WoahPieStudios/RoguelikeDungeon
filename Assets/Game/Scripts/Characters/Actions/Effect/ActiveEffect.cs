@@ -7,7 +7,7 @@ namespace Game.Characters
     public abstract class ActiveEffect : Effect, IRestrainActionEffect
     {
         [SerializeField]
-        readonly RestrictAction _RestictAction;
+        RestrictAction _RestictAction;
         
         /// <summary>
         /// Restricts the actions of whomever is casted upon.

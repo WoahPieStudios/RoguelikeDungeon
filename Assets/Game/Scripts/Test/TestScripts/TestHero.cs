@@ -8,7 +8,7 @@ using Game.Characters;
 public class TestHero : Hero
 {
     [SerializeField]
-    readonly HeroData _HeroData;
+    HeroData _HeroData;
 
     protected override void Awake() 
     {

@@ -22,7 +22,7 @@ namespace Game.CharactersEditor
         SerializedAssetData _NewSerializedAssetData;
 
         bool _IsNameEmpty = false;
-        static readonly Type[] _RootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
+        static Type[] _RootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
 
         [MenuItem("Window/Characters Asset Creation Window")]
         static void OpenWindow()

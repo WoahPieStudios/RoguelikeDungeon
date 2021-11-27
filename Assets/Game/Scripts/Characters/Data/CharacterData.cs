@@ -10,19 +10,19 @@ namespace Game.Characters
     {
         [Header("Icon")]
         [SerializeField]
-        readonly Sprite _Icon;
+        Sprite _Icon;
 
         [Header("Health")]
         [SerializeField]
-        readonly int _MaxHealth;
+        int _MaxHealth;
 
         [Header("Move")]
         [SerializeField]
-        readonly float _MoveSpeed;
+        float _MoveSpeed;
 
         [Header("Attack")]
         [SerializeField]
-        readonly Attack _Attack;
+        Attack _Attack;
 
         // Health
         /// <summary>

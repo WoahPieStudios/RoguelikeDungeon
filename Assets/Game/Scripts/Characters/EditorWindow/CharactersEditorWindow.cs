@@ -29,7 +29,7 @@ namespace Game.CharactersEditor
         private string _SearchQuery;
         private int _Category;
 
-        private readonly float _Padding = 19;
+        private float _Padding = 19;
 
         private bool _IsMovingSeperator;
 
@@ -246,17 +246,15 @@ namespace Game.CharactersEditor
 
         private void DrawAssetContent()
         {
-            // AssetItem assetItem = Select.selection.FirstOrDefault(o => o is AssetItem) as AssetItem;
-
             // EditorGUILayout.BeginVertical("box", GUILayout.Width(_ContentAreaWidth));
 
-            // if(assetItem != null && assetItem.assetObject)
+            // if (Select.selection.FirstOrDefault(o => o is AssetItem) is AssetItem assetItem && assetItem.assetObject)
             // {
             //     EditorGUI.BeginChangeCheck();
 
             //     SerializedProperty property = assetItem.serializedAssetData.serializedObject.GetIterator();
 
-            //     property.NextVisible(true);
+            //     property.Next(true);
 
             //     _ContentScrollPosition = EditorGUILayout.BeginScrollView(_ContentScrollPosition);// BeginVertical();
 
@@ -388,7 +386,13 @@ namespace Game.CharactersEditor
                     Select.RemoveSelection(Select.selection.Where(o => o is AssetItem).ToArray());
 
                 if (mousePositionInsideAssetItem != null)
-                    Select.AddSelection(mousePositionInsideAssetItem);
+                {
+                    if (Select.selection.Contains(mousePositionInsideAssetItem))
+                        Select.RemoveSelection(mousePositionInsideAssetItem);
+
+                    else
+                        Select.AddSelection(mousePositionInsideAssetItem);
+                }
 
                 Repaint();
             }

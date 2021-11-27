@@ -17,7 +17,7 @@ namespace Game.Characters
 
         // Effects
         RestrictAction _RestrictedActions;
-        readonly List<Effect> _EffectList = new List<Effect>();
+        List<Effect> _EffectList = new List<Effect>();
 
         // Collider
         BoxCollider2D _BoxCollider;
