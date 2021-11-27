@@ -7,12 +7,12 @@ namespace Game.Characters
     public abstract class CoolDownAction : Action, ICoolDown
     {
         [SerializeField]
-        float _CoolDownTime;
+        readonly float _CoolDownTime;
 
         float _CurrentCoolDownTime;
 
         bool _IsCoolingDown = false;
-
+        
         Coroutine _CoolDownCoroutine;
         
         /// <summary>
@@ -68,6 +68,16 @@ namespace Game.Characters
             base.End();
 
             _CoolDownCoroutine = target.StartCoroutine(CoolDown());
+        }
+
+        public virtual void StopCoolDown()
+        {
+            if(_CoolDownCoroutine != null)
+            {
+                _IsCoolingDown = false;
+
+                target.StopCoroutine(_CoolDownCoroutine);
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ using Game.Characters;
 public class TestPassive : PassiveEffect
 {
     [SerializeField]
-    ActiveEffect _ActiveEffect;
+    readonly ActiveEffect _ActiveEffect;
 
     protected override IEnumerator Tick()
     {

@@ -48,17 +48,49 @@ namespace Game.CharactersEditor
         [OnOpenAsset]
         private static bool OpenWindow(int instanceID, int line)
         {
+<<<<<<< HEAD
             UnityEngine.Object assetObject = EditorUtility.InstanceIDToObject(instanceID);
 
             if (assetObject is IIcon)
+=======
+            Rect _Rect;
+            readonly SerializedAssetData _SerializedAssetData;
+
+            public SerializedAssetData serializedAssetData => _SerializedAssetData;
+            
+            public AssetItem(UnityEngine.Object assetObject)
+            {
+                _SerializedAssetData = new SerializedAssetData(assetObject);
+            }
+
+
+            GUIContent LimitLabel(string text)
+>>>>>>> ee4d850124339e48857a7472963abbf7e8acd4ca
             {
                 CharactersEditorWindow window = OpenWindow();
 
+<<<<<<< HEAD
                 window.RefreshDatabase();
+=======
+                // Vector2 size = GUI.skin.label.CalcSize(content);
+>>>>>>> ee4d850124339e48857a7472963abbf7e8acd4ca
 
                 AssetItem assetItem = window._AssetItems.First(assetItem => assetItem.assetObject == assetObject);
 
+<<<<<<< HEAD
                 if (assetItem != null)
+=======
+            public bool Draw(float size)
+            {
+                GUIStyle textStyle = new GUIStyle();
+
+                bool isSelected;
+
+                textStyle.normal.textColor = Color.white;
+                textStyle.clipping = TextClipping.Clip;
+
+                if(size > 40f)
+>>>>>>> ee4d850124339e48857a7472963abbf7e8acd4ca
                 {
                     Select.AddSelection(assetItem);
 

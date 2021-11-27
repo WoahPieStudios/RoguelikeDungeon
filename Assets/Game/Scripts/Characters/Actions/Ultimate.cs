@@ -7,7 +7,7 @@ namespace Game.Characters
     public abstract class Ultimate : CoolDownAction
     {
         [SerializeField]
-        int _ManaCost;
+        readonly int _ManaCost;
 
         /// <summary>
         /// Mana cost of the Ultimate
