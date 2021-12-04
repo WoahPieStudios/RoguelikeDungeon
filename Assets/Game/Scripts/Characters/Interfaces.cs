@@ -6,6 +6,20 @@ namespace Game.Characters
 {
     // I honestly have no idea why I added lots of interfaces but yeah~ I just added the not forgetting so that it sounds like there's a purpose
     
+    public interface IAttackBonus
+    {
+        int damageBonus { get; }
+        float rangeBonus { get; }
+        float speedBonus { get; }
+    }
+
+    public interface IReceiveAttackBonus
+    {
+        IAttackBonus[] attackBonuses { get; }
+        void AddAttackBonus(IAttackBonus attackBonus);
+        void RemoveAttackBonus(IAttackBonus attackBonus);
+    }
+
     public interface ICopyable
     {
         bool isCopied { get; set; }
