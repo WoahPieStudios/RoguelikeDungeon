@@ -7,11 +7,14 @@ using UnityEditor;
 
 namespace Game.CharactersEditor
 {
-    public class AssetItem
+    public class AssetItem : IRename, IDuplicate
     {
         Rect _Rect;
         SerializedAssetData _SerializedAssetData;
         string _Path;
+
+        bool _IsRenaming = false;
+        string _NewName;
 
         public SerializedAssetData serializedAssetData => _SerializedAssetData;
         public Object assetObject => _SerializedAssetData.assetObject;
@@ -20,11 +23,7 @@ namespace Game.CharactersEditor
         public string path => _Path;
 
         public bool isSelected { get; set; } = false;
-        
-        public AssetItem(Object assetObject)
-        {
-            _SerializedAssetData = new SerializedAssetData(assetObject);
-        }
+        public bool isRenaming => _IsRenaming;
 
         public AssetItem(Object assetObject, string path)
         {
@@ -42,40 +41,67 @@ namespace Game.CharactersEditor
             return content;
         }
 
-        public void Draw(float size)
+        GUIStyle GetBox()
         {
             GUIStyle box = new GUIStyle("box");
-            GUIStyle textStyle = new GUIStyle();
 
             if(isSelected)
                 box.normal.background = Texture2D.grayTexture;
 
+            return box;
+        }
+
+        GUIStyle GetTextStyle()
+        {
+            GUIStyle textStyle = new GUIStyle();
+
             textStyle.normal.textColor = Color.white;
             textStyle.clipping = TextClipping.Clip;
 
-            if(size > 40f)
-            {
-                textStyle.alignment = TextAnchor.MiddleCenter;
+            return textStyle;
+        }
 
-                EditorGUILayout.BeginVertical(box, GUILayout.Width(size), GUILayout.Height(size));
-
-                GUILayout.Box(_SerializedAssetData.icon, GUILayout.Width(size), GUILayout.Height(size));
-                GUILayout.Label(LimitLabel(_SerializedAssetData.name), textStyle, GUILayout.Width(size));
-
-                EditorGUILayout.EndVertical();
-            }
+        void DrawName(GUIStyle textStyle, params GUILayoutOption[] options)
+        {
+            if(isRenaming)
+                _NewName = EditorGUILayout.TextField(_NewName);
 
             else
-            {
-                textStyle.alignment = TextAnchor.MiddleLeft;
+                GUILayout.Label(LimitLabel(_SerializedAssetData.name), textStyle, options);
+        }
 
-                EditorGUILayout.BeginHorizontal(box);
+        public void DrawInTileForm(float size)
+        {
+            GUIStyle box = GetBox();
+            GUIStyle textStyle = GetTextStyle();
 
-                GUILayout.Box(_SerializedAssetData.icon, GUILayout.Width(20), GUILayout.Height(20));
-                GUILayout.Label(LimitLabel(_SerializedAssetData.name));
+            textStyle.alignment = TextAnchor.MiddleCenter;
 
-                EditorGUILayout.EndHorizontal();
-            }
+            EditorGUILayout.BeginVertical(box, GUILayout.Width(size), GUILayout.Height(size));
+
+            GUILayout.Box(icon, GUILayout.Width(size), GUILayout.Height(size));
+
+            DrawName(textStyle, GUILayout.Width(size));
+
+            EditorGUILayout.EndVertical();
+
+            _Rect = GUILayoutUtility.GetLastRect();
+        }
+
+        public void DrawInListForm()
+        {
+            GUIStyle box = GetBox();
+            GUIStyle textStyle = GetTextStyle();
+
+            textStyle.alignment = TextAnchor.MiddleLeft;
+
+            EditorGUILayout.BeginHorizontal(box);
+
+            GUILayout.Box(_SerializedAssetData.icon, GUILayout.Width(20), GUILayout.Height(20));
+
+            DrawName(textStyle);
+
+            EditorGUILayout.EndHorizontal();
 
             _Rect = GUILayoutUtility.GetLastRect();
         }
@@ -83,6 +109,35 @@ namespace Game.CharactersEditor
         public bool Contains(Vector2 point)
         {
             return _Rect.Contains(point);
+        }
+
+        public void RenameStart()
+        {
+            _IsRenaming = true;
+            
+            _NewName = name;
+        }
+
+        public void RenameCancel()
+        {
+            _IsRenaming = false;
+        }
+
+        public void RenameAccept()
+        {
+            _IsRenaming = false;
+
+            AssetDatabase.RenameAsset(path, _NewName);
+        }
+
+        public void Duplicate()
+        {
+            Object newAssetObject = Object.Instantiate(assetObject);
+
+            string fileName = $"/{name}.asset";
+            string newFileName = $"/{name} - copy.asset";
+
+            AssetDatabase.CreateAsset(newAssetObject, path.Remove(path.Length - fileName.Length - 1, fileName.Length) + newFileName);
         }
     }
 }

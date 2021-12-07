@@ -19,5 +19,5 @@ MonoBehaviour:
   _MaxMana: 0
   _PassiveEffects:
   - {fileID: 11400000, guid: 5932ed2f1392524498ba54d3a1578332, type: 2}
-  _Skill: {fileID: 11400000, guid: 07607897e48242e46817b915a8e8486a, type: 2}
-  _Ultimate: {fileID: 11400000, guid: 8739b4f6f7e8da2478b3f58a34263dee, type: 2}
+  _Skill: {fileID: 11400000, guid: bc48c3f7deff5a54cbbf474b8cbbdc57, type: 2}
+  _Ultimate: {fileID: 11400000, guid: 3d23e3a1c9eb07642a26c3d140ca4512, type: 2}

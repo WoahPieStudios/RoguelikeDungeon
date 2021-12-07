@@ -6,23 +6,28 @@ namespace Game.CharactersEditor
 {
     public static class EditorInput
     {
-        private static List<KeyCode> _KeysPressedList = new List<KeyCode>();
+        static List<KeyCode> _KeysPressedList = new List<KeyCode>();
 
         public static Vector2 mousePosition => Event.current.mousePosition;
         public static Vector2 deltaMousePostion => Event.current.delta;
+        public static bool isMouseMoving => Event.current.type == EventType.MouseMove;
 
         public static bool isShiftPressed => Event.current.shift;
         public static bool isCapsLockToggled => Event.current.capsLock;
 
         public static int consecutiveClickCount => Event.current.clickCount;
 
-        private static void AddKeyPress(KeyCode key)
+        public static bool isDragUpdated => Event.current.type == EventType.DragUpdated;
+        public static bool isDragPerformed => Event.current.type == EventType.DragPerform;
+        public static bool isDragExited => Event.current.type == EventType.DragExited;
+
+        static void AddKeyPress(KeyCode key)
         {
             if(!_KeysPressedList.Contains(key))
                 _KeysPressedList.Add(key);
         }
 
-        private static void RemoveKeyPress(KeyCode key)
+        static void RemoveKeyPress(KeyCode key)
         {
             if(_KeysPressedList.Contains(key))
                 _KeysPressedList.Remove(key);

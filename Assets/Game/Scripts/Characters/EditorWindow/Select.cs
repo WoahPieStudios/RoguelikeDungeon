@@ -9,7 +9,7 @@ namespace Game.CharactersEditor
 {
     public static class Select
     {
-        private static List<object> _SelectionList = new List<object>();
+        static List<object> _SelectionList = new List<object>();
 
         public static object[] selection => _SelectionList.ToArray();
 

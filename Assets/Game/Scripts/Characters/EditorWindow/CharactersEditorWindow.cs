@@ -15,28 +15,30 @@ namespace Game.CharactersEditor
 {
     public class CharactersEditorWindow : EditorWindow
     {
-        private AssetItem[] _AssetItems;
-        private AssetItem[] _DisplayAssetItems;
+        AssetItem[] _AssetItems;
+        AssetItem[] _DisplayAssetItems;
 
-        private Vector2 _ExplorerScrollPosition;
-        private Vector2 _ContentScrollPosition;
+        SerializedObject _DisplaySerializedObject;
+        bool _LockContent;
 
-        private float _ItemScale;
+        Vector2 _ExplorerScrollPosition;
+        Vector2 _ContentScrollPosition;
 
-        private float _ExplorerAreaWidth;
-        private float _ContentAreaWidth;
+        float _ItemScale;
 
-        private string _SearchQuery;
-        private int _Category;
+        float _SeperatorPercent;
+        bool _IsMovingSeperator;
 
-        private float _Padding = 19;
+        float _ExplorerAreaWidth;
+        float _ContentAreaWidth;
 
-        private bool _IsMovingSeperator;
+        string _SearchQuery;
+        int _Category;
 
-        private bool _IsEnabled;
+        float _Padding = 19;
 
         [MenuItem("Window/Characters Window")]
-        private static CharactersEditorWindow OpenWindow()
+        static CharactersEditorWindow OpenWindow()
         {
             CharactersEditorWindow window = GetWindow<CharactersEditorWindow>("Characters Window");
 
@@ -46,46 +48,43 @@ namespace Game.CharactersEditor
         }
 
         [OnOpenAsset]
-        private static bool OpenWindow(int instanceID, int line)
+        static bool OpenWindow(int instanceID, int line)
         {
             UnityEngine.Object assetObject = EditorUtility.InstanceIDToObject(instanceID);
 
-            if (assetObject is IIcon)
-            {
-                CharactersEditorWindow window = OpenWindow();
-
-                window.RefreshDatabase();
-
-                AssetItem assetItem = window._AssetItems.First(assetItem => assetItem.assetObject == assetObject);
-
-                if (assetItem != null)
-                {
-                    Select.AddSelection(assetItem);
-
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-            else
-            {
+            if (!(assetObject is IIcon))
                 return false;
+
+            CharactersEditorWindow window = OpenWindow();
+
+            window.RefreshDatabase();
+
+            AssetItem assetItem = window._AssetItems.First(assetItem => assetItem.assetObject == assetObject);
+
+            if (assetItem != null)
+            {
+                Select.AddSelection(assetItem);
+
+                return true;
             }
+
+            else
+                return false;
         }
 
-        private void OnEnable()
+        void OnEnable()
         {
             RefreshDatabase();
 
-            _IsEnabled = true;
+            _LockContent = false;
+
+            _SeperatorPercent = 0.8f;
 
             Select.onAddSelection += OnAddSelection;
             Select.onRemoveSelection += OnRemoveSelection;
         }
 
-        private void OnDisable()
+        void OnDisable()
         {
             _ExplorerScrollPosition = Vector2.zero;
             _ContentScrollPosition = Vector2.zero;
@@ -94,7 +93,7 @@ namespace Game.CharactersEditor
             Select.onRemoveSelection -= OnRemoveSelection;
         }
 
-        private void OnGUI()
+        void OnGUI()
         {
             EditorGUILayout.BeginVertical();
 
@@ -103,12 +102,31 @@ namespace Game.CharactersEditor
             DrawContent();
 
             EditorGUILayout.EndVertical();
-
-            if(_IsEnabled)
-                _IsEnabled = false;
         }
 
-        private IEnumerable<AssetItem> GetAllAssetItemsFromDatabase()
+        void OnAddSelection(object[] selections)
+        {
+            IEnumerable<AssetItem> assetItems = selections.Where(o => o is AssetItem).Select(o => o as AssetItem);
+
+            foreach(AssetItem assetItem in assetItems)
+                assetItem.isSelected = true;
+
+            foreach(AssetItem assetItem in assetItems.Where(o => o.isRenaming))
+                assetItem.RenameCancel();
+        }
+
+        void OnRemoveSelection(object[] selections)
+        {
+            IEnumerable<AssetItem> assetItems = selections.Where(o => o is AssetItem).Select(o => o as AssetItem);
+            
+            foreach(AssetItem assetItem in assetItems)
+                assetItem.isSelected = false;
+
+            foreach(AssetItem assetItem in assetItems.Where(o => o.isRenaming))
+                assetItem.RenameCancel();
+        }
+
+        public IEnumerable<AssetItem> GetAllAssetItemsFromDatabase()
         {
             UnityEngine.Object assetObject;
 
@@ -121,19 +139,7 @@ namespace Game.CharactersEditor
             }
         }
 
-        private void OnAddSelection(object[] selections)
-        {
-            foreach(AssetItem assetItem in selections.Where(o => o is AssetItem).Select(o => o as AssetItem))
-                assetItem.isSelected = true;
-        }
-
-        private void OnRemoveSelection(object[] selections)
-        {
-            foreach(AssetItem assetItem in selections.Where(o => o is AssetItem).Select(o => o as AssetItem))
-                assetItem.isSelected = false;
-        }
-
-        private void DrawMenuBar()
+        void DrawMenuBar()
         {
             EditorGUILayout.BeginHorizontal();
 
@@ -149,7 +155,7 @@ namespace Game.CharactersEditor
 
             EditorGUILayout.EndHorizontal();
         }
-        private void DrawContent()
+        void DrawContent()
         {
             EditorGUILayout.BeginHorizontal();
 
@@ -162,10 +168,9 @@ namespace Game.CharactersEditor
             EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawSeperator()
+        void DrawSeperator()
         {
             float width = position.width;
-            float percentage;
 
             Rect rect = EditorGUILayout.BeginVertical(GUILayout.Width(10));
 
@@ -177,7 +182,6 @@ namespace Game.CharactersEditor
             GUILayout.EndVertical();
             EditorGUIUtility.AddCursorRect(GUILayoutUtility.GetLastRect(), MouseCursor.ResizeHorizontal);
 
-            // Event 
             if(rect.Contains(EditorInput.mousePosition) && EditorInput.GetMouseButtonDown(0))
                 _IsMovingSeperator = true;
 
@@ -185,31 +189,18 @@ namespace Game.CharactersEditor
                 _IsMovingSeperator = false;
 
             if(_IsMovingSeperator && EditorInput.GetMouseButtonDrag(0))
-            {
-                percentage = Mathf.Clamp(Mathf.InverseLerp(0, width, EditorInput.mousePosition.x), 0.2f, 0.8f);
+                _SeperatorPercent = Mathf.Clamp(Mathf.InverseLerp(0, width, EditorInput.mousePosition.x), 0.2f, 0.8f);
 
-                width -= _Padding;
+            width -= _Padding;
 
-                _ExplorerAreaWidth = width * percentage;
-                _ContentAreaWidth = width * (1 - percentage);
+            _ExplorerAreaWidth = width * _SeperatorPercent;
+            _ContentAreaWidth = width * (1 - _SeperatorPercent);
 
-                Repaint();
-            }
+            Repaint();
+        }
 
-            if(_IsEnabled)
-            {
-                percentage = 0.8f;
-
-                width -= _Padding;
-
-                _ExplorerAreaWidth = width * percentage;
-                _ContentAreaWidth = width * (1 - percentage);
-
-                Repaint();
-            }
-    }
-
-        private void DrawExplorerArea()
+        #region Explorer Area
+        void DrawExplorerArea()
         {
             float itemSize = Mathf.Lerp(40, 100, _ItemScale);
 
@@ -225,14 +216,6 @@ namespace Game.CharactersEditor
 
             EditorGUILayout.EndHorizontal();
 
-            _ExplorerScrollPosition = EditorGUILayout.BeginScrollView(_ExplorerScrollPosition);
-
-            DrawAssetItems(itemSize);
-
-            GUILayout.FlexibleSpace();
-
-            EditorGUILayout.EndScrollView();
-
             EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
 
             GUILayout.FlexibleSpace();
@@ -241,86 +224,20 @@ namespace Game.CharactersEditor
 
             EditorGUILayout.EndHorizontal();
 
+            _ExplorerScrollPosition = EditorGUILayout.BeginScrollView(_ExplorerScrollPosition);
+
+            DrawAssetItems(itemSize);
+
+            CheckAssetItemsEvent();
+
+            GUILayout.FlexibleSpace();
+
+            EditorGUILayout.EndScrollView();
+
             EditorGUILayout.EndVertical();
         }
 
-        private void DrawAssetContent()
-        {
-            // EditorGUILayout.BeginVertical("box", GUILayout.Width(_ContentAreaWidth));
-
-            // if (Select.selection.FirstOrDefault(o => o is AssetItem) is AssetItem assetItem && assetItem.assetObject)
-            // {
-            //     EditorGUI.BeginChangeCheck();
-
-            //     SerializedProperty property = assetItem.serializedAssetData.serializedObject.GetIterator();
-
-            //     property.Next(true);
-
-            //     _ContentScrollPosition = EditorGUILayout.BeginScrollView(_ContentScrollPosition);// BeginVertical();
-
-            //     EditorGUILayout.LabelField(assetItem.name);
-
-            //     while(property.NextVisible(false))
-            //         EditorGUILayout.PropertyField(property);
-
-            //     EditorGUILayout.EndScrollView();
-
-            //     if(EditorGUI.EndChangeCheck())
-            //     {
-            //         assetItem.serializedAssetData.UpdateData();
-
-            //         DrawExplorerArea();
-
-            //         Repaint();
-            //     }
-            // }
-
-            // EditorGUILayout.EndVertical();
-
-            IEnumerable<AssetItem> assetItemsSelected = Select.selection.Where(o => o is AssetItem).Select(o => o as AssetItem);
-
-            if(assetItemsSelected.Any())
-            {
-                AssetItem assetItem = assetItemsSelected.First();
-
-                UnityEngine.Object[] assetObjects = Select.selection.Where(o => o is AssetItem).Select(o => (o as AssetItem).assetObject).ToArray();
-
-                SerializedObject serializedObject = new SerializedObject(assetObjects);
-
-                EditorGUILayout.BeginVertical("box", GUILayout.Width(_ContentAreaWidth));
-
-                if(assetObjects.Length > 0 && assetObjects.IsSameType())
-                {
-                    EditorGUI.BeginChangeCheck();
-
-                    SerializedProperty property = serializedObject.GetIterator();
-
-                    property.NextVisible(true);
-
-                    _ContentScrollPosition = EditorGUILayout.BeginScrollView(_ContentScrollPosition);// BeginVertical();
-
-                    //EditorGUILayout.LabelField(assetItem.name);
-
-                    while(property.NextVisible(false))
-                        EditorGUILayout.PropertyField(property);
-
-                    EditorGUILayout.EndScrollView();
-
-                    if(EditorGUI.EndChangeCheck())
-                    {
-                        //assetItem.serializedAssetData.UpdateData();
-
-                        DrawExplorerArea();
-
-                        Repaint();
-                    }
-                }
-
-                EditorGUILayout.EndVertical();
-            }
-        }
-
-        private void DrawSearchBar()
+        void DrawSearchBar()
         {
             EditorGUI.BeginChangeCheck();
 
@@ -330,7 +247,7 @@ namespace Game.CharactersEditor
                 RefreshForQuery();
         }
 
-        private void DrawCategoryField()
+        void DrawCategoryField()
         {
             EditorGUI.BeginChangeCheck();
 
@@ -340,78 +257,197 @@ namespace Game.CharactersEditor
                 RefreshForQuery();
         }
 
-        private void DrawAssetItems(float itemSize)
+        void DrawAssetItems(float itemSize)
         {
-            if(_DisplayAssetItems?.Length > 0)
+            if(_DisplayAssetItems == null || _DisplayAssetItems.Length <= 0)
+                return;
+
+            if(itemSize > 40)
+                DrawAssetItemTileLayout(itemSize);
+
+            else
+                DrawAssetItemListLayout();
+        }
+
+        void DrawAssetItemTileLayout(float itemSize)
+        {
+            for(int i = 0; i < _DisplayAssetItems.Length; i++)
             {
-                if(itemSize > 40)
-                {
-                    for(int i = 0; i < _DisplayAssetItems.Length; i++)
-                    {
-                        int items = Mathf.Clamp(Mathf.FloorToInt(_ExplorerAreaWidth / (itemSize + _Padding)), 0, _DisplayAssetItems.Length);
+                int items = Mathf.Clamp(Mathf.FloorToInt(_ExplorerAreaWidth / (itemSize + _Padding)), 0, _DisplayAssetItems.Length);
 
-                        if(items + i > _DisplayAssetItems.Length)
-                            items -= (items + i) - _DisplayAssetItems.Length;
+                if(items + i > _DisplayAssetItems.Length)
+                    items -= (items + i) - _DisplayAssetItems.Length;
 
-                        EditorGUILayout.BeginHorizontal();
+                EditorGUILayout.BeginHorizontal();
 
-                        for(int n = 0; n < items; n++)
-                            _DisplayAssetItems[n + i].Draw(itemSize);
+                for(int n = 0; n < items; n++)
+                    _DisplayAssetItems[n + i].DrawInTileForm(itemSize);
 
-                        GUILayout.FlexibleSpace();
+                GUILayout.FlexibleSpace();
 
-                        EditorGUILayout.EndHorizontal();
+                EditorGUILayout.EndHorizontal();
 
-                        i += items - 1;
-                    }
-                }
-
-                else
-                {
-                    foreach(AssetItem assetItem in _DisplayAssetItems)
-                        assetItem.Draw(itemSize);
-                }
-
-                CheckAssetItemsEvent();
+                i += items - 1;
             }
         }
 
-        private void CheckAssetItemsEvent()
+        void DrawAssetItemListLayout()
         {
-            AssetItem mousePositionInsideAssetItem = Array.Find(_DisplayAssetItems, assetItem => assetItem.Contains(EditorInput.mousePosition));
+            foreach(AssetItem assetItem in _DisplayAssetItems)
+                assetItem.DrawInListForm();
+        }
+        #endregion
+        
+        void DrawAssetContent()
+        {
+            IEnumerable<AssetItem> assetItemsSelected = Select.selection.Where(o => o is AssetItem).Select(o => o as AssetItem);
 
-            if (EditorInput.GetMouseButtonDown(0))
+            UnityEngine.Object[] assetObjects = assetItemsSelected.Select(o => o.assetObject).ToArray();
+
+            EditorGUILayout.BeginVertical("box", GUILayout.Width(_ContentAreaWidth));
+
+            if(GUILayout.Button(_LockContent ? "Unlock" : "Lock"))
+                _LockContent = !_LockContent;
+
+            if(!(assetObjects.Length > 0 && assetObjects.IsSameType()) && !_LockContent)
             {
-                if (!EditorInput.isShiftPressed)
-                    Select.RemoveSelection(Select.selection.Where(o => o is AssetItem).ToArray());
+                GUILayout.FlexibleSpace();
+                
+                EditorGUILayout.EndVertical();
 
-                if (mousePositionInsideAssetItem != null)
-                {
-                    if (Select.selection.Contains(mousePositionInsideAssetItem))
-                        Select.RemoveSelection(mousePositionInsideAssetItem);
+                return;
+            }
+            
+            if(!_LockContent || _DisplaySerializedObject == null)
+                _DisplaySerializedObject = new SerializedObject(assetObjects);
 
-                    else
-                        Select.AddSelection(mousePositionInsideAssetItem);
-                }
+            EditorGUI.BeginChangeCheck();
+
+            SerializedProperty property = _DisplaySerializedObject.GetIterator();
+
+            property.NextVisible(true);
+
+            _ContentScrollPosition = EditorGUILayout.BeginScrollView(_ContentScrollPosition);
+
+            EditorGUILayout.LabelField(_DisplaySerializedObject.isEditingMultipleObjects ? "-" : _DisplaySerializedObject.targetObject.name, EditorStyles.boldLabel);
+
+            while (property.NextVisible(false))
+                EditorGUILayout.PropertyField(property);
+
+            EditorGUILayout.EndScrollView();
+
+            if(EditorGUI.EndChangeCheck())
+            {
+                _DisplaySerializedObject.ApplyModifiedProperties();
+
+                DrawExplorerArea();
 
                 Repaint();
             }
+
+            EditorGUILayout.EndVertical();
+        }
+
+        void CheckAssetItemsEvent()
+        {
+            if(_DisplayAssetItems == null || _DisplayAssetItems.Length <= 0)
+                return;
+
+            AssetItem mousePositionInsideAssetItem = Array.Find(_DisplayAssetItems, assetItem => assetItem.Contains(EditorInput.mousePosition));
+
+            if(EditorInput.GetMouseButtonDrag(0))
+                HandleDragAndDropEvent();
+
+            if (EditorInput.GetMouseButtonUp(0))
+                HandleLeftClick();
+            
             else if (EditorInput.GetMouseButtonDown(1))
+                HandleRightClick();
+
+            HandleRenameAssetItem();
+
+            Repaint();
+        }
+
+        void HandleLeftClick()
+        {
+            AssetItem[] assetItems = Select.selection.Where(o => o is AssetItem).Cast<AssetItem>().ToArray();
+            AssetItem mousePositionInsideAssetItem = Array.Find(_DisplayAssetItems, assetItem => assetItem.Contains(EditorInput.mousePosition));
+
+            if (!EditorInput.isShiftPressed)
+                Select.RemoveSelection(assetItems);
+
+            if (mousePositionInsideAssetItem != null)
             {
-                DrawContextMenu(mousePositionInsideAssetItem);
+                if (Select.selection.Contains(mousePositionInsideAssetItem))
+                    Select.RemoveSelection(mousePositionInsideAssetItem);
+
+                else
+                    Select.AddSelection(mousePositionInsideAssetItem);
+            }
+
+            GUI.FocusControl(null);
+        }
+
+        void HandleRightClick()
+        {
+            AssetItem[] assetItems = Select.selection.Where(o => o is AssetItem).Cast<AssetItem>().ToArray();
+
+            if(assetItems.Length <= 0)
+                return;
+
+            GenericMenu menu = new GenericMenu(); 
+
+            if(assetItems?.Length > 0)
+                menu.AddItem(new GUIContent("Delete"), false, DeleteAssetItem, assetItems);
+            else
+                menu.AddDisabledItem(new GUIContent("Delete"));
+
+            if(assetItems?.Length == 1)
+                menu.AddItem(new GUIContent("Rename"), false, RenameAssetItem, assetItems.First());
+            else
+                menu.AddDisabledItem(new GUIContent("Rename"));
+
+            menu.AddItem(new GUIContent("Duplicate"), false, DuplicateAssetItem, assetItems);
+                
+            menu.ShowAsContext();
+        }
+
+        void HandleRenameAssetItem()
+        {
+            AssetItem renameAssetItem = Array.Find(_DisplayAssetItems, assetItem => assetItem.isRenaming);
+
+            if((EditorInput.GetKeyDown(KeyCode.Return) || EditorInput.GetKeyDown(KeyCode.KeypadEnter)) && renameAssetItem != null)
+            {
+                renameAssetItem.RenameAccept();
+
+                RefreshDatabase();
             }
         }
 
-        private void RefreshDatabase()
+        void HandleDragAndDropEvent()
+        {
+            AssetItem[] assetItems = Select.selection.Where(o => o is AssetItem).Cast<AssetItem>().ToArray();
+            AssetItem mousePositionInsideAssetItem = Array.Find(_DisplayAssetItems, assetItem => assetItem.Contains(EditorInput.mousePosition));
+
+            if(mousePositionInsideAssetItem == null || EditorInput.deltaMousePostion.magnitude < 2 || assetItems.Length <= 0 || !mousePositionInsideAssetItem.isSelected)
+                return;
+
+            DragAndDrop.PrepareStartDrag();
+            DragAndDrop.objectReferences = assetItems.Select(a => a.assetObject).ToArray();
+            DragAndDrop.StartDrag(null);
+        }
+
+        void RefreshDatabase()
         {
             Select.RemoveAllSelection();
 
-            _AssetItems = GetAllAssetItemsFromDatabase().ToArray();
+            _AssetItems = GetAllAssetItemsFromDatabase().OrderBy(assetItem => assetItem.name).ToArray();
 
             RefreshForQuery();
         }
 
-        private void RefreshForQuery()
+        void RefreshForQuery()
         {
             // Search Query
             _DisplayAssetItems = !string.IsNullOrEmpty(_SearchQuery) ? _AssetItems.Where(assetItem => assetItem.name.ToLower().Contains(_SearchQuery.ToLower())).ToArray() : _AssetItems;
@@ -440,437 +476,59 @@ namespace Game.CharactersEditor
             }
         }
 
-        private void DrawContextMenu(AssetItem assetItem)
+        #region Context Menu
+        void DeleteAssetItem(object assetItemObjects)
         {
-            GenericMenu menu = new GenericMenu();
+            if(!(assetItemObjects is AssetItem[]))
+                return;
 
-            menu.AddItem(new GUIContent("Delete"), false, DeleteAssetItem, assetItem);
-            menu.AddItem(new GUIContent("Rename"), false, RenameAssetItem, assetItem);
-            menu.ShowAsContext();
+            AssetItem[] assetItems = assetItemObjects as AssetItem[];
+
+            Select.RemoveSelection(assetItems);
+
+            if(_LockContent)
+                RemoveAssetsFromSerializedContent(assetItems);
+
+            _AssetItems = _AssetItems.Except(assetItems).ToArray();
+            _DisplayAssetItems = _DisplayAssetItems.Except(assetItems).ToArray();
+
+            foreach(AssetItem assetItem in assetItems)
+                AssetDatabase.DeleteAsset(assetItem.path);
         }
 
-        private void DeleteAssetItem(object assetItemObject)
+        void RemoveAssetsFromSerializedContent(AssetItem[] assetItems)
+        {
+            IEnumerable<UnityEngine.Object> assetItemObjects = assetItems.Select(assetItem => assetItem.assetObject);
+            
+            UnityEngine.Object[] serializedObjects = _DisplaySerializedObject.targetObjects.Where(o => !assetItemObjects.Contains(o)).ToArray();
+
+            if(serializedObjects.Length <= 0)
+                _LockContent = false;
+
+            _DisplaySerializedObject = new SerializedObject(serializedObjects);
+        }
+
+        void RenameAssetItem(object assetItemObject)
         {
             AssetItem assetItem = assetItemObject as AssetItem;
 
-            Select.RemoveSelection(assetItemObject);
-
-            _AssetItems = _AssetItems.Where(a => a != assetItem).ToArray();
-            _DisplayAssetItems = _DisplayAssetItems.Where(a => a != assetItem).ToArray();
-
-            AssetDatabase.DeleteAsset(assetItem.path);
+            assetItem.RenameStart();
         }
 
-        private void RenameAssetItem(object assetItemObject)
+        void DuplicateAssetItem(object assetItemObjects)
         {
-            AssetItem assetItem = assetItemObject as AssetItem;
+            if(!(assetItemObjects is AssetItem[]))
+                return;
+                
+            AssetItem[] assetItems = assetItemObjects as AssetItem[];
+
+            Select.RemoveSelection(assetItems);
+
+            foreach(AssetItem assetItem in assetItems)
+                assetItem.Duplicate();
+
+            RefreshDatabase();
         }
+        #endregion
     }
-    // public class CharactersEditorWindow : EditorWindow
-    // {
-    //     AssetItem[] _AssetItems = null;
-    //     AssetItem[] _DisplayAssetItems = null;
- 
-    //     AssetItem _SelectedAssetItem = null;
-
-    //     Vector2 _ExplorerScrollPosition;
-    //     Vector2 _ContentScrollPosition; 
-
-    //     float _ItemScale = 0;
-
-    //     float _ExplorerAreaWidth;
-    //     float _ContentAreaWidth;
-
-    //     string _SearchQuery;
-    //     int _Category;
-
-    //     float _Padding = 19;
-
-    //     bool _IsMovingSeperator;
-
-    //     bool _IsEnabled = false;
-
-    //     [MenuItem("Window/Characters Window")]
-    //     static CharactersEditorWindow OpenWindow()
-    //     {
-    //         CharactersEditorWindow window = CharactersEditorWindow.GetWindow<CharactersEditorWindow>("Characters Window");
-
-    //         window.RefreshDatabase();
-
-    //         return window;
-    //     }
-
-    //     [OnOpenAsset]
-    //     static bool OpenWindow(int instanceID, int line)
-    //     {
-    //         UnityEngine.Object assetObject = EditorUtility.InstanceIDToObject(instanceID);
-
-    //         if(assetObject is IIcon)
-    //         {
-    //             CharactersEditorWindow window = OpenWindow();
-
-    //             window.RefreshDatabase();
-
-    //             AssetItem assetItem = window._AssetItems.First(assetItem => assetItem.assetObject == assetObject);
-
-    //             if(assetItem != null)
-    //             {
-    //                 window._SelectedAssetItem = assetItem;
-
-    //                 return true;
-    //             }
-
-    //             else
-    //                 return false;
-    //         }
-
-    //         else
-    //             return false;
-    //     }
-
-    //     void OnEnable() 
-    //     {
-    //         _SelectedAssetItem = null;
-            
-    //         RefreshDatabase();
-
-    //         _IsEnabled = true;
-    //     }
-
-    //     void OnDisable() 
-    //     {
-    //         _ExplorerScrollPosition = Vector2.zero;
-    //         _ContentScrollPosition = Vector2.zero;
-    //     }
-
-    //     void OnGUI() 
-    //     {
-    //         EditorGUILayout.BeginVertical();
-
-    //         DrawMenuBar();
-
-    //         DrawContent();
-
-    //         EditorGUILayout.EndVertical();
-
-    //         if(_IsEnabled)
-    //             _IsEnabled = false;
-    //     } 
-
-    //     IEnumerable<AssetItem> GetAllAssetItemsFromDatabase()
-    //     {
-    //         UnityEngine.Object assetObject;
-
-    //         foreach(string path in AssetDatabase.GetAllAssetPaths())
-    //         {
-    //             assetObject = AssetDatabase.LoadAssetAtPath(path, typeof(UnityEngine.Object));
-
-    //             if(assetObject is IIcon)
-    //                 yield return new AssetItem(assetObject, path);
-    //         }
-    //     }
-        
-    //     void DrawMenuBar()
-    //     {
-    //         EditorGUILayout.BeginHorizontal();
-
-    //         if(GUILayout.Button("Create New Asset"))
-    //         {
-    //             CreateAssetWindow.GetWindow<CreateAssetWindow>("Create Asset");
-    //         }
-
-    //         if(GUILayout.Button("Refresh"))
-    //         {
-    //             RefreshDatabase();
-    //         }
-
-    //         EditorGUILayout.EndHorizontal();
-    //     }
-    //     void DrawContent()
-    //     {
-    //         EditorGUILayout.BeginHorizontal();
-
-    //         DrawExplorerArea();
-
-    //         DrawSeperator();
-
-    //         DrawAssetContent();
-
-    //         EditorGUILayout.EndHorizontal();
-    //     }
-
-    //     void DrawSeperator()
-    //     {
-    //         float width = position.width;
-
-    //         Rect rect = EditorGUILayout.BeginVertical(GUILayout.Width(10));
-
-    //         GUILayout.FlexibleSpace();
-
-    //         Handles.color = Color.grey;
-    //         Handles.DrawLine(rect.center + Vector2.up * (rect.height / 2), rect.center + Vector2.down * (rect.height / 2));
-
-    //         GUILayout.EndVertical();
-    //         EditorGUIUtility.AddCursorRect(GUILayoutUtility.GetLastRect(), MouseCursor.ResizeHorizontal);
-
-    //         // Event 
-    //         if(rect.Contains(EditorInput.mousePosition) && EditorInput.MouseDown(0))
-    //             _IsMovingSeperator = true;
-
-    //         else if(EditorInput.MouseUp(0))
-    //             _IsMovingSeperator = false;
-
-    //         if(_IsMovingSeperator && EditorInput.MouseDrag(0))
-    //         {
-    //             float percentage = Mathf.Clamp(Mathf.InverseLerp(0, width, EditorInput.mousePosition.x), 0.2f, 0.8f);
-
-    //             width -= _Padding;
-                
-    //             _ExplorerAreaWidth = width * percentage;
-    //             _ContentAreaWidth = width * (1 - percentage);
-
-    //             Repaint();
-    //         }
-
-    //         if(_IsEnabled)
-    //         {
-    //             float percentage = 0.8f;
-
-    //             width -= _Padding;
-                
-    //             _ExplorerAreaWidth = width * percentage;
-    //             _ContentAreaWidth = width * (1 - percentage);
-
-    //             Repaint();
-    //         }
-    // }
-
-    //     void DrawExplorerArea()
-    //     {
-    //         float itemSize = Mathf.Lerp(40, 100, _ItemScale);
-
-    //         EditorGUILayout.BeginVertical(GUILayout.Width(_ExplorerAreaWidth));
-
-    //         EditorGUILayout.BeginHorizontal();
-            
-    //         DrawSearchBar();
-
-    //         GUILayout.FlexibleSpace();
-            
-    //         DrawCategoryField();
-
-    //         EditorGUILayout.EndHorizontal();
-
-    //         _ExplorerScrollPosition = EditorGUILayout.BeginScrollView(_ExplorerScrollPosition);
-    
-    //         DrawAssetItems(itemSize);
-
-    //         GUILayout.FlexibleSpace();
-
-    //         EditorGUILayout.EndScrollView();
-
-    //         EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
-
-    //         GUILayout.FlexibleSpace();
-
-    //         _ItemScale = GUILayout.HorizontalSlider(_ItemScale, 0, 1, GUILayout.Width(100)); 
-
-    //         EditorGUILayout.EndHorizontal();
-
-    //         EditorGUILayout.EndVertical();
-    //     }
-
-    //     void DrawAssetContent()
-    //     {
-    //         EditorGUILayout.BeginVertical("box", GUILayout.Width(_ContentAreaWidth));
-
-    //         if(_SelectedAssetItem != null && _SelectedAssetItem.assetObject)
-    //         {
-    //             EditorGUI.BeginChangeCheck();
-
-    //             SerializedProperty property = _SelectedAssetItem.serializedAssetData.serializedObject.GetIterator();
-
-    //             property.NextVisible(true);
-
-    //             _ContentScrollPosition = EditorGUILayout.BeginScrollView(_ContentScrollPosition);// BeginVertical();
-                
-    //             EditorGUILayout.LabelField(_SelectedAssetItem.name);
-
-    //             while(property.NextVisible(false))
-    //                 EditorGUILayout.PropertyField(property);
-
-    //             EditorGUILayout.EndScrollView();
-
-    //             if(EditorGUI.EndChangeCheck())
-    //             {
-    //                 _SelectedAssetItem.serializedAssetData.UpdateData();
-
-    //                 DrawExplorerArea();
-
-    //                 Repaint();
-    //             }
-    //         }
-
-    //         EditorGUILayout.EndVertical();
-    //     }
-
-    //     void DrawSearchBar()
-    //     {
-    //         EditorGUI.BeginChangeCheck();
-
-    //         _SearchQuery = EditorGUILayout.TextField(_SearchQuery);
-
-    //         if(EditorGUI.EndChangeCheck())
-    //             RefreshForQuery();
-    //     }
-
-    //     void DrawCategoryField()
-    //     {
-    //         EditorGUI.BeginChangeCheck();
-
-    //         _Category = EditorGUILayout.MaskField(_Category, CharactersUtilities.allCreatableAssetTypes.Select(t => t.Name).ToArray());
-
-    //         if(EditorGUI.EndChangeCheck())
-    //             RefreshForQuery();
-    //     }
-        
-    //     void DrawAssetItems(float itemSize)
-    //     {
-    //         if(_DisplayAssetItems != null && _DisplayAssetItems.Length > 0)
-    //         {
-    //             if(itemSize > 40)
-    //             {
-    //                 for(int i = 0; i < _DisplayAssetItems.Length; i++)
-    //                 {
-    //                     int items = Mathf.Clamp(Mathf.FloorToInt(_ExplorerAreaWidth / (itemSize + _Padding)), 0, _DisplayAssetItems.Length);
-
-    //                     if(items + i > _DisplayAssetItems.Length)
-    //                         items -= (items + i) - _DisplayAssetItems.Length;
-
-    //                     EditorGUILayout.BeginHorizontal();
-
-    //                     for(int n = 0; n < items; n++)
-    //                     {
-    //                         _DisplayAssetItems[n + i].Draw(itemSize);
-
-    //                         CheckAssetItemEvent(_DisplayAssetItems[n + i]);
-    //                     }
-
-    //                     GUILayout.FlexibleSpace();
-
-    //                     EditorGUILayout.EndHorizontal();
-
-    //                     i += items - 1;
-    //                 }
-    //             }
-
-    //             else
-    //             {
-    //                 foreach(AssetItem assetItem in _DisplayAssetItems)
-    //                 {
-    //                     assetItem.Draw(itemSize);
-
-    //                     CheckAssetItemEvent(assetItem);
-    //                 }
-    //             }
-    //         }
-    //     }
-
-    //     void CheckAssetItemEvent(AssetItem assetItem)
-    //     {
-    //         Event currentEvent = Event.current; 
-            
-    //         if(assetItem.Contains(currentEvent.mousePosition))
-    //         {
-    //             if(currentEvent.type == EventType.MouseDown && currentEvent.button == 0)
-    //             {
-    //                 SelectAssetItem(assetItem);
-
-    //                 Repaint();
-    //             }
-
-    //             else if(currentEvent.type == EventType.ContextClick)
-    //                 DrawContextMenu(assetItem);
-    //         }
-    //     }
-
-    //     void RefreshDatabase()
-    //     {
-    //         _AssetItems = GetAllAssetItemsFromDatabase().ToArray();
-
-    //         // foreach(UnityEngine.Object assetObject in AssetUtilities.GetAllAssetsInPath("Assets/Game/Data/Characters/"))
-    //         // foreach(AssetItem assetItem in _AssetItems)
-    //         // {
-    //         //     Debug.Log(assetItem.assetObject);
-    //         // }
-
-    //         _SelectedAssetItem = null;
-
-    //         RefreshForQuery();
-    //     }
-
-    //     void RefreshForQuery()
-    //     {
-    //         // Search Query
-    //         _DisplayAssetItems = !string.IsNullOrEmpty(_SearchQuery) ? _AssetItems.Where(assetItem => assetItem.name.ToLower().Contains(_SearchQuery.ToLower())).ToArray() : _AssetItems;
-
-    //         // Category Query
-    //         IEnumerable<int> categoryIndexesSelected = CharactersUtilities.GetIndexesFromByte(_Category, CharactersUtilities.allCreatableAssetTypes.Length);
-
-    //         if(categoryIndexesSelected.Any())
-    //         {
-    //             for(int i = 0; i < CharactersUtilities.allCreatableAssetTypes.Length; i++)
-    //             {
-    //                 if(!categoryIndexesSelected.Where(index => index == i).Any())
-    //                 {
-    //                     _DisplayAssetItems = _DisplayAssetItems.Where(assetItem => 
-    //                     {
-    //                         Type type = assetItem.assetObject.GetType();
-    //                         return !(type.IsSubclassOf(CharactersUtilities.allCreatableAssetTypes[i]) || type == CharactersUtilities.allCreatableAssetTypes[i]);
-    //                     }).ToArray();
-    //                 }
-    //             }
-    //         }
-
-    //         else
-    //             _DisplayAssetItems = null;
-    //     }
-
-    //     void DrawContextMenu(AssetItem assetItem)
-    //     {
-    //         GenericMenu menu = new GenericMenu();
-
-    //         menu.AddItem(new GUIContent("Delete"), false, DeleteAssetItem, assetItem);
-    //         menu.AddItem(new GUIContent("Rename"), false, RenameAssetItem, assetItem);
-    //         menu.ShowAsContext();
-    //     }
-
-    //     void DeleteAssetItem(object assetItemObject)
-    //     {
-    //         AssetItem assetItem = assetItemObject as AssetItem;
-
-    //         if(assetItem == _SelectedAssetItem)
-    //             _SelectedAssetItem = null;
-
-    //         _AssetItems = _AssetItems.Where(a => a != assetItem).ToArray();
-    //         _DisplayAssetItems = _DisplayAssetItems.Where(a => a != assetItem).ToArray();
-
-    //         AssetDatabase.DeleteAsset(assetItem.path);
-    //     }
-
-    //     void RenameAssetItem(object assetItemObject)
-    //     {
-    //         AssetItem assetItem = assetItemObject as AssetItem;
-    //     }
-
-    //     void SelectAssetItem(AssetItem assetItem)
-    //     {
-    //         if(_SelectedAssetItem != null)
-    //             _SelectedAssetItem.isSelected = false;
-
-    //         _SelectedAssetItem = assetItem;
-
-    //         _SelectedAssetItem.isSelected = true;
-    //     }
-    // }
 }
