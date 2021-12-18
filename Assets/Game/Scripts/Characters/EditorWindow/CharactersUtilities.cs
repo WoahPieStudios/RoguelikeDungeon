@@ -14,8 +14,9 @@ namespace Game.CharactersEditor
 {
     public static class CharactersUtilities
     { 
-        public static Type[] creatableAssetRootTypes => GetRootCreatableAssetTypes(); //_CreatableAssetRootTypes;
-        public static Type[] allCreatableAssetTypes => GetCreatableAssetTypes(); //_AllCreatableAssetTypes;
+        public static Type[] creatableAssetRootTypes => GetRootCreatableAssetTypes();
+        public static Type[] allCreatableAssetTypes => GetCreatableAssetTypes();
+        public static string[] categoryNames => GetCategoryNames().ToArray();
 
         static Type[] GetCreatableAssetTypes()
         {
@@ -26,7 +27,35 @@ namespace Game.CharactersEditor
         {
             return Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => t.GetCustomAttribute<RootCreatableAssetAttribute>() != null && !t.IsAbstract).ToArray();
         }
-        
+
+        static string[] GetCategoryNames()
+        {
+            List<string> categoryNames = new List<string>();
+
+            foreach(CreatableAssetAttribute c in Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().
+                Select(t => t.GetCustomAttribute<CreatableAssetAttribute>()))
+            {
+                if(c?.categories == null)
+                    continue;
+
+                categoryNames.AddRange(c?.categories.Where(s => !categoryNames.Contains(s)));
+            }
+
+            return categoryNames.ToArray();
+        }
+
+        public static bool ContainsCategoryAttribute(Type t, string categoryName)
+        {
+            CreatableAssetAttribute creatableAssetAttribute = t.GetCustomAttribute<CreatableAssetAttribute>();
+
+            return creatableAssetAttribute != null && creatableAssetAttribute.categories.Where(s => s == categoryName).Count() > 0;
+        }
+
+        public static string[] GetCategories(Type t)
+        {
+            return t.GetCustomAttribute<CreatableAssetAttribute>().categories;
+        }
+
         public static IEnumerable<int> GetIndexesFromByte(int source, int length)
         {
             if(source < 0)

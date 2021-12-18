@@ -33,6 +33,7 @@ namespace Game.CharactersEditor
         float _ContentAreaWidth;
 
         string _SearchQuery;
+        string[] _CategoryNames;
         int _Category;
 
         float _Padding = 19;
@@ -155,6 +156,7 @@ namespace Game.CharactersEditor
 
             EditorGUILayout.EndHorizontal();
         }
+        
         void DrawContent()
         {
             EditorGUILayout.BeginHorizontal();
@@ -251,8 +253,8 @@ namespace Game.CharactersEditor
         {
             EditorGUI.BeginChangeCheck();
 
-            _Category = EditorGUILayout.MaskField(_Category, CharactersUtilities.allCreatableAssetTypes.Select(t => t.Name).ToArray());
-
+            _Category = EditorGUILayout.MaskField(_Category, _CategoryNames);
+            // EditorGUILayout.MaskField(0, _CategoryNames);
             if(EditorGUI.EndChangeCheck())
                 RefreshForQuery();
         }
@@ -303,13 +305,11 @@ namespace Game.CharactersEditor
         
         void DrawAssetContent()
         {
-            IEnumerable<AssetItem> assetItemsSelected = Select.selection.Where(o => o is AssetItem).Select(o => o as AssetItem);
-
-            UnityEngine.Object[] assetObjects = assetItemsSelected.Select(o => o.assetObject).ToArray();
+            UnityEngine.Object[] assetObjects = Select.selection.Where(o => o is AssetItem).Select(o => o as AssetItem).Select(o => o.assetObject).ToArray();
 
             EditorGUILayout.BeginVertical("box", GUILayout.Width(_ContentAreaWidth));
 
-            if(GUILayout.Button(_LockContent ? "Unlock" : "Lock"))
+            if(GUILayout.Button(_LockContent ? "Unlock" : "Lock") && assetObjects.Length > 0)
                 _LockContent = !_LockContent;
 
             if(!(assetObjects.Length > 0 && assetObjects.IsSameType()) && !_LockContent)
@@ -447,38 +447,58 @@ namespace Game.CharactersEditor
 
             _AssetItems = GetAllAssetItemsFromDatabase().OrderBy(assetItem => assetItem.name).ToArray();
 
+            _CategoryNames = CharactersUtilities.categoryNames;
+
             RefreshForQuery();
         }
 
         void RefreshForQuery()
         {
-            Type[] creatableAssetTypes = CharactersUtilities.allCreatableAssetTypes;
+            // Type[] creatableAssetTypes = CharactersUtilities.allCreatableAssetTypes;
+
+            // // Search Query
+            // _DisplayAssetItems = !string.IsNullOrEmpty(_SearchQuery) ? _AssetItems.Where(assetItem => assetItem.name.ToLower().Contains(_SearchQuery.ToLower())).ToArray() : _AssetItems;
+
+            // // Category Query
+            // IEnumerable<int> categoryIndexesSelected = CharactersUtilities.GetIndexesFromByte(_Category, creatableAssetTypes.Length);
+
+            // if (categoryIndexesSelected.Any())
+            // {
+            //     for (int i = 0; i < creatableAssetTypes.Length; i++)
+            //     {
+            //         if (!categoryIndexesSelected.Any(index => index == i))
+            //         {
+            //             _DisplayAssetItems = _DisplayAssetItems.Where(assetItem =>
+            //             {
+            //                 Type type = assetItem.assetObject.GetType();
+            //                 return !(type.IsSubclassOf(creatableAssetTypes[i]) || type == creatableAssetTypes[i]);
+            //             }).ToArray();
+            //         }
+            //     }
+            // }
+
+            // else
+            // {
+            //     _DisplayAssetItems = null;
+            // }
 
             // Search Query
             _DisplayAssetItems = !string.IsNullOrEmpty(_SearchQuery) ? _AssetItems.Where(assetItem => assetItem.name.ToLower().Contains(_SearchQuery.ToLower())).ToArray() : _AssetItems;
 
             // Category Query
-            IEnumerable<int> categoryIndexesSelected = CharactersUtilities.GetIndexesFromByte(_Category, creatableAssetTypes.Length);
+            IEnumerable<AssetItem> tempDisplayAssets = _DisplayAssetItems;
+            IEnumerable<int> categoryIndexesSelected = CharactersUtilities.GetIndexesFromByte(_Category, _CategoryNames.Length);
 
             if (categoryIndexesSelected.Any())
             {
-                for (int i = 0; i < creatableAssetTypes.Length; i++)
-                {
-                    if (!categoryIndexesSelected.Any(index => index == i))
-                    {
-                        _DisplayAssetItems = _DisplayAssetItems.Where(assetItem =>
-                        {
-                            Type type = assetItem.assetObject.GetType();
-                            return !(type.IsSubclassOf(creatableAssetTypes[i]) || type == creatableAssetTypes[i]);
-                        }).ToArray();
-                    }
-                }
+                foreach(int i in categoryIndexesSelected)
+                    tempDisplayAssets = tempDisplayAssets.Where(a => !CharactersUtilities.ContainsCategoryAttribute(a.assetObject.GetType(), _CategoryNames[i]));
+            
+                _DisplayAssetItems = _DisplayAssetItems.Except(tempDisplayAssets).ToArray();
             }
 
             else
-            {
                 _DisplayAssetItems = null;
-            }
         }
 
         #region Context Menu

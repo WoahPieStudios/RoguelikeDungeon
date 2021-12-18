@@ -5,7 +5,7 @@ using UnityEngine;
 
 using Game.Characters;
 
-[CreatableAsset]
+[CreatableAsset("Attack")]
 public class TestAttack : Attack
 {
     [SerializeField]

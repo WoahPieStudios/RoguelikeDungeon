@@ -21,4 +21,9 @@ namespace Game.CharactersEditor
     {
         void Duplicate();
     }
+
+    public interface ICategory
+    {
+        string[] categories { get; }
+    }
 }
