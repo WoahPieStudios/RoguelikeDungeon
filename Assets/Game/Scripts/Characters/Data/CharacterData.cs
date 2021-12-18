@@ -6,6 +6,7 @@ using UnityEngine.Animations;
 
 namespace Game.Characters
 {
+    [RootCreatableAsset]
     public class CharacterData : ScriptableObject, IIcon
     {
         [Header("Icon")]

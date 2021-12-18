@@ -7,28 +7,21 @@ using UnityEditor;
 
 namespace Game.CharactersEditor
 {
-    public class AssetItem : IRename, IDuplicate
+    public class AssetItem : SerializedAssetData, IRename, IDuplicate
     {
         Rect _Rect;
-        SerializedAssetData _SerializedAssetData;
         string _Path;
 
         bool _IsRenaming = false;
         string _NewName;
 
-        public SerializedAssetData serializedAssetData => _SerializedAssetData;
-        public Object assetObject => _SerializedAssetData.assetObject;
-        public string name => _SerializedAssetData.name;
-        public Texture icon => _SerializedAssetData.icon;
         public string path => _Path;
 
         public bool isSelected { get; set; } = false;
         public bool isRenaming => _IsRenaming;
 
-        public AssetItem(Object assetObject, string path)
+        public AssetItem(Object assetObject, string path) : base(assetObject)
         {
-            _SerializedAssetData = new SerializedAssetData(assetObject);
-
             _Path = path;
         }
 
@@ -67,7 +60,7 @@ namespace Game.CharactersEditor
                 _NewName = EditorGUILayout.TextField(_NewName);
 
             else
-                GUILayout.Label(LimitLabel(_SerializedAssetData.name), textStyle, options);
+                GUILayout.Label(LimitLabel(name), textStyle, options);
         }
 
         public void DrawInTileForm(float size)
@@ -97,7 +90,7 @@ namespace Game.CharactersEditor
 
             EditorGUILayout.BeginHorizontal(box);
 
-            GUILayout.Box(_SerializedAssetData.icon, GUILayout.Width(20), GUILayout.Height(20));
+            GUILayout.Box(icon, GUILayout.Width(20), GUILayout.Height(20));
 
             DrawName(textStyle);
 

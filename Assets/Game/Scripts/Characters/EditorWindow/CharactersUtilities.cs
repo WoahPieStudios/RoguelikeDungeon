@@ -14,16 +14,17 @@ namespace Game.CharactersEditor
 {
     public static class CharactersUtilities
     { 
-        static Type[] _CreatableAssetRootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
-        static Type[] _AllCreatableAssetTypes = new Type[] { typeof(HeroData), typeof(EnemyData), typeof(PassiveEffect), typeof(ActiveEffect), typeof(Attack), typeof(Skill), typeof(Ultimate) };
-        
-        public static Type[] creatableAssetRootTypes => _CreatableAssetRootTypes;
-        public static Type[] allCreatableAssetTypes => _AllCreatableAssetTypes;
-        
-        public static IEnumerable<Type> GetAllCreatableAssetTypes()
+        public static Type[] creatableAssetRootTypes => GetRootCreatableAssetTypes(); //_CreatableAssetRootTypes;
+        public static Type[] allCreatableAssetTypes => GetCreatableAssetTypes(); //_AllCreatableAssetTypes;
+
+        static Type[] GetCreatableAssetTypes()
         {
-            foreach(Type t in Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(Characters.Action)) || t.IsSubclassOf(typeof(CharacterData)))))
-                yield return t;
+            return Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => t.GetCustomAttribute<CreatableAssetAttribute>() != null && !t.IsAbstract).ToArray();
+        }
+
+        static Type[] GetRootCreatableAssetTypes()
+        {
+            return Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => t.GetCustomAttribute<RootCreatableAssetAttribute>() != null && !t.IsAbstract).ToArray();
         }
         
         public static IEnumerable<int> GetIndexesFromByte(int source, int length)

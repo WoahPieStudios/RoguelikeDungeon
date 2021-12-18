@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
+    [RootCreatableAsset]
     public abstract class Action : ScriptableObject, IIcon, ICopyable
     {
         [SerializeField]

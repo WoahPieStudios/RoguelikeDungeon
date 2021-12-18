@@ -5,7 +5,7 @@ using UnityEngine;
 
 using Game.Characters;
 
-[CreateAssetMenu(menuName = "Data/TestAttack")]
+[CreatableAsset]
 public class TestAttack : Attack
 {
     [SerializeField]

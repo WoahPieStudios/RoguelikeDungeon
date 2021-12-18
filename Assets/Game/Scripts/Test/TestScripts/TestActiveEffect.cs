@@ -5,7 +5,7 @@ using UnityEngine;
 
 using Game.Characters;
 
-[CreateAssetMenu(menuName = "Data/TestActive")]
+[CreatableAsset]
 public class TestActiveEffect : ActiveEffect
 {
     int _StackCount = 0;

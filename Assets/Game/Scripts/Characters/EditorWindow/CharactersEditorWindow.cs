@@ -271,9 +271,12 @@ namespace Game.CharactersEditor
 
         void DrawAssetItemTileLayout(float itemSize)
         {
+            int itemsPerRow = Mathf.FloorToInt(_ExplorerAreaWidth / (itemSize + _Padding));
+            float addItemSize = (_ExplorerAreaWidth - (itemsPerRow * (itemSize + _Padding))) / itemsPerRow; // To Fill the extra spaces
+            
             for(int i = 0; i < _DisplayAssetItems.Length; i++)
             {
-                int items = Mathf.Clamp(Mathf.FloorToInt(_ExplorerAreaWidth / (itemSize + _Padding)), 0, _DisplayAssetItems.Length);
+                int items = Mathf.Clamp(itemsPerRow, 0, _DisplayAssetItems.Length);
 
                 if(items + i > _DisplayAssetItems.Length)
                     items -= (items + i) - _DisplayAssetItems.Length;
@@ -281,7 +284,7 @@ namespace Game.CharactersEditor
                 EditorGUILayout.BeginHorizontal();
 
                 for(int n = 0; n < items; n++)
-                    _DisplayAssetItems[n + i].DrawInTileForm(itemSize);
+                    _DisplayAssetItems[n + i].DrawInTileForm(addItemSize + itemSize);
 
                 GUILayout.FlexibleSpace();
 
@@ -449,22 +452,24 @@ namespace Game.CharactersEditor
 
         void RefreshForQuery()
         {
+            Type[] creatableAssetTypes = CharactersUtilities.allCreatableAssetTypes;
+
             // Search Query
             _DisplayAssetItems = !string.IsNullOrEmpty(_SearchQuery) ? _AssetItems.Where(assetItem => assetItem.name.ToLower().Contains(_SearchQuery.ToLower())).ToArray() : _AssetItems;
 
             // Category Query
-            IEnumerable<int> categoryIndexesSelected = CharactersUtilities.GetIndexesFromByte(_Category, CharactersUtilities.allCreatableAssetTypes.Length);
+            IEnumerable<int> categoryIndexesSelected = CharactersUtilities.GetIndexesFromByte(_Category, creatableAssetTypes.Length);
 
             if (categoryIndexesSelected.Any())
             {
-                for (int i = 0; i < CharactersUtilities.allCreatableAssetTypes.Length; i++)
+                for (int i = 0; i < creatableAssetTypes.Length; i++)
                 {
                     if (!categoryIndexesSelected.Any(index => index == i))
                     {
                         _DisplayAssetItems = _DisplayAssetItems.Where(assetItem =>
                         {
                             Type type = assetItem.assetObject.GetType();
-                            return !(type.IsSubclassOf(CharactersUtilities.allCreatableAssetTypes[i]) || type == CharactersUtilities.allCreatableAssetTypes[i]);
+                            return !(type.IsSubclassOf(creatableAssetTypes[i]) || type == creatableAssetTypes[i]);
                         }).ToArray();
                     }
                 }

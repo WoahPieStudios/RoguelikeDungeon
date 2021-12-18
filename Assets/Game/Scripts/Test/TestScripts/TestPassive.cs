@@ -5,7 +5,7 @@ using UnityEngine;
 
 using Game.Characters;
 
-[CreateAssetMenu(menuName = "Data/TestPassive")]
+[CreatableAsset]
 public class TestPassive : PassiveEffect
 {
     [SerializeField]
