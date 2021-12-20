@@ -77,6 +77,8 @@ namespace Game.CharactersEditor
         {
             RefreshDatabase();
 
+            _DisplaySerializedObject = null;
+
             _LockContent = false;
 
             _SeperatorPercent = 0.8f;
@@ -309,10 +311,17 @@ namespace Game.CharactersEditor
 
             EditorGUILayout.BeginVertical("box", GUILayout.Width(_ContentAreaWidth));
 
-            if(GUILayout.Button(_LockContent ? "Unlock" : "Lock") && assetObjects.Length > 0)
-                _LockContent = !_LockContent;
+            if(GUILayout.Button(_LockContent ? "Unlock" : "Lock"))
+                _LockContent = assetObjects.Length > 0 && !_LockContent;
 
-            if(!(assetObjects.Length > 0 && assetObjects.IsSameType()) && !_LockContent)
+            if(!_LockContent)
+                _DisplaySerializedObject = assetObjects.Length > 0 && assetObjects.IsSameType() ? new SerializedObject(assetObjects) : null;
+
+            // if(assetObjects.Length > 0 && assetObjects.IsSameType())
+            //     _DisplaySerializedObject = new SerializedObject(assetObjects);
+
+            
+            if(_DisplaySerializedObject == null)
             {
                 GUILayout.FlexibleSpace();
                 
@@ -320,9 +329,6 @@ namespace Game.CharactersEditor
 
                 return;
             }
-            
-            if(!_LockContent || _DisplaySerializedObject == null)
-                _DisplaySerializedObject = new SerializedObject(assetObjects);
 
             EditorGUI.BeginChangeCheck();
 
@@ -443,8 +449,6 @@ namespace Game.CharactersEditor
 
         void RefreshDatabase()
         {
-            Select.RemoveAllSelection();
-
             _AssetItems = GetAllAssetItemsFromDatabase().OrderBy(assetItem => assetItem.name).ToArray();
 
             _CategoryNames = CharactersUtilities.categoryNames;
@@ -454,34 +458,8 @@ namespace Game.CharactersEditor
 
         void RefreshForQuery()
         {
-            // Type[] creatableAssetTypes = CharactersUtilities.allCreatableAssetTypes;
-
-            // // Search Query
-            // _DisplayAssetItems = !string.IsNullOrEmpty(_SearchQuery) ? _AssetItems.Where(assetItem => assetItem.name.ToLower().Contains(_SearchQuery.ToLower())).ToArray() : _AssetItems;
-
-            // // Category Query
-            // IEnumerable<int> categoryIndexesSelected = CharactersUtilities.GetIndexesFromByte(_Category, creatableAssetTypes.Length);
-
-            // if (categoryIndexesSelected.Any())
-            // {
-            //     for (int i = 0; i < creatableAssetTypes.Length; i++)
-            //     {
-            //         if (!categoryIndexesSelected.Any(index => index == i))
-            //         {
-            //             _DisplayAssetItems = _DisplayAssetItems.Where(assetItem =>
-            //             {
-            //                 Type type = assetItem.assetObject.GetType();
-            //                 return !(type.IsSubclassOf(creatableAssetTypes[i]) || type == creatableAssetTypes[i]);
-            //             }).ToArray();
-            //         }
-            //     }
-            // }
-
-            // else
-            // {
-            //     _DisplayAssetItems = null;
-            // }
-
+            // Select.RemoveSelection(Select.selection.Where(o => o is AssetItem));
+            Select.RemoveAllSelection();
             // Search Query
             _DisplayAssetItems = !string.IsNullOrEmpty(_SearchQuery) ? _AssetItems.Where(assetItem => assetItem.name.ToLower().Contains(_SearchQuery.ToLower())).ToArray() : _AssetItems;
 

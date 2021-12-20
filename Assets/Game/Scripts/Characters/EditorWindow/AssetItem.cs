@@ -7,7 +7,7 @@ using UnityEditor;
 
 namespace Game.CharactersEditor
 {
-    public class AssetItem : SerializedAssetData, IRename, IDuplicate, ICategory
+    public class AssetItem : SerializedAssetData, IRename, IDuplicate
     {
         Rect _Rect;
         string _Path;
@@ -22,13 +22,9 @@ namespace Game.CharactersEditor
         public bool isSelected { get; set; } = false;
         public bool isRenaming => _IsRenaming;
 
-        public string[] categories => _Categories;
-
         public AssetItem(Object assetObject, string path) : base(assetObject)
         {
             _Path = path;
-
-            _Categories = CharactersUtilities.GetCategories(assetObject.GetType());
         }
 
         GUIContent LimitLabel(string text)
