@@ -16,15 +16,8 @@ namespace Game.CharactersEditor
     public class CharactersEditorWindow : EditorWindow
     {
         AssetItem[] _AssetItems;
-        AssetItem[] _DisplayAssetItems;
-
-        SerializedObject _DisplaySerializedObject;
-        bool _LockContent;
 
         Vector2 _ExplorerScrollPosition;
-        Vector2 _ContentScrollPosition;
-
-        float _ItemScale;
 
         float _SeperatorPercent;
         bool _IsMovingSeperator;
@@ -32,11 +25,11 @@ namespace Game.CharactersEditor
         float _ExplorerAreaWidth;
         float _ContentAreaWidth;
 
-        string _SearchQuery;
-        string[] _CategoryNames;
-        int _Category;
-
         float _Padding = 19;
+
+        Inspector _Inspector = new Inspector();
+
+        Explorer _Explorer = new Explorer();
 
         [MenuItem("Window/Characters Window")]
         static CharactersEditorWindow OpenWindow()
@@ -75,22 +68,25 @@ namespace Game.CharactersEditor
 
         void OnEnable()
         {
-            RefreshDatabase();
+            
 
-            _DisplaySerializedObject = null;
+            _Inspector.onGUIChange += OnInspectorGUIChange;
 
-            _LockContent = false;
+            _Explorer.onAfterDraw += CheckAssetItemsEvent;
 
             _SeperatorPercent = 0.8f;
 
             Select.onAddSelection += OnAddSelection;
             Select.onRemoveSelection += OnRemoveSelection;
+
+            RefreshDatabase();
         }
 
         void OnDisable()
         {
             _ExplorerScrollPosition = Vector2.zero;
-            _ContentScrollPosition = Vector2.zero;
+
+            _Inspector.onGUIChange -= OnInspectorGUIChange;
 
             Select.onAddSelection -= OnAddSelection;
             Select.onRemoveSelection -= OnRemoveSelection;
@@ -105,6 +101,13 @@ namespace Game.CharactersEditor
             DrawContent();
 
             EditorGUILayout.EndVertical();
+        }
+
+        void OnInspectorGUIChange()
+        {
+            _Explorer.Draw(_ExplorerAreaWidth);
+
+            Repaint();
         }
 
         void OnAddSelection(object[] selections)
@@ -163,11 +166,11 @@ namespace Game.CharactersEditor
         {
             EditorGUILayout.BeginHorizontal();
 
-            DrawExplorerArea();
+            _Explorer.Draw(_ExplorerAreaWidth);
 
             DrawSeperator();
 
-            DrawAssetContent();
+            _Inspector.Draw(_ContentAreaWidth);
 
             EditorGUILayout.EndHorizontal();
         }
@@ -203,166 +206,12 @@ namespace Game.CharactersEditor
             Repaint();
         }
 
-        #region Explorer Area
-        void DrawExplorerArea()
-        {
-            float itemSize = Mathf.Lerp(40, 100, _ItemScale);
-
-            EditorGUILayout.BeginVertical(GUILayout.Width(_ExplorerAreaWidth));
-
-            EditorGUILayout.BeginHorizontal();
-
-            DrawSearchBar();
-
-            GUILayout.FlexibleSpace();
-
-            DrawCategoryField();
-
-            EditorGUILayout.EndHorizontal();
-
-            EditorGUILayout.BeginHorizontal(GUILayout.Height(20));
-
-            GUILayout.FlexibleSpace();
-
-            _ItemScale = GUILayout.HorizontalSlider(_ItemScale, 0, 1, GUILayout.Width(100));
-
-            EditorGUILayout.EndHorizontal();
-
-            _ExplorerScrollPosition = EditorGUILayout.BeginScrollView(_ExplorerScrollPosition);
-
-            DrawAssetItems(itemSize);
-
-            CheckAssetItemsEvent();
-
-            GUILayout.FlexibleSpace();
-
-            EditorGUILayout.EndScrollView();
-
-            EditorGUILayout.EndVertical();
-        }
-
-        void DrawSearchBar()
-        {
-            EditorGUI.BeginChangeCheck();
-
-            _SearchQuery = EditorGUILayout.TextField(_SearchQuery);
-
-            if(EditorGUI.EndChangeCheck())
-                RefreshForQuery();
-        }
-
-        void DrawCategoryField()
-        {
-            EditorGUI.BeginChangeCheck();
-
-            _Category = EditorGUILayout.MaskField(_Category, _CategoryNames);
-            // EditorGUILayout.MaskField(0, _CategoryNames);
-            if(EditorGUI.EndChangeCheck())
-                RefreshForQuery();
-        }
-
-        void DrawAssetItems(float itemSize)
-        {
-            if(_DisplayAssetItems == null || _DisplayAssetItems.Length <= 0)
-                return;
-
-            if(itemSize > 40)
-                DrawAssetItemTileLayout(itemSize);
-
-            else
-                DrawAssetItemListLayout();
-        }
-
-        void DrawAssetItemTileLayout(float itemSize)
-        {
-            int itemsPerRow = Mathf.FloorToInt(_ExplorerAreaWidth / (itemSize + _Padding));
-            float addItemSize = (_ExplorerAreaWidth - (itemsPerRow * (itemSize + _Padding))) / itemsPerRow; // To Fill the extra spaces
-            
-            for(int i = 0; i < _DisplayAssetItems.Length; i++)
-            {
-                int items = Mathf.Clamp(itemsPerRow, 0, _DisplayAssetItems.Length);
-
-                if(items + i > _DisplayAssetItems.Length)
-                    items -= (items + i) - _DisplayAssetItems.Length;
-
-                EditorGUILayout.BeginHorizontal();
-
-                for(int n = 0; n < items; n++)
-                    _DisplayAssetItems[n + i].DrawInTileForm(addItemSize + itemSize);
-
-                GUILayout.FlexibleSpace();
-
-                EditorGUILayout.EndHorizontal();
-
-                i += items - 1;
-            }
-        }
-
-        void DrawAssetItemListLayout()
-        {
-            foreach(AssetItem assetItem in _DisplayAssetItems)
-                assetItem.DrawInListForm();
-        }
-        #endregion
-        
-        void DrawAssetContent()
-        {
-            UnityEngine.Object[] assetObjects = Select.selection.Where(o => o is AssetItem).Select(o => o as AssetItem).Select(o => o.assetObject).ToArray();
-
-            EditorGUILayout.BeginVertical("box", GUILayout.Width(_ContentAreaWidth));
-
-            if(GUILayout.Button(_LockContent ? "Unlock" : "Lock"))
-                _LockContent = assetObjects.Length > 0 && !_LockContent;
-
-            if(!_LockContent)
-                _DisplaySerializedObject = assetObjects.Length > 0 && assetObjects.IsSameType() ? new SerializedObject(assetObjects) : null;
-
-            // if(assetObjects.Length > 0 && assetObjects.IsSameType())
-            //     _DisplaySerializedObject = new SerializedObject(assetObjects);
-
-            
-            if(_DisplaySerializedObject == null)
-            {
-                GUILayout.FlexibleSpace();
-                
-                EditorGUILayout.EndVertical();
-
-                return;
-            }
-
-            EditorGUI.BeginChangeCheck();
-
-            SerializedProperty property = _DisplaySerializedObject.GetIterator();
-
-            property.NextVisible(true);
-
-            _ContentScrollPosition = EditorGUILayout.BeginScrollView(_ContentScrollPosition);
-
-            EditorGUILayout.LabelField(_DisplaySerializedObject.isEditingMultipleObjects ? "-" : _DisplaySerializedObject.targetObject.name, EditorStyles.boldLabel);
-
-            while (property.NextVisible(false))
-                EditorGUILayout.PropertyField(property);
-
-            EditorGUILayout.EndScrollView();
-
-            if(EditorGUI.EndChangeCheck())
-            {
-                _DisplaySerializedObject.ApplyModifiedProperties();
-
-                DrawExplorerArea();
-
-                Repaint();
-            }
-
-            EditorGUILayout.EndVertical();
-        }
-
         void CheckAssetItemsEvent()
         {
-            if(_DisplayAssetItems == null || _DisplayAssetItems.Length <= 0)
+            if(_Explorer.displayedAssetItems == null || _Explorer.displayedAssetItems.Length <= 0)
                 return;
 
-            AssetItem mousePositionInsideAssetItem = Array.Find(_DisplayAssetItems, assetItem => assetItem.Contains(EditorInput.mousePosition));
+            AssetItem mousePositionInsideAssetItem = Array.Find(_Explorer.displayedAssetItems, assetItem => assetItem.Contains(EditorInput.mousePosition));
 
             if(EditorInput.GetMouseButtonDrag(0))
                 HandleDragAndDropEvent();
@@ -381,7 +230,7 @@ namespace Game.CharactersEditor
         void HandleLeftClick()
         {
             AssetItem[] assetItems = Select.selection.Where(o => o is AssetItem).Cast<AssetItem>().ToArray();
-            AssetItem mousePositionInsideAssetItem = Array.Find(_DisplayAssetItems, assetItem => assetItem.Contains(EditorInput.mousePosition));
+            AssetItem mousePositionInsideAssetItem = Array.Find(_Explorer.displayedAssetItems, assetItem => assetItem.Contains(EditorInput.mousePosition));
 
             if (!EditorInput.isShiftPressed)
                 Select.RemoveSelection(assetItems);
@@ -424,7 +273,7 @@ namespace Game.CharactersEditor
 
         void HandleRenameAssetItem()
         {
-            AssetItem renameAssetItem = Array.Find(_DisplayAssetItems, assetItem => assetItem.isRenaming);
+            AssetItem renameAssetItem = Array.Find(_Explorer.displayedAssetItems, assetItem => assetItem.isRenaming);
 
             if((EditorInput.GetKeyDown(KeyCode.Return) || EditorInput.GetKeyDown(KeyCode.KeypadEnter)) && renameAssetItem != null)
             {
@@ -437,7 +286,7 @@ namespace Game.CharactersEditor
         void HandleDragAndDropEvent()
         {
             AssetItem[] assetItems = Select.selection.Where(o => o is AssetItem).Cast<AssetItem>().ToArray();
-            AssetItem mousePositionInsideAssetItem = Array.Find(_DisplayAssetItems, assetItem => assetItem.Contains(EditorInput.mousePosition));
+            AssetItem mousePositionInsideAssetItem = Array.Find(_Explorer.displayedAssetItems, assetItem => assetItem.Contains(EditorInput.mousePosition));
 
             if(mousePositionInsideAssetItem == null || EditorInput.deltaMousePostion.magnitude < 2 || assetItems.Length <= 0 || !mousePositionInsideAssetItem.isSelected)
                 return;
@@ -451,32 +300,12 @@ namespace Game.CharactersEditor
         {
             _AssetItems = GetAllAssetItemsFromDatabase().OrderBy(assetItem => assetItem.name).ToArray();
 
-            _CategoryNames = CharactersUtilities.categoryNames;
+            _Explorer.assetItems = GetAllAssetItemsFromDatabase().OrderBy(assetItem => assetItem.name).ToArray();
 
-            RefreshForQuery();
-        }
-
-        void RefreshForQuery()
-        {
             // Select.RemoveSelection(Select.selection.Where(o => o is AssetItem));
             Select.RemoveAllSelection();
-            // Search Query
-            _DisplayAssetItems = !string.IsNullOrEmpty(_SearchQuery) ? _AssetItems.Where(assetItem => assetItem.name.ToLower().Contains(_SearchQuery.ToLower())).ToArray() : _AssetItems;
 
-            // Category Query
-            IEnumerable<AssetItem> tempDisplayAssets = _DisplayAssetItems;
-            IEnumerable<int> categoryIndexesSelected = CharactersUtilities.GetIndexesFromByte(_Category, _CategoryNames.Length);
-
-            if (categoryIndexesSelected.Any())
-            {
-                foreach(int i in categoryIndexesSelected)
-                    tempDisplayAssets = tempDisplayAssets.Where(a => !CharactersUtilities.ContainsCategoryAttribute(a.assetObject.GetType(), _CategoryNames[i]));
-            
-                _DisplayAssetItems = _DisplayAssetItems.Except(tempDisplayAssets).ToArray();
-            }
-
-            else
-                _DisplayAssetItems = null;
+            _Explorer.Refresh();
         }
 
         #region Context Menu
@@ -489,26 +318,25 @@ namespace Game.CharactersEditor
 
             Select.RemoveSelection(assetItems);
 
-            if(_LockContent)
+            if(_Inspector.lockContent)
                 RemoveAssetsFromSerializedContent(assetItems);
-
-            _AssetItems = _AssetItems.Except(assetItems).ToArray();
-            _DisplayAssetItems = _DisplayAssetItems.Except(assetItems).ToArray();
 
             foreach(AssetItem assetItem in assetItems)
                 AssetDatabase.DeleteAsset(assetItem.path);
+
+            RefreshDatabase();
         }
 
         void RemoveAssetsFromSerializedContent(AssetItem[] assetItems)
         {
             IEnumerable<UnityEngine.Object> assetItemObjects = assetItems.Select(assetItem => assetItem.assetObject);
             
-            UnityEngine.Object[] serializedObjects = _DisplaySerializedObject.targetObjects.Where(o => !assetItemObjects.Contains(o)).ToArray();
+            UnityEngine.Object[] serializedObjects = _Inspector.serializedObjectInspected.targetObjects.Where(o => !assetItemObjects.Contains(o)).ToArray();
 
             if(serializedObjects.Length <= 0)
-                _LockContent = false;
+                _Inspector.lockContent = false;
 
-            _DisplaySerializedObject = new SerializedObject(serializedObjects);
+            _Inspector.serializedObjectInspected = new SerializedObject(serializedObjects);
         }
 
         void RenameAssetItem(object assetItemObject)

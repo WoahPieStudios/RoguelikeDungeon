@@ -7,7 +7,7 @@ using UnityEditor;
 
 namespace Game.CharactersEditor
 {
-    public class AssetItem : SerializedAssetData, IRename, IDuplicate
+    public class AssetItem : SerializedAssetData, IRename, IDuplicate, IDrawList, IDrawTile
     {
         Rect _Rect;
         string _Path;
@@ -65,25 +65,25 @@ namespace Game.CharactersEditor
                 GUILayout.Label(LimitLabel(name), textStyle, options);
         }
 
-        public void DrawInTileForm(float size)
+        public void DrawTile(float tileSize)
         {
             GUIStyle box = GetBox();
             GUIStyle textStyle = GetTextStyle();
 
             textStyle.alignment = TextAnchor.MiddleCenter;
 
-            EditorGUILayout.BeginVertical(box, GUILayout.Width(size), GUILayout.Height(size));
+            EditorGUILayout.BeginVertical(box, GUILayout.Width(tileSize), GUILayout.Height(tileSize));
 
-            GUILayout.Box(icon, GUILayout.Width(size), GUILayout.Height(size));
+            GUILayout.Box(icon, GUILayout.Width(tileSize), GUILayout.Height(tileSize));
 
-            DrawName(textStyle, GUILayout.Width(size));
+            DrawName(textStyle, GUILayout.Width(tileSize));
 
             EditorGUILayout.EndVertical();
 
             _Rect = GUILayoutUtility.GetLastRect();
         }
 
-        public void DrawInListForm()
+        public void DrawList()
         {
             GUIStyle box = GetBox();
             GUIStyle textStyle = GetTextStyle();

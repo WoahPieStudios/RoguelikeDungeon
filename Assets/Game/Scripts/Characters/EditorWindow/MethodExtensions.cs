@@ -14,6 +14,11 @@ namespace Game.CharactersEditor
 {
     public static class MethodExtensions
     {
+        public static bool IsNotNullAndEmpty<T>(this IEnumerable<T> source)
+        {
+            return source != null && source.Any();
+        }
+
         public static bool IsSameType<T>(this IEnumerable<T> source)
         {
             Type type = source.First().GetType();
