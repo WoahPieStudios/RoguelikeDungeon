@@ -17,3 +17,10 @@ MonoBehaviour:
   _Range: 0
   _Speed: 0
   _ActiveEffects: []
+  startTimeBtwAttack: 0.1
+  attackPos: {fileID: 0}
+  attackRange: 1
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  damage: 1
