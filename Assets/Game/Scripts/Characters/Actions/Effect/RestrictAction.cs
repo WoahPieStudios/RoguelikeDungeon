@@ -10,11 +10,11 @@ namespace Game.Characters
     [System.Flags]
     public enum RestrictAction
     {
-        None = 0x00,
-        Movement = 0x01,
-        Attack = 0x02,
-        Passive = 0x03,
-        Skill = 0x04,
-        Ultimate = 0x05
+        None = 0,
+        Movement = 1 << 1,
+        Attack = 1 << 2,
+        Passive = 1 << 3,
+        Skill = 1 << 4,
+        Ultimate = 1 << 5
     }
 }

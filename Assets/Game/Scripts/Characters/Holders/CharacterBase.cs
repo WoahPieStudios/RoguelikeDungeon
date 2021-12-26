@@ -97,7 +97,7 @@ namespace Game.Characters
         // Effects
         void UpdateRestrainedActions()
         {
-            RestrictAction RestrainedActions = default(RestrictAction);
+            RestrictAction RestrainedActions = default;
 
             // Adds Restrict Actions to RestrainedActions
             foreach(RestrictAction r in _EffectList.Where(effect => effect.GetType() is IRestrainActionEffect).Select(effect => (effect as IRestrainActionEffect).restrictAction))//_EffectList.Where(effect => effect.GetType().IsSubclassOf(typeof(ActiveEffect))).Select(effect => (effect as ActiveEffect).restrictAction))
@@ -143,60 +143,123 @@ namespace Game.Characters
         /// <param name="effects">The one who is casted upon</param>
         public virtual void AddEffects(CharacterBase sender, params Effect[] effects)
         {
-            IEnumerable<Effect> effectsInList;
+            Effect effect;
+            Effect effectCopy;
 
-            // I create a copy of the effects otherwise all effects will go haywire with other Characters as they would only reference 1.
-            foreach(IGrouping<System.Type, Effect> group in effects.GroupBy(effect => effect.GetType()))
+            IEnumerable<Effect> effectsInList;
+            IEnumerable<Effect> tempEffectList = _EffectList;
+
+            foreach(IGrouping<int, Effect> effectGroup in effects.GroupBy(effect => effect.instanceId))
             {
-                Effect effect = group.First();
-                
-                // If effect is stackable
+                effect = effectGroup.First();
+
+                effectsInList = _EffectList.Where(e => e.instanceId == effectGroup.Key);
+
+                effectCopy = effect.isCopied ? effect : effect.CreateCopy<Effect>();
+
                 if(effect.isStackable)
                 {
-                    // Get effects with same class from _EffectList
-                    effectsInList = _EffectList.Where(effect => effect.GetType() == group.Key);
+                    if(effectsInList.Any()) // If there is already a copy in the list, expected there is always 1 or none in the least.
+                    {
+                        effect = effectsInList.First();
 
-                    // If there are any effect in the list with the same type, stack them up
-                    if(effectsInList.Any())
-                        effectsInList.First().Stack(group.ToArray());
+                        effect.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateCopy<Effect>()).ToArray());
+                    }
 
-                    // If not, stack the first one with the rest of the effects then add to the list
                     else
                     {
-                        Effect effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
-                        Effect[] effectsArray;
-                        
+                        effectCopy.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateCopy<Effect>()).ToArray());
                         effectCopy.StartEffect(sender, this);
-
-                        effectsArray = group.Where(e => e != effect).ToArray();
-
-                        if(effectsArray.Length > 0)
-                            effectCopy.Stack(effectsArray);
 
                         _EffectList.Add(effectCopy);
                     }
                 }
 
-                // If not, End current one and add new one
+                // Removes all same type in effect list and adds new one. "Refreshes" Effect
                 else
                 {
-                    effectsInList = _EffectList.Where(effect => effect.GetType() == group.Key);
-
                     if(effectsInList.Any())
                     {
-                        Effect tempEffect = effectsInList.First();
+                        Effect[] effectsArray = effectsInList.ToArray();
 
-                        if(tempEffect) 
-                            tempEffect.End();
+                        for(int i = 1; i < effectsArray.Length; i++)
+                            effectsArray[i].End();
                     }
-
-                    Effect effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
-
-                    effectCopy.StartEffect(sender, this);
                     
+                    effectCopy.StartEffect(sender, this);
+
                     _EffectList.Add(effectCopy);
                 }
             }
+                
+            foreach(IGrouping<int, Effect> effectGroup in _EffectList.GroupBy(effect => effect.instanceId))
+            {
+                Effect[] effectsArray = effectGroup.ToArray();
+
+                for(int i = 1; i < effectsArray.Length; i++)
+                    effectsArray[i].End();
+            }
+
+            // IEnumerable<Effect> effectsInList;
+
+            // // I create a copy of the effects otherwise all effects will go haywire with other Characters as they would only reference 1.
+            // foreach(IGrouping<int, Effect> group in effects.GroupBy(effect => effect.instanceId))
+            // {
+            //     Effect effect = group.First();
+                
+            //     // If effect is stackable
+            //     if(effect.isStackable)
+            //     {
+            //         // Get effects with same class from _EffectList
+            //         effectsInList = _EffectList.Where(effect => effect.instanceId == group.Key);
+
+            //         // If there are any effect in the list with the same type, stack them up
+            //         if(effectsInList.Any())
+            //         {
+            //             effect = effectsInList.First();
+
+            //             effect.Stack(group.ToArray());
+            //         }
+
+            //         // If not, stack the first one with the rest of the effects then add to the list
+            //         else
+            //         {
+            //             Effect effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
+            //             Effect[] effectsArray;
+                        
+            //             effectCopy.StartEffect(sender, this);
+
+            //             effectsArray = group.Where(e => e != effect).ToArray();
+
+            //             Debug.LogWarning(effectsInList.ToArray().Length + " " + effectCopy.name);
+
+            //             if(effectsArray.Length > 0)
+            //                 effectCopy.Stack(effectsArray);
+
+            //             _EffectList.Add(effectCopy);
+            //         }
+            //     }
+
+            //     // If not, End current one and add new one
+            //     else
+            //     {
+            //         effectsInList = _EffectList.Where(effect => effect.instanceId == group.Key);
+
+            //         if(effectsInList.Any())
+            //         {
+            //             Effect tempEffect = effectsInList.First();
+
+            //             if(tempEffect) 
+            //                 tempEffect.End();
+            //         }
+
+            //         Effect effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
+
+            //         effectCopy.StartEffect(sender, this);
+                    
+            //         _EffectList.Add(effectCopy);
+            //     }
+            // }
 
             UpdateRestrainedActions();
         }
