@@ -13,10 +13,11 @@ MonoBehaviour:
   m_Name: TestAttack
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-  _Damage: 0
-  _Range: 0
-  _Speed: 0
-  _ActiveEffects: []
+  _Damage: 5
+  _Range: 5
+  _Speed: 5
+  _ActiveEffects:
+  - {fileID: 11400000, guid: 0036ccd3709c0094e857d43721844254, type: 2}
   _CharacterLayer:
     serializedVersion: 2
     m_Bits: 8

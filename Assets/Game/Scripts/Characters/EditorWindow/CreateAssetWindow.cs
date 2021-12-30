@@ -22,18 +22,17 @@ namespace Game.CharactersEditor
         SerializedAssetData _NewSerializedAssetData;
 
         bool _IsNameEmpty = false;
-
         static Type[] _RootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
 
         [MenuItem("Window/Characters Asset Creation Window")]
         static void OpenWindow()
         {
-            CreateAssetWindow.GetWindow<CreateAssetWindow>("Characters Asset Creation Window");
+            GetWindow<CreateAssetWindow>("Characters Asset Creation Window");
         }
 
         void OnEnable() 
         {
-            _CreatableAssetTypes = Utilities.GetAllCreatableAssetTypes().ToArray();
+            _CreatableAssetTypes = CharactersUtilities.allCreatableAssetTypes;
 
             _CreatableAssetTypeNames = _CreatableAssetTypes.Select(t => CompileInheritedClassNames(t)).ToArray();
 
@@ -46,9 +45,7 @@ namespace Game.CharactersEditor
 
         void OnGUI() 
         {
-            int tempSelectedTypeIndex = _CurrentSelectedTypeIndex;
-
-            tempSelectedTypeIndex = EditorGUILayout.Popup("Asset Type", _CurrentSelectedTypeIndex, _CreatableAssetTypeNames);
+            int tempSelectedTypeIndex = EditorGUILayout.Popup("Asset Type", _CurrentSelectedTypeIndex, _CreatableAssetTypeNames);
 
             EditorGUILayout.Space();
 
@@ -133,13 +130,14 @@ namespace Game.CharactersEditor
 
         void SaveFile(SerializedAssetData serializedAssetData)
         {
+            Debug.Log(CharactersUtilities.creatableAssetRootTypes.Length);
             Type type = serializedAssetData.assetObject.GetType();
-            string path = "Assets/Game/Data/Characters/" + type.GetBaseTypes(Utilities.creatableAssetRootTypes).Select(t => t.Name).Reverse().Concat("/") + type.Name;
+            string path = "Assets/Game/Data/Characters/" + type.GetBaseTypes(CharactersUtilities.creatableAssetRootTypes).Select(t => t.Name).Reverse().Concat("/") + type.Name;
 
             if(serializedAssetData.name != "")
             {
                 if(!AssetDatabase.IsValidFolder(path))
-                    Utilities.CreateFolder(path);
+                    AssetUtilities.CreateFolder(path);
                 
                 AssetDatabase.CreateAsset(serializedAssetData.assetObject, $"{path}/{serializedAssetData.name}.asset");
             }

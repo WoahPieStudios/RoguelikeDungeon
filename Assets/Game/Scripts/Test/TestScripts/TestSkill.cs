@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    [CreateAssetMenu(menuName = "Data/TestSkill")]
+    [CreatableAsset]
     public class TestSkill : Skill
     {
         protected override IEnumerator Tick()

@@ -12,16 +12,12 @@ using Game.Characters;
 
 namespace Game.CharactersEditor
 {
-    public static class Utilities 
+    public static class AssetUtilities 
     {
-        static Type[] _CreatableAssetRootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
-        
-        public static Type[] creatableAssetRootTypes => _CreatableAssetRootTypes;
-
         public static void CreateFolder(string path)
         {
             string currentPath = "";
-            string tempPath = "";
+            string tempPath;
 
             foreach(string s in path.Split('/'))
             {
@@ -38,13 +34,19 @@ namespace Game.CharactersEditor
             AssetDatabase.Refresh();
         }
 
-        public static IEnumerable<Type> GetAllCreatableAssetTypes()
+        public static IEnumerable<UnityEngine.Object> GetAllAssetsInPath(string path)
         {
-            foreach(Type t in Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(Characters.Action)) || t.IsSubclassOf(typeof(CharacterData)))))
-                yield return t;
-
-            // foreach(Type t in Assembly.GetAssembly(typeof(CharacterData)).GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(CharacterData))))
-            //     yield return t;
+            if(AssetDatabase.IsValidFolder(path))
+            {
+                foreach(UnityEngine.Object assetObject in AssetDatabase.LoadAllAssetsAtPath(path))
+                    yield return assetObject;
+                
+                foreach(string assetPath in AssetDatabase.GetSubFolders(path))
+                {
+                    foreach(UnityEngine.Object assetObject in GetAllAssetsInPath(assetPath))
+                        yield return assetObject;
+                }
+            }
         }
     }
 }

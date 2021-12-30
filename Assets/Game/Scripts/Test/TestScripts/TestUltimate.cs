@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    [CreateAssetMenu(menuName = "Data/TestUltimate")]
+[CreatableAsset]
     public class TestUltimate : Ultimate
     {
         protected override IEnumerator Tick()
@@ -16,7 +16,7 @@ namespace Game.Characters
 
         protected override void OnCooldown()
         {
-            Debug.Log(currentCoolDownTime);
+            
         }
     }
 }

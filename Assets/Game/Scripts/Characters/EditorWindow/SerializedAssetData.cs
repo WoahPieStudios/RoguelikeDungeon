@@ -12,10 +12,9 @@ using Game.Characters;
 
 namespace Game.CharactersEditor
 {
-    class SerializedAssetData
+    public class SerializedAssetData
     {
         Texture2D _Icon;
-
         SerializedObject _SerializedObject;
 
         public Texture2D icon => _Icon;

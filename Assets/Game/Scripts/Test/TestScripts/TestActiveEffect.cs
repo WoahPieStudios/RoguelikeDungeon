@@ -5,10 +5,11 @@ using UnityEngine;
 
 using Game.Characters;
 
-[CreateAssetMenu(menuName = "Data/TestActive")]
+[CreatableAsset]
 public class TestActiveEffect : ActiveEffect
 {
     int _StackCount = 0;
+
     protected override IEnumerator Tick()
     {
         Debug.Log("Active Effect");
@@ -21,6 +22,8 @@ public class TestActiveEffect : ActiveEffect
     public override void Stack(params Effect[] effects)
     {
         _StackCount += effects.Length;
-        Debug.Log(effects.Length);
+
+        if(_StackCount > 3)
+            Debug.LogWarning("test active stacked!");
     }
 }

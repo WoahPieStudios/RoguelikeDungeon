@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: TestUltimate
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-  _CoolDownTime: 5
-  _ManaCost: 5
+  _CoolDownTime: 0
+  _ManaCost: 0
