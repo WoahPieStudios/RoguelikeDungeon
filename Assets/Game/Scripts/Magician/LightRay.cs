@@ -23,6 +23,8 @@ namespace Game.Characters.Magician
         void Awake() 
         {
             _SpriteRenderer = GetComponent<SpriteRenderer>();
+
+            _SpriteRenderer.color = _Gradient.Evaluate(0);
         }
 
         IEnumerator Sequence(float fadeIn, float fadeOut)

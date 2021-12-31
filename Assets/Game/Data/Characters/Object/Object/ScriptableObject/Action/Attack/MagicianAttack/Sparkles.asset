@@ -17,7 +17,6 @@ MonoBehaviour:
   _Range: 5
   _Speed: 0
   _ActiveEffects: []
-  _LightRayPrefab: {fileID: 6355572049708942688, guid: 5afb76cc985757a48855142cfd3db3eb, type: 3}
-  _EnemyLayer:
-    serializedVersion: 2
-    m_Bits: 4294967295
+  _Prefab: {fileID: 6355572049708942688, guid: 5afb76cc985757a48855142cfd3db3eb, type: 3}
+  _FadeInTime: 0.01
+  _FadeOutTime: 1

@@ -9,10 +9,6 @@ namespace Game.Characters.Magician
     [CreatableAsset("Magician")]
     public class Sparkles : Attack, IBonusDamage
     {
-        [Header("Target")]
-        [SerializeField]
-        LayerMask _EnemyLayer;
-        
         [Header("Light Ray")]
         [SerializeField]
         GameObject _Prefab;
@@ -33,6 +29,8 @@ namespace Game.Characters.Magician
 
             Vector2 enemyDirection;
 
+            target.FaceNearestCharacter(5);
+
             enemyDirection = _ClosestEnemy.transform.position - target.transform.position;
 
             _LightRay.position = target.transform.position + (Vector3)enemyDirection.normalized * (range / 2);
@@ -50,16 +48,7 @@ namespace Game.Characters.Magician
 
         public override bool CanUse(CharacterBase attacker)
         {
-            Debug.Log(Utilities.GetNearestCharacter<Enemy>(attacker.transform.position, range, _EnemyLayer));
-            try
-            {
-                _ClosestEnemy = Utilities.GetCharacters(attacker.transform.position, range, _EnemyLayer)?.Select(r => r.collider.GetComponent<Enemy>())?.Where(e => e)?.First();
-            }
-
-            catch
-            {
-                _ClosestEnemy = null;
-            }
+            _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(attacker.transform.position, range);
 
             return base.CanUse(attacker) && _ClosestEnemy;
         }

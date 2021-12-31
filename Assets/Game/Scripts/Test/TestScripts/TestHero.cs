@@ -9,8 +9,6 @@ public class TestHero : Hero
 {
     [SerializeField]
     HeroData _HeroData;
-    [SerializeField]
-    LayerMask _EnemyLayer;
 
     protected override void Awake() 
     {
