@@ -41,5 +41,10 @@ namespace Game.Characters
         {
             return FaceNearestCharacter<CharacterBase>(characterBase, radius);
         }
+
+        public static TCast IsCast<TCast>(this object source) where TCast : class
+        {
+            return source is TCast ? source as TCast : null;
+        }
     }
 }

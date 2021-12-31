@@ -85,6 +85,7 @@ namespace Game.Characters
             _CurrentHealth = maxHealth;
 
             _Attack = data.attack?.CreateCopy<Attack>();
+            _Attack.IsCast<IOnAssignEvent>()?.OnAssign();
         }
 
         // Attack
