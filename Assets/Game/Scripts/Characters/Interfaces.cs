@@ -9,6 +9,11 @@ namespace Game.Characters
     {
         Animation animation { get; }
     }
+    
+    public interface IOnAssignEvent
+    {
+        void OnAssign();
+    }
 
     public interface ICopyable
     {
