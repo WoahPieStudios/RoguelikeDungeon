@@ -9,6 +9,8 @@ public class TestHero : Hero
 {
     [SerializeField]
     HeroData _HeroData;
+    [SerializeField]
+    LayerMask _EnemyLayer;
 
     protected override void Awake() 
     {
@@ -27,7 +29,5 @@ public class TestHero : Hero
         
         if(Input.GetKeyDown(KeyCode.S))
             Debug.Log("Attack " + UseAttack());
-
-        
     }
 }
