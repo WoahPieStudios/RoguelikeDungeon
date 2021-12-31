@@ -15,9 +15,9 @@ MonoBehaviour:
   _Icon: {fileID: 0}
   _MaxHealth: 20
   _MoveSpeed: 5
-  _Attack: {fileID: 11400000, guid: f5d624606d1e95645bd0f9723a193598, type: 2}
+  _Attack: {fileID: 11400000, guid: fcba927af2936544cb71ef27af05e1cd, type: 2}
   _MaxMana: 20
   _PassiveEffects:
-  - {fileID: 11400000, guid: 4a692d97ded37354386523e778341970, type: 2}
-  _Skill: {fileID: 11400000, guid: d834b0cf72b1de840abb4691215ff15e, type: 2}
-  _Ultimate: {fileID: 11400000, guid: bb24a07bda0be6b4c8c5486a80227b93, type: 2}
+  - {fileID: 11400000, guid: c5452f5a3fc49584c8449ef6859ec659, type: 2}
+  _Skill: {fileID: 11400000, guid: b5aabe159d79df9498513de449f5120a, type: 2}
+  _Ultimate: {fileID: 11400000, guid: 854e69c1a3ffc3a4ca799c55a1ba4c3e, type: 2}

@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    [CreateAssetMenu(menuName = "Data/MagicianData")]
+    [CreatableAsset("Magician")]
     public class MagicianData : HeroData
     {
 
