@@ -54,7 +54,7 @@ namespace Game.Characters
         void SetupPassives(IEnumerable<PassiveEffect> passiveEffects)
         {
             foreach(PassiveEffect passiveEffect in passiveEffects)
-                passiveEffects.IsCast<IOnAssignEvent>()?.OnAssign();
+                passiveEffects.IsCast<IOnAssignEvent>()?.OnAssign(this);
 
             foreach(Enum e in Enum.GetValues(typeof(TrackAction)) )
                 _TrackActionPassiveEffects.Add((TrackAction)e, passiveEffects.Where(p => p.trackAction.HasFlag(e)).ToArray());
@@ -155,10 +155,10 @@ namespace Game.Characters
             _CurrentMana = data.maxMana;
 
             _Skill = data.skill.CreateCopy<Skill>();
-            _Skill.IsCast<IOnAssignEvent>()?.OnAssign();
+            _Skill.IsCast<IOnAssignEvent>()?.OnAssign(this);
 
             _Ultimate = data.ultimate.CreateCopy<Ultimate>();
-            _Ultimate.IsCast<IOnAssignEvent>()?.OnAssign();
+            _Ultimate.IsCast<IOnAssignEvent>()?.OnAssign(this);
         }
     }
 }

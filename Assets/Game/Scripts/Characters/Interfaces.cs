@@ -12,7 +12,7 @@ namespace Game.Characters
     
     public interface IOnAssignEvent
     {
-        void OnAssign();
+        void OnAssign(CharacterBase character);
     }
 
     public interface ICopyable
