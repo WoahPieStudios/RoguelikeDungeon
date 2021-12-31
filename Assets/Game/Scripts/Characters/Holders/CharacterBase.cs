@@ -76,9 +76,20 @@ namespace Game.Characters
         // Collider
         public BoxCollider2D boxCollider2D => _BoxCollider;
 
+        static List<CharacterBase> _CharacterList = new List<CharacterBase>();
+
+        public static CharacterBase[] characters => _CharacterList.ToArray();
+
         protected virtual void Awake()
         {
             _BoxCollider = GetComponent<BoxCollider2D>();
+
+            _CharacterList.Add(this);
+        }
+
+        protected virtual void OnDestroy() 
+        {
+            _CharacterList.Remove(this);
         }
 
         // Health
@@ -199,68 +210,7 @@ namespace Game.Characters
                 for(int i = 1; i < effectsArray.Length; i++)
                     effectsArray[i].End();
             }
-
-            // IEnumerable<Effect> effectsInList;
-
-            // // I create a copy of the effects otherwise all effects will go haywire with other Characters as they would only reference 1.
-            // foreach(IGrouping<int, Effect> group in effects.GroupBy(effect => effect.instanceId))
-            // {
-            //     Effect effect = group.First();
-                
-            //     // If effect is stackable
-            //     if(effect.isStackable)
-            //     {
-            //         // Get effects with same class from _EffectList
-            //         effectsInList = _EffectList.Where(effect => effect.instanceId == group.Key);
-
-            //         // If there are any effect in the list with the same type, stack them up
-            //         if(effectsInList.Any())
-            //         {
-            //             effect = effectsInList.First();
-
-            //             effect.Stack(group.ToArray());
-            //         }
-
-            //         // If not, stack the first one with the rest of the effects then add to the list
-            //         else
-            //         {
-            //             Effect effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
-            //             Effect[] effectsArray;
-                        
-            //             effectCopy.StartEffect(sender, this);
-
-            //             effectsArray = group.Where(e => e != effect).ToArray();
-
-            //             Debug.LogWarning(effectsInList.ToArray().Length + " " + effectCopy.name);
-
-            //             if(effectsArray.Length > 0)
-            //                 effectCopy.Stack(effectsArray);
-
-            //             _EffectList.Add(effectCopy);
-            //         }
-            //     }
-
-            //     // If not, End current one and add new one
-            //     else
-            //     {
-            //         effectsInList = _EffectList.Where(effect => effect.instanceId == group.Key);
-
-            //         if(effectsInList.Any())
-            //         {
-            //             Effect tempEffect = effectsInList.First();
-
-            //             if(tempEffect) 
-            //                 tempEffect.End();
-            //         }
-
-            //         Effect effectCopy = !effect.isCopied ? effect.CreateCopy<Effect>() : effect;
-
-            //         effectCopy.StartEffect(sender, this);
-                    
-            //         _EffectList.Add(effectCopy);
-            //     }
-            // }
-
+            
             UpdateRestrainedActions();
         }
 

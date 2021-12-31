@@ -12,7 +12,7 @@ public class TestAttack : Attack
     LayerMask _CharacterLayer;
     protected override IEnumerator Tick()
     {
-        target.FaceNearestCharacter(range, _CharacterLayer);
+        target.FaceNearestCharacter(range);
         // target.FaceNearestCharacter<CharacterBase>(range, _CharacterLayer);
 
         // Utilities.GetCharacters(Vector3.zero, 5, _CharacterLayer);
