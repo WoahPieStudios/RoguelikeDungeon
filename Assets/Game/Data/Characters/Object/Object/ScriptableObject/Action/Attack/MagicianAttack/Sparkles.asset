@@ -9,8 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a58130d4f135785489d6d4d58ca69303, type: 3}
-  m_Name: Magician Skill
+  m_Script: {fileID: 11500000, guid: 43583c15477638646b46c3cdbc7858cc, type: 3}
+  m_Name: Sparkles
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
-  _CoolDownTime: 0
+  _Damage: 0
+  _Range: 5
+  _Speed: 0
+  _ActiveEffects: []
+  _LightRayPrefab: {fileID: 6355572049708942688, guid: 5afb76cc985757a48855142cfd3db3eb, type: 3}
+  _EnemyLayer:
+    serializedVersion: 2
+    m_Bits: 4294967295

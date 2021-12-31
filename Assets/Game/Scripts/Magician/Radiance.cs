@@ -5,8 +5,20 @@ using UnityEngine;
 namespace Game.Characters
 {
     [CreatableAsset("Magician")]
-    public class MagicianSkill : Skill
+    public class Radiance : Skill
     {
+        [Header("Target")]
+        [SerializeField]
+        LayerMask _EnemyLayer;
+        
+        [Header("Light Ray")]
+        [SerializeField]
+        GameObject _Prefab;
+        [SerializeField]
+        float _FadeInTime;
+        [SerializeField]
+        float _FadeOutTime;
+
         protected override IEnumerator Tick()
         {
             yield return new WaitForEndOfFrame();
