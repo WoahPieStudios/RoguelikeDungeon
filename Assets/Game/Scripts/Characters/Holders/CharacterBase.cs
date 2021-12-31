@@ -6,8 +6,8 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    [RequireComponent(typeof(BoxCollider2D))]
-    public abstract class CharacterBase : MonoBehaviour, IHealth, IMove, IEffectable, IDirectional, IAttack
+    [RequireComponent(typeof(BoxCollider2D), typeof(Animation))]
+    public abstract class CharacterBase : MonoBehaviour, IHealth, IMove, IEffectable, IDirectional, IAttack, IAnimation
     {
         // Movement
         Vector2 _Velocity;
@@ -21,6 +21,9 @@ namespace Game.Characters
 
         // Collider
         BoxCollider2D _BoxCollider;
+
+        // Animation
+        Animation _Animation;
 
         // Health
         /// <summary>
@@ -80,9 +83,13 @@ namespace Game.Characters
 
         public static CharacterBase[] characters => _CharacterList.ToArray();
 
+        public new Animation animation => _Animation;
+
         protected virtual void Awake()
         {
             _BoxCollider = GetComponent<BoxCollider2D>();
+
+            _Animation = GetComponent<Animation>();
 
             _CharacterList.Add(this);
         }

@@ -5,6 +5,11 @@ using UnityEngine;
 namespace Game.Characters
 {
     // I honestly have no idea why I added lots of interfaces but yeah~ I just added the not forgetting so that it sounds like there's a purpose
+    public interface IAnimation
+    {
+        Animation animation { get; }
+    }
+
     public interface ICopyable
     {
         int instanceId { get; }
