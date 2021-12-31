@@ -10,7 +10,10 @@ public class TestAttack : Attack
 {
     [SerializeField]
     LayerMask _CharacterLayer;
-    protected override IEnumerator Tick()
+
+    Coroutine _TickCoroutine;
+
+    IEnumerator Tick()
     {
         target.FaceNearestCharacter(range);
         // target.FaceNearestCharacter<CharacterBase>(range, _CharacterLayer);
@@ -22,5 +25,20 @@ public class TestAttack : Attack
         yield return null;
 
         End();
+    }
+
+    public override void Use(CharacterBase attacker)
+    {
+        base.Use(attacker);
+
+        _TickCoroutine = target.StartCoroutine(Tick());
+    }
+
+    public override void End()
+    {
+        base.End();
+
+        if(_TickCoroutine != null)
+            target.StopCoroutine(_TickCoroutine);
     }
 }

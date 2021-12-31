@@ -7,7 +7,9 @@ namespace Game.Characters
     [CreatableAsset]
     public class TestSkill : Skill
     {
-        protected override IEnumerator Tick()
+        Coroutine _TickCoroutine;
+
+        IEnumerator Tick()
         {
             yield return new WaitForEndOfFrame();
 
@@ -17,6 +19,21 @@ namespace Game.Characters
         protected override void OnCooldown()
         {
             
+        }
+
+        public override void Use(Hero hero)
+        {
+            base.Use(hero);
+
+            _TickCoroutine = target.StartCoroutine(Tick());
+        }
+
+        public override void End()
+        {
+            base.End();
+
+            if(_TickCoroutine != null)
+                target.StopCoroutine(_TickCoroutine);
         }
     }
 }
