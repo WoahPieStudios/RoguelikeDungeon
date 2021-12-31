@@ -7,7 +7,7 @@ namespace Game.Characters
     // I honestly have no idea why I added lots of interfaces but yeah~ I just added the not forgetting so that it sounds like there's a purpose
     public interface IOnAssignEvent
     {
-        void OnAssign();
+        void OnAssign(CharacterBase character);
     }
 
     public interface ICopyable
