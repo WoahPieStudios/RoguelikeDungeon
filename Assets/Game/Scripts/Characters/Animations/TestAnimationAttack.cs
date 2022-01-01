@@ -5,21 +5,42 @@ using UnityEngine;
 namespace Game.Characters.Animations
 {
     [CreateAssetMenu(fileName = "TestAnimationAttack", menuName = "Animations/TestAnimationAttack")]
-    public class TestAnimationAttack : Attack
+    public class TestAnimationAttack : Attack, IOnAssignEvent
     {
         [SerializeField]
-        ActionAnimation _ActionAnimation;
+        AnimationClip _AnimationClip;
+
+        CharacterBase _NearestCharacter;
 
         protected override IEnumerator Tick()
         {
-            yield return null;
+            target.FaceNearestCharacter(_NearestCharacter);
+
+            yield return new WaitForSeconds(2);
+        }
+
+        public override bool CanUse(CharacterBase attacker)
+        {
+            _NearestCharacter = Utilities.GetNearestCharacter<CharacterBase>(attacker.transform.position, range, attacker);
+
+            return base.CanUse(attacker) && _NearestCharacter;
         }
 
         public override void Use(CharacterBase attacker)
         {
             base.Use(attacker);
-            
-            _ActionAnimation.AddToAnimation(target.animation);
+
+            target.animationController.Play("Attack");
+        }
+
+        public override void End()
+        {
+            base.End();
+        }
+
+        public void OnAssign(CharacterBase character)
+        {
+            character.animationController.AddAnimation("Attack", _AnimationClip, End);
         }
     }
 }

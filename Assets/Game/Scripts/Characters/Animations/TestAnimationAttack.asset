@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Icon: {fileID: 0}
   _Damage: 0
-  _Range: 0
+  _Range: 10
   _Speed: 0
   _ActiveEffects: []
-  _ActionAnimation: {fileID: 0}
+  _AnimationClip: {fileID: 7400000, guid: b4389e02e5d25fc4288ab02a839f5a01, type: 2}

@@ -9,7 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e88b982433c310542aa53fafbd321dce, type: 3}
-  m_Name: ActionAnimation
+  m_Script: {fileID: 11500000, guid: 229e665e620c2d248b26bab5ec402658, type: 3}
+  m_Name: TestAnimationUltimate
   m_EditorClassIdentifier: 
-  _Clip: {fileID: 0}
+  _Icon: {fileID: 0}
+  _CoolDownTime: 1
+  _ManaCost: 0
+  _AnimationClip: {fileID: 7400000, guid: 744a714604f4b4c4f8e6c601eeac4262, type: 2}
