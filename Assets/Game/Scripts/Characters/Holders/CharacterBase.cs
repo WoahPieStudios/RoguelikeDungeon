@@ -3,11 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using Game.Characters.Animations;
 
 namespace Game.Characters
 {
-    [RequireComponent(typeof(BoxCollider2D))]
-    public abstract class CharacterBase : MonoBehaviour, IHealth, IMove, IEffectable, IDirectional, IAttack
+    [RequireComponent(typeof(BoxCollider2D), typeof(AnimationController))]
+    public abstract class CharacterBase : MonoBehaviour, IHealth, IMove, IEffectable, IDirectional, IAttack, IAnimations
     {
         // Movement
         Vector2 _Velocity;
@@ -21,6 +22,9 @@ namespace Game.Characters
 
         // Collider
         BoxCollider2D _BoxCollider;
+
+        // Animation
+        AnimationController _AnimationController;
 
         // Health
         /// <summary>
@@ -80,9 +84,13 @@ namespace Game.Characters
 
         public static CharacterBase[] characters => _CharacterList.ToArray();
 
+        public AnimationController animationController => _AnimationController;
+
         protected virtual void Awake()
         {
             _BoxCollider = GetComponent<BoxCollider2D>();
+
+            _AnimationController = GetComponent<AnimationController>();
 
             _CharacterList.Add(this);
         }

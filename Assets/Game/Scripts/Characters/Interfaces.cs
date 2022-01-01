@@ -1,10 +1,23 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
+
+using Game.Characters.Animations;
 
 namespace Game.Characters
 {
     // I honestly have no idea why I added lots of interfaces but yeah~ I just added the not forgetting so that it sounds like there's a purpose
+    public interface IAnimations
+    {
+        AnimationController animationController { get; }
+    }
+    
+    public interface IOnAssignEvent
+    {
+        void OnAssign(CharacterBase character);
+    }
+
     public interface ICopyable
     {
         int instanceId { get; }

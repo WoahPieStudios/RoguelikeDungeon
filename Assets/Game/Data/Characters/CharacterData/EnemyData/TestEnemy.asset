@@ -15,4 +15,4 @@ MonoBehaviour:
   _Icon: {fileID: -6407341208919860682, guid: 82f63f579cc2aca4d8574cf956db85e8, type: 3}
   _MaxHealth: 10
   _MoveSpeed: 0
-  _Attack: {fileID: 11400000, guid: e63116133f4041c4b841f6d6161d3b9e, type: 2}
+  _Attack: {fileID: 11400000, guid: ec720b24d192b2648a2f948f24edd966, type: 2}

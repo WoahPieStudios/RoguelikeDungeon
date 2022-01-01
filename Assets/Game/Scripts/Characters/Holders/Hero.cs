@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,11 +10,8 @@ namespace Game.Characters
     public class Hero : Character<HeroData>, ISkillUser, IUltimateUser, IPassiveEffects
     {
         int _CurrentMana;
+        
         Dictionary<TrackAction, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackAction, PassiveEffect[]>();
-
-        IEnumerable<PassiveEffect> _AttackPassives;
-        IEnumerable<PassiveEffect> _SkillPassives;
-        IEnumerable<PassiveEffect> _UltimatePassives;
 
         Skill _Skill;
 
@@ -55,9 +53,11 @@ namespace Game.Characters
 
         void SetupPassives(IEnumerable<PassiveEffect> passiveEffects)
         {
-            _AttackPassives = passiveEffects.Where(passives => passives.trackAction.HasFlag(TrackAction.Attack));
-            _SkillPassives = passiveEffects.Where(passives => passives.trackAction.HasFlag(TrackAction.Skill));
-            _UltimatePassives = passiveEffects.Where(passives => passives.trackAction.HasFlag(TrackAction.Ultimate));
+            foreach(PassiveEffect passiveEffect in passiveEffects)
+                passiveEffects.IsCast<IOnAssignEvent>()?.OnAssign(this);
+
+            foreach(Enum e in Enum.GetValues(typeof(TrackAction)) )
+                _TrackActionPassiveEffects.Add((TrackAction)e, passiveEffects.Where(p => p.trackAction.HasFlag(e)).ToArray());
         }
 
         // Mana
@@ -94,10 +94,8 @@ namespace Game.Characters
 
             if(canAttack)
             {
-                if(_AttackPassives.Any())
-                    AddEffects(this, _AttackPassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
-                // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Attack))
-                //     AddEffects(_TrackActionPassiveEffects[TrackAction.Attack].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Attack))
+                    AddEffects(this, _TrackActionPassiveEffects[TrackAction.Attack].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
 
             return canAttack;
@@ -115,11 +113,9 @@ namespace Game.Characters
             if(canUse)
             {
                 _Skill.Use(this);
-
-                if(_SkillPassives.Any())
-                    AddEffects(this, _SkillPassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
-                // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Skill))
-                //     AddEffects(_TrackActionPassiveEffects[TrackAction.Skill].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                
+                if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Skill))
+                    AddEffects(this, _TrackActionPassiveEffects[TrackAction.Skill].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
 
             return canUse;
@@ -138,10 +134,8 @@ namespace Game.Characters
             {
                 _Ultimate.Activate(this);
                 
-                if(_UltimatePassives.Any())
-                    AddEffects(this, _UltimatePassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
-                // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Ultimate))
-                //     AddEffects(_TrackActionPassiveEffects[TrackAction.Ultimate].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Ultimate))
+                    AddEffects(this, _TrackActionPassiveEffects[TrackAction.Ultimate].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
 
             return canUse;
@@ -161,8 +155,10 @@ namespace Game.Characters
             _CurrentMana = data.maxMana;
 
             _Skill = data.skill.CreateCopy<Skill>();
+            _Skill.IsCast<IOnAssignEvent>()?.OnAssign(this);
 
             _Ultimate = data.ultimate.CreateCopy<Ultimate>();
+            _Ultimate.IsCast<IOnAssignEvent>()?.OnAssign(this);
         }
     }
 }
