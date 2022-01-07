@@ -51,6 +51,17 @@ namespace Game.Characters
         /// </summary>
         public PassiveEffect[] passiveEffects => data.passiveEffects;
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            _Skill = GetComponent<Skill>();
+            _Skill.IsCast<IOnAssignEvent>()?.OnAssign(this);
+
+            _Ultimate = GetComponent<Ultimate>();
+            _Ultimate.IsCast<IOnAssignEvent>()?.OnAssign(this);
+        }
+
         void SetupPassives(IEnumerable<PassiveEffect> passiveEffects)
         {
             foreach(PassiveEffect passiveEffect in passiveEffects)
@@ -150,15 +161,9 @@ namespace Game.Characters
         {
             base.AssignData(data);
 
-            SetupPassives(data.passiveEffects.Select(passive => passive.CreateCopy<PassiveEffect>()));
+            SetupPassives(data.passiveEffects.Select(passive => passive.CreateClone<PassiveEffect>()));
 
             _CurrentMana = data.maxMana;
-
-            _Skill = data.skill.CreateCopy<Skill>();
-            _Skill.IsCast<IOnAssignEvent>()?.OnAssign(this);
-
-            _Ultimate = data.ultimate.CreateCopy<Ultimate>();
-            _Ultimate.IsCast<IOnAssignEvent>()?.OnAssign(this);
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 using Game.Characters.Animations;
+using System;
 
 namespace Game.Characters
 {
@@ -82,6 +83,9 @@ namespace Game.Characters
 
         static List<CharacterBase> _CharacterList = new List<CharacterBase>();
 
+        public event Action<IHealth, int> onAddHealth;
+        public event Action<IHealth, int> onDamage;
+
         public static CharacterBase[] characters => _CharacterList.ToArray();
 
         public AnimationController animationController => _AnimationController;
@@ -105,13 +109,19 @@ namespace Game.Characters
         /// Adds to the Health of the Character
         /// </summary>
         /// <param name="health">Amount to be added</param>
-        public abstract void AddHealth(int health);
+        public virtual void AddHealth(int health)
+        {
+            onAddHealth?.Invoke(this, health);
+        }
 
         /// <summary>
         /// Reduces the Health of the Character
         /// </summary>
         /// <param name="damage">Amount to be reduced the health by</param>
-        public abstract void Damage(int damage);
+        public virtual void Damage(int damage)
+        {
+            onDamage?.Invoke(this, damage);
+        }
 
         // Effects
         void UpdateRestrainedActions()
@@ -174,7 +184,7 @@ namespace Game.Characters
 
                 effectsInList = _EffectList.Where(e => e.instanceId == effectGroup.Key);
 
-                effectCopy = effect.isCopied ? effect : effect.CreateCopy<Effect>();
+                effectCopy = effect.isCopied ? effect : effect.CreateClone<Effect>();
 
                 if(effect.isStackable)
                 {
@@ -182,12 +192,12 @@ namespace Game.Characters
                     {
                         effect = effectsInList.First();
 
-                        effect.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateCopy<Effect>()).ToArray());
+                        effect.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateClone<Effect>()).ToArray());
                     }
 
                     else
                     {
-                        effectCopy.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateCopy<Effect>()).ToArray());
+                        effectCopy.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateClone<Effect>()).ToArray());
                         effectCopy.StartEffect(sender, this);
 
                         _EffectList.Add(effectCopy);

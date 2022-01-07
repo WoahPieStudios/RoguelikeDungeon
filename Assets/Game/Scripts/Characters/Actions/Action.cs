@@ -5,7 +5,7 @@ using UnityEngine;
 namespace Game.Characters
 {
     [RootCreatableAsset]
-    public abstract class Action : ScriptableObject, IIcon, ICopyable
+    public abstract class Action : ScriptableObject, IAction<CharacterBase>, IIcon, ICloneable
     {
         [SerializeField]
         Sprite _Icon;
@@ -17,11 +17,6 @@ namespace Game.Characters
         int _InstanceId;
 
         CharacterBase _Target;
-
-        /// <summary>
-        /// Target of the Action.
-        /// </summary>
-        protected CharacterBase target => _Target;
 
         /// <summary>
         /// To see if Action is Active.
@@ -44,6 +39,11 @@ namespace Game.Characters
         /// </summary>
         /// <returns></returns>
         public int instanceId => _InstanceId;
+
+        /// <summary>
+        /// Target of the Action.
+        /// </summary>
+        public CharacterBase target => _Target;
 
         /// <summary>
         /// Starts the Action, Sets up Variables and runs Tick
@@ -69,14 +69,25 @@ namespace Game.Characters
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T CreateCopy<T>() where T : Action
+        public T CreateClone<T>() where T : Object, ICloneable
         {
             T copy = Instantiate(this) as T;
 
-            copy._InstanceId = GetInstanceID();
-            copy._IsCopy = true;
+            copy.InitializeClone(GetInstanceID());
 
             return copy;
+        }
+
+        public void InitializeClone(int instanceid)
+        {
+            _InstanceId = instanceid;
+
+            _IsCopy = true;
+        }
+
+        public virtual void ForceStart()
+        {
+            _IsActive = true;
         }
     }
 }

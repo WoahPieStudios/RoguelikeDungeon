@@ -16,11 +16,6 @@ namespace Game.Characters
             End();
         }
 
-        protected override void OnCooldown()
-        {
-            
-        }
-
         public override void Activate(Hero hero)
         {
             base.Activate(hero);

@@ -50,6 +50,14 @@ namespace Game.Characters
         /// </summary>
         public TData data => _Data;
 
+        protected override void Awake()
+        {
+            base.Awake();
+        
+            _Attack = GetComponent<Attack>();
+            _Attack.IsCast<IOnAssignEvent>()?.OnAssign(this);
+        }
+
         // Health
         /// <summary>
         /// Adds to the Health of the Character
@@ -60,6 +68,8 @@ namespace Game.Characters
             int newHealth = _CurrentHealth + health;
 
             _CurrentHealth = newHealth > maxHealth ? maxHealth : newHealth;
+
+            base.AddHealth(health);
         }
 
         /// <summary>
@@ -71,6 +81,8 @@ namespace Game.Characters
             int newHealth = _CurrentHealth - damage;
 
             _CurrentHealth = newHealth < 0 ? 0 : newHealth;
+
+            base.Damage(damage);
         }
         
         // Character Data
@@ -83,9 +95,6 @@ namespace Game.Characters
             _Data = data;
 
             _CurrentHealth = maxHealth;
-
-            _Attack = data.attack?.CreateCopy<Attack>();
-            _Attack.IsCast<IOnAssignEvent>()?.OnAssign(this);
         }
 
         // Attack

@@ -8,6 +8,17 @@ using Game.Characters.Animations;
 namespace Game.Characters
 {
     // I honestly have no idea why I added lots of interfaces but yeah~ I just added the not forgetting so that it sounds like there's a purpose
+
+    public interface IAction<T>
+    {
+        bool isActive { get; }
+        T target { get; }
+
+
+        void ForceStart();
+        void End();
+    }
+
     public interface IAnimations
     {
         AnimationController animationController { get; }
@@ -18,11 +29,12 @@ namespace Game.Characters
         void OnAssign(CharacterBase character);
     }
 
-    public interface ICopyable
+    public interface ICloneable
     {
         int instanceId { get; }
         bool isCopied { get; }
-        T CreateCopy<T>() where T : Action;
+        T CreateClone<T>() where T : Object, ICloneable;
+        void InitializeClone(int instanceid);
     }
 
     public interface IPassiveEffects
@@ -92,15 +104,23 @@ namespace Game.Characters
         int maxHealth { get; }
         int currentHealth { get; }
         bool isAlive { get; }
+
+        event System.Action<IHealth, int> onAddHealth; 
+        event System.Action<IHealth, int> onDamage; 
+
         void AddHealth(int health);
         void Damage(int damage);
     }
 
     // Interface for not forgetting Mana
-    public interface IManaUser
+    public interface IMana
     {
         int maxMana { get; }
         int currentMana { get; }
+
+        event System.Action<IMana, int> onAddHealth; 
+        event System.Action<IMana, int> onDamage; 
+
         void UseMana(int mana);
         void AddMana(int mana);
     }
