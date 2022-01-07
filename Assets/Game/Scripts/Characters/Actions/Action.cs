@@ -16,8 +16,6 @@ namespace Game.Characters
 
         int _InstanceId;
 
-        Coroutine _TickCoroutine;
-
         CharacterBase _Target;
 
         /// <summary>
@@ -47,13 +45,6 @@ namespace Game.Characters
         /// <returns></returns>
         public int instanceId => _InstanceId;
 
-        // Tick, to update your action, also in IEnumerator for to set update in Fixed or normal Update. **DO NOT SETACTIVE(FALSE) GAMEOBJECT AS IT WILL STOP ALL TICKS**
-        /// <summary>
-        /// Updates the action. **DO NOT SETACTIVE(FALSE) GAMEOBJECT AS IT WILL STOP ALL TICKS**
-        /// </summary>
-        /// <returns></returns>
-        protected abstract IEnumerator Tick();
-
         /// <summary>
         /// Starts the Action, Sets up Variables and runs Tick
         /// </summary>
@@ -63,8 +54,6 @@ namespace Game.Characters
             _IsActive = true;
 
             _Target = target;
-
-            _TickCoroutine = target.StartCoroutine(Tick());
         }
 
         /// <summary>
@@ -73,9 +62,6 @@ namespace Game.Characters
         public virtual void End()
         {
             _IsActive = false;
-
-            if(_TickCoroutine != null)
-                _Target.StopCoroutine(_TickCoroutine);
         }
 
         /// <summary>
