@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Game.Characters.Magician
 {
     [CreatableAsset("Magician")]
-    public class Sparkles : Attack, IBonusDamage
+    public class Sparkles : Attack, IBonusDamage, IOnAssignEvent
     {
         [Header("Light Ray")]
         [SerializeField]
@@ -29,7 +29,7 @@ namespace Game.Characters.Magician
 
             Vector2 enemyDirection;
 
-            target.FaceNearestCharacter(5);
+            target.FaceNearestCharacter(_ClosestEnemy);
 
             enemyDirection = _ClosestEnemy.transform.position - target.transform.position;
 
@@ -53,10 +53,8 @@ namespace Game.Characters.Magician
             return base.CanUse(attacker) && _ClosestEnemy;
         }
 
-        public override void Use(CharacterBase attacker)
+        public void OnAssign(CharacterBase character)
         {
-            base.Use(attacker);
-
             _LightRay = Instantiate(_Prefab).GetComponent<LightRay>();
         }
     }

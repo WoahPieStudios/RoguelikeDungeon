@@ -15,5 +15,11 @@ namespace Game.Characters
 
             AssignData(_EnemyData);
         }
+
+        private void Update()
+        {
+            if(Input.GetKeyDown(KeyCode.U))
+                UseAttack();
+        }
     }
 }
