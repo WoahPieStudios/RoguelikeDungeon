@@ -1,29 +1,23 @@
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 namespace Game.Characters
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    public abstract class SpriteCharacter : CharacterBase
+    public class SpriteOrientation : Orientation
     {
         SpriteRenderer _SpriteRenderer;
 
-        SpriteRenderer spriteRenderer => _SpriteRenderer;
-
-        protected override void Awake()
+        protected virtual void Awake() 
         {
-            base.Awake();
-
             _SpriteRenderer = GetComponent<SpriteRenderer>();
-
-            boxCollider2D.size = _SpriteRenderer.size;
         }
 
-        public override void Orient(Vector2Int faceDirection)
+        protected override void SetDirection(Vector2Int faceDirection)
         {
-            base.Orient(faceDirection);
-
             _SpriteRenderer.flipX = !(Mathf.Sign(faceDirection.x) == 1);
         }
     }

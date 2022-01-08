@@ -8,9 +8,6 @@ using Game.Characters;
 [CreatableAsset("Attack")]
 public class TestAttack : Attack
 {
-    [SerializeField]
-    LayerMask _CharacterLayer;
-
     Coroutine _TickCoroutine;
 
     IEnumerator Tick()

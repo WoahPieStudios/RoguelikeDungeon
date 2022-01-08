@@ -22,12 +22,12 @@ namespace Game.Characters.Animations
         {
             base.Activate(hero);
 
-            hero.animationController.Play("Ultimate");
+            hero.Play("Ultimate");
         }
 
         public void OnAssign(CharacterBase character)
         {
-            character.animationController.AddAnimation("Ultimate", _AnimationClip);
+            character.AddAnimation("Ultimate", _AnimationClip);
         }
     }
 }

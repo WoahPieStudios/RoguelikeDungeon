@@ -8,91 +8,78 @@ using System;
 
 namespace Game.Characters
 {
-    [RequireComponent(typeof(BoxCollider2D), typeof(AnimationController))]
-    public abstract class CharacterBase : MonoBehaviour, IHealth, IMove, IEffectable, IDirectional, IAttack, IAnimations
+    public class CharacterBase : MonoBehaviour, IHealth, IAttack, IEffectable, IMovement, IOrientation, IAnimations
     {
-        // Movement
-        Vector2 _Velocity;
+        #region Health
+        Health _Health;
 
-        // Direction
-        Vector2Int _FaceDirection = Vector2Int.right;
+        public event System.Action<IHealth, int> onAddHealthEvent;
+        public event System.Action<IHealth, int> onDamageEvent;
+        public event System.Action onKillEvent;
+        public event System.Action onResetHealthEvent;
 
-        // Effects
-        RestrictAction _RestrictedActions;
-        List<Effect> _EffectList = new List<Effect>();
+        public int maxHealth => _Health.maxHealth;
 
-        // Collider
-        BoxCollider2D _BoxCollider;
+        public int currentHealth => _Health.currentHealth;
 
-        // Animation
-        AnimationController _AnimationController;
+        public bool isAlive => _Health.isAlive;
+        #endregion
 
-        // Health
-        /// <summary>
-        /// Max Health of the Character
-        /// </summary>
-        public abstract int maxHealth { get; }
+        #region Move
+        Movement _Movement;
         
-        /// <summary>
-        /// Current Health of the Character 
-        /// </summary>
-        public abstract int currentHealth { get; }
+        public float moveSpeed => _Movement.moveSpeed;
 
-        /// <summary>
-        /// Checks if the Character is Alive
-        /// </summary>
-        public abstract bool isAlive { get; }
+        public Vector2 velocity => _Movement.velocity;
+        #endregion
+
+        #region Animations
+        AnimationController _AnimationController;
+        #endregion
+
+        #region Attack
+        Attack _Attack;
 
         // Attack
         /// <summary>
         /// Attack of the Character
         /// </summary>
-        public abstract Attack attack { get; }
+        public Attack attack => _Attack;
+        #endregion
 
-        // Effects
-        /// <summary>
-        /// Restricted Actions of the Character
-        /// </summary>
-        public RestrictAction restrictedActions => _RestrictedActions;
+        #region Orientation
+        Orientation _Orientation;
 
-        /// <summary>
-        /// Effects casted upon the Character.
-        /// </summary>
-        /// <returns></returns>
-        public Effect[] effects => _EffectList.ToArray();
+        public Vector2Int currentDirection => _Orientation.currentDirection;
+        #endregion
 
-        // Movement
-        /// <summary>
-        /// Move Speed of the Character
-        /// </summary>
-        public abstract float moveSpeed { get; }
+        #region Effectable
+        EffectsHandler _EffectsHandler;
+        
+        public RestrictAction restrictedActions => _EffectsHandler.restrictedActions;
 
-        /// <summary>
-        /// Velocity of the Character.
-        /// </summary>
-        public Vector2 velocity => _Velocity;
+        public Effect[] effects => _EffectsHandler.effects;
+        #endregion
 
-        // Direction
-        /// <summary>
-        /// Direction of the Character is currently facing.
-        /// </summary>
-        public Vector2Int faceDirection => _FaceDirection;
-
-        // Collider
-        public BoxCollider2D boxCollider2D => _BoxCollider;
-
+        #region Characters
         static List<CharacterBase> _CharacterList = new List<CharacterBase>();
 
-        public event Action<IHealth, int> onAddHealth;
-        public event Action<IHealth, int> onDamage;
-
         public static CharacterBase[] characters => _CharacterList.ToArray();
+        #endregion
 
-        public AnimationController animationController => _AnimationController;
-
+        #region Unity Functions
         protected virtual void Awake()
         {
-            _BoxCollider = GetComponent<BoxCollider2D>();
+            _Orientation = GetComponent<Orientation>();
+
+            _Movement = GetComponent<Movement>();
+
+            _Health = GetComponent<Health>();
+
+            _Attack = GetComponent<Attack>();
+            _Attack.IsCast<IOnAssignEvent>()?.OnAssign(this);
+
+            _EffectsHandler = GetComponent<EffectsHandler>();
 
             _AnimationController = GetComponent<AnimationController>();
 
@@ -103,155 +90,127 @@ namespace Game.Characters
         {
             _CharacterList.Remove(this);
         }
+        #endregion
 
-        // Health
-        /// <summary>
-        /// Adds to the Health of the Character
-        /// </summary>
-        /// <param name="health">Amount to be added</param>
-        public virtual void AddHealth(int health)
-        {
-            onAddHealth?.Invoke(this, health);
-        }
-
-        /// <summary>
-        /// Reduces the Health of the Character
-        /// </summary>
-        /// <param name="damage">Amount to be reduced the health by</param>
-        public virtual void Damage(int damage)
-        {
-            onDamage?.Invoke(this, damage);
-        }
-
-        // Effects
-        void UpdateRestrainedActions()
-        {
-            RestrictAction RestrainedActions = default;
-
-            // Adds Restrict Actions to RestrainedActions
-            foreach(RestrictAction r in _EffectList.Where(effect => effect.GetType() is IRestrainActionEffect).Select(effect => (effect as IRestrainActionEffect).restrictAction))//_EffectList.Where(effect => effect.GetType().IsSubclassOf(typeof(ActiveEffect))).Select(effect => (effect as ActiveEffect).restrictAction))
-                RestrainedActions |= r;
-
-            _RestrictedActions = RestrainedActions;
-        }
-
-        // Attack
-        /// <summary>
-        /// Starts the Attack.
-        /// </summary>
-        /// <returns>if the Attack can be used</returns>
-        public abstract bool UseAttack();
-
+        #region Move Functions
         // Movement
         /// <summary>
-        /// Moves the Character. **TO BE DECIDED IF THIS STAYS OR NOT**
+        /// Moves the Character.
         /// </summary>
         /// <param name="direction"></param>
         /// <returns></returns>
         public virtual bool Move(Vector2 direction)
         {
-            bool canMove = !_RestrictedActions.HasFlag(RestrictAction.Movement); 
+            bool canMove = !_EffectsHandler.restrictedActions.HasFlag(RestrictAction.Movement); 
             
             // Checks first if this is restricted
             if(canMove)
-            {
-                // Definitely expecting this to be replaced or to have its own class
-                _Velocity = direction * moveSpeed * Time.fixedDeltaTime;
-
-                transform.position += (Vector3)_Velocity;
-            }
+                _Movement.Move(direction);
 
             return canMove;
         }
+        #endregion
+    
+        #region Attack Functions
+        // Attack
+        /// <summary>
+        /// Starts the Attack.
+        /// </summary>
+        /// <returns>if the Attack can be used</returns>
+        public virtual bool UseAttack()
+        {
+            bool canAttack = attack && attack.CanUse(this) && !_EffectsHandler.restrictedActions.HasFlag(RestrictAction.Attack);
+
+            if(canAttack)
+                attack.Use(this);
+
+            return canAttack;
+        }
+        #endregion
+
+        #region Effectable Functions
+        public void AddEffects(CharacterBase sender, params Effect[] effects)
+        {
+            _EffectsHandler.AddEffects(sender, this);
+        }
+
+        public void RemoveEffects(params Effect[] effects)
+        {
+            _EffectsHandler.RemoveEffects(effects);
+        }
+        #endregion
         
-        // Effects
-        /// <summary>
-        /// Adds the effects to this Character.
-        /// </summary>
-        /// <param name="sender">The one who sent the effect</param>
-        /// <param name="effects">The one who is casted upon</param>
-        public virtual void AddEffects(CharacterBase sender, params Effect[] effects)
+        #region Health Functions
+        public void AddHealth(int health)
         {
-            Effect effect;
-            Effect effectCopy;
+            _Health.AddHealth(health);
 
-            IEnumerable<Effect> effectsInList;
-            IEnumerable<Effect> tempEffectList = _EffectList;
+            onAddHealthEvent?.Invoke(this, health);
+        }
 
-            foreach(IGrouping<int, Effect> effectGroup in effects.GroupBy(effect => effect.instanceId))
-            {
-                effect = effectGroup.First();
+        public void Damage(int damage)
+        {
+            _Health.Damage(damage);
 
-                effectsInList = _EffectList.Where(e => e.instanceId == effectGroup.Key);
-
-                effectCopy = effect.isCopied ? effect : effect.CreateClone<Effect>();
-
-                if(effect.isStackable)
-                {
-                    if(effectsInList.Any()) // If there is already a copy in the list, expected there is always 1 or none in the least.
-                    {
-                        effect = effectsInList.First();
-
-                        effect.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateClone<Effect>()).ToArray());
-                    }
-
-                    else
-                    {
-                        effectCopy.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateClone<Effect>()).ToArray());
-                        effectCopy.StartEffect(sender, this);
-
-                        _EffectList.Add(effectCopy);
-                    }
-                }
-
-                // Removes all same type in effect list and adds new one. "Refreshes" Effect
-                else
-                {
-                    if(effectsInList.Any())
-                    {
-                        Effect[] effectsArray = effectsInList.ToArray();
-
-                        for(int i = 1; i < effectsArray.Length; i++)
-                            effectsArray[i].End();
-                    }
-                    
-                    effectCopy.StartEffect(sender, this);
-
-                    _EffectList.Add(effectCopy);
-                }
-            }
-                
-            foreach(IGrouping<int, Effect> effectGroup in _EffectList.GroupBy(effect => effect.instanceId))
-            {
-                Effect[] effectsArray = effectGroup.ToArray();
-
-                for(int i = 1; i < effectsArray.Length; i++)
-                    effectsArray[i].End();
-            }
+            if(isAlive)
+                onDamageEvent?.Invoke(this, damage);
             
-            UpdateRestrainedActions();
+            else
+                onKillEvent?.Invoke();
         }
 
-        /// <summary>
-        /// Removed the Effect
-        /// </summary>
-        /// <param name="effects"></param>
-        public virtual void RemoveEffects(params Effect[] effects)
+        public void Kill()
         {
-            foreach(Effect effect in effects.Where(effect => _EffectList.Contains(effect)))
-                _EffectList.Remove(effect);
+            _Health.Kill();
 
-            UpdateRestrainedActions();
+            onKillEvent?.Invoke();
         }
-
-        // Direction
-        /// <summary>
-        /// Orients the Character to the direction.
-        /// </summary>
-        /// <param name="faceDirection"></param>
-        public virtual void Orient(Vector2Int faceDirection) // Saw it from Jolo's Code
+         
+        public void ResetHealth()
         {
-            _FaceDirection = faceDirection;
+            _Health.ResetHealth();
+            
+            onResetHealthEvent?.Invoke();
         }
+        #endregion
+
+        #region Orientation Functions
+        public void FaceDirection(Vector2Int faceDirection)
+        {
+            _Orientation.FaceDirection(faceDirection);
+        }
+        #endregion
+
+        #region Animations Functions
+        public void AddAnimation(string name, AnimationClip animationClip, params System.Action[] animationEvents)
+        {
+            _AnimationController.AddAnimation(name, animationClip, animationEvents);
+        }
+
+        public void RemoveAnimation(string name)
+        {
+            _AnimationController.RemoveAnimation(name);
+        }
+
+        public void Play(string name)
+        {
+            _AnimationController.Play(name);
+        }
+
+        public void Stop()
+        {
+            _AnimationController.Stop();
+        }
+
+        public void Stop(string name)
+        {
+            _AnimationController.Stop(name);
+        }
+
+        public void CrossFadePlay(string name, float fadeTime)
+        {
+            _AnimationController.CrossFadePlay(name, fadeTime);
+        }
+        #endregion
     }
 }

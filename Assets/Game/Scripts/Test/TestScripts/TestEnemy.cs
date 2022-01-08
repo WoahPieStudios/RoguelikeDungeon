@@ -12,8 +12,6 @@ namespace Game.Characters
         protected override void Awake()
         {
             base.Awake();
-
-            AssignData(_EnemyData);
         }
     }
 }

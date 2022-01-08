@@ -11,6 +11,7 @@ namespace Game.Characters
 
         IEnumerator Tick()
         {
+            Debug.Log("Blah");
             yield return new WaitForEndOfFrame();
 
             End();

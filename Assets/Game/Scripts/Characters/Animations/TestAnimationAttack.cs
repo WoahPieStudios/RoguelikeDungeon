@@ -24,12 +24,12 @@ namespace Game.Characters.Animations
             
             target.FaceNearestCharacter(_NearestCharacter);
 
-            target.animationController.Play("Attack");
+            target.Play("Attack");
         }
 
         public void OnAssign(CharacterBase character)
         {
-            character.animationController.AddAnimation("Attack", _AnimationClip, End);
+            character.AddAnimation("Attack", _AnimationClip, End);
         }
     }
 }

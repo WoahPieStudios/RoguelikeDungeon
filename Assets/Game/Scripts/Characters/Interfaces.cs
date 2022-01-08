@@ -9,6 +9,16 @@ namespace Game.Characters
 {
     // I honestly have no idea why I added lots of interfaces but yeah~ I just added the not forgetting so that it sounds like there's a purpose
 
+    public interface IAnimations
+    {
+        void AddAnimation(string name, AnimationClip animationClip, params System.Action[] animationEvents);
+        void RemoveAnimation(string name);
+        void Play(string name);
+        void Stop();
+        void Stop(string name);
+        void CrossFadePlay(string name, float fadeTime);
+    }
+
     public interface IAction<T>
     {
         bool isActive { get; }
@@ -17,11 +27,6 @@ namespace Game.Characters
 
         void ForceStart();
         void End();
-    }
-
-    public interface IAnimations
-    {
-        AnimationController animationController { get; }
     }
     
     public interface IOnAssignEvent
@@ -78,14 +83,14 @@ namespace Game.Characters
     }
 
     // Interface for not forgetting Ultimate
-    public interface IUltimateUser
+    public interface IUltimate
     {
         Ultimate ultimate { get; }
         bool UseUltimate();
     }
 
     // Interface for not forgetting Skill
-    public interface ISkillUser
+    public interface ISkill
     {
         Skill skill { get; }
         bool UseSkill();
@@ -105,11 +110,15 @@ namespace Game.Characters
         int currentHealth { get; }
         bool isAlive { get; }
 
-        event System.Action<IHealth, int> onAddHealth; 
-        event System.Action<IHealth, int> onDamage; 
+        event System.Action<IHealth, int> onAddHealthEvent;
+        event System.Action<IHealth, int> onDamageEvent;
+        event System.Action onKillEvent;
+        event System.Action onResetHealthEvent;
 
         void AddHealth(int health);
         void Damage(int damage);
+        void Kill();
+        void ResetHealth();
     }
 
     // Interface for not forgetting Mana
@@ -118,11 +127,17 @@ namespace Game.Characters
         int maxMana { get; }
         int currentMana { get; }
 
-        event System.Action<IMana, int> onAddHealth; 
-        event System.Action<IMana, int> onDamage; 
+        event System.Action<IMana, int> onUseManaEvent;
+        event System.Action<IMana, int> onAddManaEvent;
+        event System.Action onDrainManaEvent;
+        event System.Action onResetManaEvent;
 
         void UseMana(int mana);
         void AddMana(int mana);
+        void DrainMana();
+        void ResetMana();
+
+        public delegate void OnUseMana(IMana mana, int usedMana);
     }
 
     // Interface for not forgetting Effects
@@ -135,7 +150,7 @@ namespace Game.Characters
     }
 
     // Interface for not forgetting Movement
-    public interface IMove
+    public interface IMovement
     {
         float moveSpeed { get; }
         Vector2 velocity { get; }
@@ -143,9 +158,9 @@ namespace Game.Characters
     }
 
     // Interface for not forgetting Face Directions
-    public interface IDirectional
+    public interface IOrientation
     {
-        Vector2Int faceDirection { get; }
-        void Orient(Vector2Int faceDirection); // Saw it from Jolo's Code
+        Vector2Int currentDirection { get; }
+        void FaceDirection(Vector2Int faceDirection);
     }
 }

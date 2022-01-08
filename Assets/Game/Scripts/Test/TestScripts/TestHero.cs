@@ -7,18 +7,6 @@ using Game.Characters;
 
 public class TestHero : Hero
 {
-    [SerializeField]
-    HeroData _HeroData;
-    [SerializeField]
-    LayerMask _EnemyLayer;
-
-    protected override void Awake() 
-    {
-        base.Awake();
-        
-        AssignData(_HeroData);    
-    }
-
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.A))
