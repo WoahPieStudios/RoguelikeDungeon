@@ -7,16 +7,6 @@ namespace Game.Characters
     [CreatableAsset("Magician")]
     public class MagicianUltimate : Ultimate
     {
-        protected override IEnumerator Tick()
-        {
-            yield return new WaitForEndOfFrame();
-
-            End();
-        }
-
-        protected override void OnCooldown()
-        {
-            Debug.Log(currentCoolDownTime);
-        }
+        
     }
 }

@@ -30,8 +30,6 @@ namespace Game.Characters.Magician
         IEnumerator Sequence(float fadeIn, float fadeOut)
         {
             yield return FXUtilities.FadeTransition(fadeIn, fadeOut, LaserFadeOut);
-
-            Destroy(gameObject);
         }
 
         void LaserFadeOut(float value)

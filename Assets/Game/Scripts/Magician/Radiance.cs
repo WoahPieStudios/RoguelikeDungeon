@@ -18,17 +18,5 @@ namespace Game.Characters
         float _FadeInTime;
         [SerializeField]
         float _FadeOutTime;
-
-        protected override IEnumerator Tick()
-        {
-            yield return new WaitForEndOfFrame();
-
-            End();
-        }
-
-        protected override void OnCooldown()
-        {
-            Debug.Log(currentCoolDownTime);
-        }
     }
 }

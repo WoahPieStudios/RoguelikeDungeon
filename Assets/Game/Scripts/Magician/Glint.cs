@@ -30,10 +30,5 @@ namespace Game.Characters.Magician
             if (sender.attack is IBonusDamage)
                 (sender.attack as IBonusDamage).bonusDamge = 0;
         }
-
-        protected override IEnumerator Tick()
-        {
-            yield return null;
-        }
     }
 }
