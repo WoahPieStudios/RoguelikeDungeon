@@ -68,6 +68,14 @@ namespace Game.Characters
         }
 
         /// <summary>
+        /// Force Starts an action.
+        /// </summary>
+        public virtual void ForceStart()
+        {
+            _IsActive = true;
+        }
+
+        /// <summary>
         /// Ends Action. Cool Down Starts afterwards.
         /// </summary>
         public virtual void End()
@@ -85,11 +93,6 @@ namespace Game.Characters
 
                 StopCoroutine(_CoolDownCoroutine);
             }
-        }
-
-        public virtual void ForceStart()
-        {
-            _IsActive = true;
         }
     }
 }

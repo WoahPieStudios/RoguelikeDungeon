@@ -5,10 +5,12 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Health : MonoBehaviour
+    [Serializable]
+    public class Health
     {
         [SerializeField]
         int _MaxHealth = 0;
+
         int _CurrentHealth = 0;
 
         public int maxHealth => _MaxHealth;
@@ -17,7 +19,7 @@ namespace Game.Characters
 
         public bool isAlive => _CurrentHealth > 0;
 
-        void Awake() 
+        public Health()
         {
             ResetHealth();
         }
@@ -26,7 +28,7 @@ namespace Game.Characters
         /// Adds to the Health of the Character
         /// </summary>
         /// <param name="health">Amount to be added</param>
-        public virtual void AddHealth(int addHealth)
+        public void AddHealth(int addHealth)
         {
             int newHealth = _CurrentHealth + addHealth;
 
@@ -37,19 +39,19 @@ namespace Game.Characters
         /// Reduces the Health of the Character
         /// </summary>
         /// <param name="damage">Amount to be reduced the health by</param>
-        public virtual void Damage(int damage)
+        public void Damage(int damage)
         {
             int newHealth = _CurrentHealth - damage;
 
             _CurrentHealth = newHealth < 0 ? 0 : newHealth; 
         }
 
-        public virtual void Kill()
+        public void Kill()
         {
             _CurrentHealth = 0;
         }
 
-        public virtual void ResetHealth()
+        public void ResetHealth()
         {
             _CurrentHealth = _MaxHealth;
         }

@@ -7,20 +7,21 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Mana : MonoBehaviour
+    [Serializable]
+    public class Mana
     {
         [SerializeField]
-        int _MaxMana;
-
-        int _CurrentMana;
+        int _MaxMana = 0;
+        [SerializeField]
+        int _CurrentMana = 0;
 
         public int maxMana => _MaxMana;
 
         public int currentMana => _CurrentMana;
 
-        void Awake() 
+        public Mana() 
         {
-            ResetMana();    
+            ResetMana();
         }
 
         public void AddMana(int mana)

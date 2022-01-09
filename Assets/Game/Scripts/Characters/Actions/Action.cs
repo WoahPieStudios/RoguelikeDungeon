@@ -57,6 +57,14 @@ namespace Game.Characters
         }
 
         /// <summary>
+        /// Force Starts the action.
+        /// </summary>
+        public virtual void ForceStart()
+        {
+            _IsActive = true;
+        }
+
+        /// <summary>
         /// Ends Action and stops Tick if its still running. Can be called by itself or outside.
         /// </summary>
         public virtual void End()
@@ -83,11 +91,6 @@ namespace Game.Characters
             _InstanceId = instanceid;
 
             _IsCopy = true;
-        }
-
-        public virtual void ForceStart()
-        {
-            _IsActive = true;
         }
     }
 }

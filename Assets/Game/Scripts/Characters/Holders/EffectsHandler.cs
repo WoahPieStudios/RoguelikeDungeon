@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class EffectsHandler : MonoBehaviour
+    public class EffectsHandler
     {
         RestrictAction _RestrictedActions;
         
@@ -24,13 +24,13 @@ namespace Game.Characters
 
         protected void UpdateRestrainedActions()
         {
-            RestrictAction RestrainedActions = default;
+            RestrictAction restrainedActions = default;
 
             // Adds Restrict Actions to RestrainedActions
-            foreach(RestrictAction r in _EffectList.Where(effect => effect.GetType() is IRestrainActionEffect).Select(effect => (effect as IRestrainActionEffect).restrictAction))//_EffectList.Where(effect => effect.GetType().IsSubclassOf(typeof(ActiveEffect))).Select(effect => (effect as ActiveEffect).restrictAction))
-                RestrainedActions |= r;
+            foreach(RestrictAction r in _EffectList.Where(effect => effect.GetType() is IRestrainActionEffect).Select(effect => (effect as IRestrainActionEffect).restrictAction))
+                restrainedActions |= r;
 
-            _RestrictedActions = RestrainedActions;
+            _RestrictedActions = restrainedActions;
         }
         
         /// <summary>
@@ -101,7 +101,7 @@ namespace Game.Characters
         }
 
         /// <summary>
-        /// Removed the Effect
+        /// Removes the Effect
         /// </summary>
         /// <param name="effects"></param>
         public virtual void RemoveEffects(params Effect[] effects)

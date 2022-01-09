@@ -10,11 +10,11 @@ namespace Game.Characters
     public class Hero : CharacterBase, IMana, ISkill, IUltimate, IPassiveEffects
     {
         [SerializeField]
+        Mana _Mana;
+        [SerializeField]
         PassiveEffect[] _PassiveEffects;
 
         #region Mana
-        Mana _Mana;
-        
         /// <summary>
         /// Current Mana of the Hero
         /// </summary>
@@ -69,8 +69,8 @@ namespace Game.Characters
         protected override void Awake()
         {
             base.Awake();
-
-            _Mana = GetComponent<Mana>();
+            
+            _Mana.ResetMana();
 
             _Skill = GetComponent<Skill>();
             _Skill.IsCast<IOnAssignEvent>()?.OnAssign(this);

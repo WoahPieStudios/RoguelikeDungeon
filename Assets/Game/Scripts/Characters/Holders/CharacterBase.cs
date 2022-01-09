@@ -10,9 +10,10 @@ namespace Game.Characters
 {
     public class CharacterBase : MonoBehaviour, IHealth, IAttack, IEffectable, IMovement, IOrientation, IAnimations
     {
-        #region Health
+        [SerializeField]
         Health _Health;
 
+        #region Health
         public event System.Action<IHealth, int> onAddHealthEvent;
         public event System.Action<IHealth, int> onDamageEvent;
         public event System.Action onKillEvent;
@@ -54,7 +55,7 @@ namespace Game.Characters
         #endregion
 
         #region Effectable
-        EffectsHandler _EffectsHandler;
+        EffectsHandler _EffectsHandler = new EffectsHandler();
         
         public RestrictAction restrictedActions => _EffectsHandler.restrictedActions;
 
@@ -70,16 +71,14 @@ namespace Game.Characters
         #region Unity Functions
         protected virtual void Awake()
         {
+            _Health.ResetHealth();
+            
             _Orientation = GetComponent<Orientation>();
 
             _Movement = GetComponent<Movement>();
 
-            _Health = GetComponent<Health>();
-
             _Attack = GetComponent<Attack>();
             _Attack.IsCast<IOnAssignEvent>()?.OnAssign(this);
-
-            _EffectsHandler = GetComponent<EffectsHandler>();
 
             _AnimationController = GetComponent<AnimationController>();
 
