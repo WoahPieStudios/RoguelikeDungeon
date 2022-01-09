@@ -35,8 +35,8 @@ namespace Game.Characters
         /// <returns></returns>
         public static T GetNearestCharacter<T>(Vector3 center, float radius, params CharacterBase[] exceptCharacters) where T : CharacterBase
         {
-            return GetCharacters<T>(center, radius, exceptCharacters).OrderBy(item => item.Item2).
-                FirstOrDefault().Item1;
+            return GetCharacters<T>(center, radius, exceptCharacters)?.OrderBy(item => item.Item2)?.
+                FirstOrDefault()?.Item1;
         }
     }
 }
