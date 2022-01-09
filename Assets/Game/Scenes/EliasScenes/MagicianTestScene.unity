@@ -505,7 +505,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Text: {fileID: 1334233415}
-  _Hero: {fileID: 1739015348}
+  _Hero: {fileID: 0}
 --- !u!114 &1334233415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -772,7 +772,7 @@ MonoBehaviour:
     _MaxMana: 0
     _CurrentMana: 0
   _PassiveEffects:
-  - {fileID: 11400000, guid: c5452f5a3fc49584c8449ef6859ec659, type: 2}
+  - {fileID: 0}
 --- !u!212 &1739015349
 SpriteRenderer:
   m_ObjectHideFlags: 0
