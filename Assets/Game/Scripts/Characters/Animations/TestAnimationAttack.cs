@@ -4,20 +4,12 @@ using UnityEngine;
 
 namespace Game.Characters.Animations
 {
-    [CreateAssetMenu(fileName = "TestAnimationAttack", menuName = "Animations/TestAnimationAttack")]
     public class TestAnimationAttack : Attack, IOnAssignEvent
     {
         [SerializeField]
         AnimationClip _AnimationClip;
 
         CharacterBase _NearestCharacter;
-
-        protected override IEnumerator Tick()
-        {
-            target.FaceNearestCharacter(_NearestCharacter);
-
-            yield return new WaitForSeconds(2);
-        }
 
         public override bool CanUse(CharacterBase attacker)
         {
@@ -29,18 +21,15 @@ namespace Game.Characters.Animations
         public override void Use(CharacterBase attacker)
         {
             base.Use(attacker);
+            
+            target.FaceNearestCharacter(_NearestCharacter);
 
-            target.animationController.Play("Attack");
-        }
-
-        public override void End()
-        {
-            base.End();
+            target.Play("Attack");
         }
 
         public void OnAssign(CharacterBase character)
         {
-            character.animationController.AddAnimation("Attack", _AnimationClip, End);
+            character.AddAnimation("Attack", _AnimationClip, End);
         }
     }
 }

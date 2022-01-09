@@ -4,18 +4,14 @@ using UnityEngine;
 
 namespace Game.Characters.Animations
 {
-    [CreateAssetMenu(fileName = "TestAnimationUltimate", menuName = "Animations/TestAnimationUltimate")]
     public class TestAnimationUltimate : Ultimate, IOnAssignEvent
     {
         [SerializeField]
         AnimationClip _AnimationClip;
 
-        protected override void OnCooldown()
-        {
-            
-        }
+        Coroutine _TickCoroutine;
 
-        protected override IEnumerator Tick()
+        protected IEnumerator Tick()
         {
             yield return new WaitForSeconds(2);
 
@@ -26,12 +22,12 @@ namespace Game.Characters.Animations
         {
             base.Activate(hero);
 
-            hero.animationController.Play("Ultimate");
+            hero.Play("Ultimate");
         }
 
         public void OnAssign(CharacterBase character)
         {
-            character.animationController.AddAnimation("Ultimate", _AnimationClip);
+            character.AddAnimation("Ultimate", _AnimationClip);
         }
     }
 }

@@ -68,8 +68,6 @@ namespace Game.CharactersEditor
 
         void OnEnable()
         {
-            
-
             _Inspector.onGUIChange += OnInspectorGUIChange;
 
             _Explorer.onAfterDraw += CheckAssetItemsEvent;
@@ -300,12 +298,19 @@ namespace Game.CharactersEditor
         {
             _AssetItems = GetAllAssetItemsFromDatabase().OrderBy(assetItem => assetItem.name).ToArray();
 
-            _Explorer.assetItems = GetAllAssetItemsFromDatabase().OrderBy(assetItem => assetItem.name).ToArray();
+            _Explorer.assetItems = _AssetItems;
 
             // Select.RemoveSelection(Select.selection.Where(o => o is AssetItem));
             Select.RemoveAllSelection();
 
             _Explorer.Refresh();
+        }
+
+        // For Moving All Assets to their new directories
+        void MoveAllAssetItems()
+        {
+            foreach(AssetItem assetItem in _AssetItems)
+                MoveFile(assetItem);
         }
 
         #region Context Menu
@@ -361,5 +366,22 @@ namespace Game.CharactersEditor
             RefreshDatabase();
         }
         #endregion
+
+        void MoveFile(AssetItem assetItem)
+        {
+            string newPath = $"Assets/Game/Data/Characters/{ assetItem.assetObject.GetType().Name }";
+
+            if(!AssetDatabase.IsValidFolder(newPath))
+                AssetUtilities.CreateFolder(newPath);
+
+            newPath += $"/{ assetItem.assetObject.name }.asset";
+
+            if(assetItem.path != newPath)
+            {
+                AssetDatabase.MoveAsset(assetItem.path, newPath);
+
+                assetItem.UpdatePath(newPath);
+            }
+        }
     }
 }
