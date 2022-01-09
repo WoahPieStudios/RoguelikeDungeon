@@ -134,5 +134,11 @@ namespace Game.CharactersEditor
 
             AssetDatabase.CreateAsset(newAssetObject, path.Remove(path.Length - fileName.Length - 1, fileName.Length) + newFileName);
         }
+
+        public void UpdatePath(string newPath)
+        {
+            if(AssetDatabase.IsValidFolder(path))
+                _Path = newPath;
+        }
     }
 }

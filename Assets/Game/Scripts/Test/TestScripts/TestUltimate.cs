@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-[CreatableAsset]
     public class TestUltimate : Ultimate
     {
         Coroutine _TickCoroutine;

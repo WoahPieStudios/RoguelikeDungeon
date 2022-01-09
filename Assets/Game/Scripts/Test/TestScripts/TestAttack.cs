@@ -5,7 +5,6 @@ using UnityEngine;
 
 using Game.Characters;
 
-[CreatableAsset("Attack")]
 public class TestAttack : Attack
 {
     Coroutine _TickCoroutine;

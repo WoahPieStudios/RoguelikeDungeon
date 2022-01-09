@@ -7,12 +7,6 @@ using UnityEngine;
 namespace Game.Characters
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class RootCreatableAssetAttribute : Attribute
-    {
-
-    }
-
-    [AttributeUsage(AttributeTargets.Class)]
     public class CreatableAssetAttribute : Attribute
     {
         string[] _Categories;

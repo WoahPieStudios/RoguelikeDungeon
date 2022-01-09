@@ -13,21 +13,14 @@ using Game.Characters;
 namespace Game.CharactersEditor
 {
     public static class CharactersUtilities
-    { 
-        public static Type[] creatableAssetRootTypes => GetRootCreatableAssetTypes();
+    {
         public static Type[] allCreatableAssetTypes => GetCreatableAssetTypes();
         public static string[] categoryNames => GetCategoryNames().ToArray();
 
         static Type[] GetCreatableAssetTypes()
         {
-            return Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => t.GetCustomAttribute<CreatableAssetAttribute>() != null && !t.IsAbstract).ToArray();
+            return Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => t.GetCustomAttribute<CreatableAssetAttribute>() != null && !t.IsAbstract && t.IsSubclassOf(typeof(ScriptableObject))).ToArray();
         }
-
-        static Type[] GetRootCreatableAssetTypes()
-        {
-            return Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => t.GetCustomAttribute<RootCreatableAssetAttribute>() != null && !t.IsAbstract).ToArray();
-        }
-
         static string[] GetCategoryNames()
         {
             List<string> categoryNames = new List<string>();
