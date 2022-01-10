@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -44,7 +43,7 @@ namespace Game.Characters.Magician
                 yield return null;
             }
 
-            foreach(Enemy enemy in Utilities.GetCharacters<Enemy>(_ClosestEnemy.transform.position, _AoeRange, target).Select(t => t.Item1))
+            foreach(Enemy enemy in Utilities.GetCharacters<Enemy>(_ClosestEnemy.transform.position, _AoeRange, target))
                 enemy.Damage(_Damage);
             
             _LightRay.FadeOutLightRay(_FadeOutTime);
