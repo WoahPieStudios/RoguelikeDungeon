@@ -8,22 +8,28 @@ namespace Game.Characters.ActiveEffects
     public class Knockback : ActiveEffect
     {
         [SerializeField]
-        float _KnockbackForce;
+        float _KnockbackDistance;
         [SerializeField]
         float _KnockbackTime;
+        [SerializeField]
+        AnimationCurve _KnockbackCurve;
         Coroutine _TickCoroutine;
 
         IEnumerator Tick()
         {
-            float currentTime = _KnockbackTime;
+            float currentTime = 0;
 
-            while(currentTime > 0)
+            Vector3 direction = target.transform.position - sender.transform.position;
+
+            Vector3 newPosition = target.transform.position + direction * _KnockbackDistance;
+
+            while(currentTime < _KnockbackTime)
             {
-                Vector3 direction = target.transform.position - sender.transform.position;
+                currentTime += Time.fixedDeltaTime;
 
-                currentTime -= Time.fixedDeltaTime;
+                float c = _KnockbackCurve.Evaluate(currentTime / _KnockbackTime);
 
-                target.transform.position += direction * _KnockbackForce * Time.fixedDeltaTime;
+                target.transform.position = Vector3.Lerp(target.transform.position, newPosition, c);
 
                 yield return new WaitForFixedUpdate();
             }

@@ -33,7 +33,7 @@ namespace Game.Characters.Magician
             _LightRay.rotation = Quaternion.LookRotation(Vector3.forward, enemyDirection);
             _LightRay.size = new Vector2(_LightRay.size.x, range);
 
-            _LightRay.StartLightRay(_FadeInTime, _FadeOutTime);
+            _LightRay.FadeInOutLightRay(_FadeInTime, _FadeOutTime);
 
         }
 

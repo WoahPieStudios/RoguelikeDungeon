@@ -20,6 +20,8 @@ namespace Game.Characters.Magician
         public Vector3 position { get => transform.position; set => transform.position = value; }
         public Quaternion rotation { get => transform.rotation; set => transform.rotation = value; }
 
+        Coroutine _FadeCoroutine;
+
         void Awake() 
         {
             _SpriteRenderer = GetComponent<SpriteRenderer>();
@@ -27,19 +29,33 @@ namespace Game.Characters.Magician
             _SpriteRenderer.color = _Gradient.Evaluate(0);
         }
 
-        IEnumerator Sequence(float fadeIn, float fadeOut)
-        {
-            yield return FXUtilities.FadeTransition(fadeIn, fadeOut, LaserFadeOut);
-        }
-
         void LaserFadeOut(float value)
         {
             _SpriteRenderer.color = _Gradient.Evaluate(value);
         }
 
-        public void StartLightRay(float fadeIn, float fadeOut)
+        public void FadeInLightRay(float fadeTime)
         {
-            StartCoroutine(Sequence(fadeIn, fadeOut));
+            if(_FadeCoroutine != null)
+                StopCoroutine(_FadeCoroutine);
+
+            _FadeCoroutine = StartCoroutine(FXUtilities.FadeIn(fadeTime, LaserFadeOut));
+        }
+
+        public void FadeOutLightRay(float fadeTime)
+        {
+            if(_FadeCoroutine != null)
+                StopCoroutine(_FadeCoroutine);
+
+            _FadeCoroutine = StartCoroutine(FXUtilities.FadeOut(fadeTime, LaserFadeOut));
+        }
+
+        public void FadeInOutLightRay(float fadeIn, float fadeOut)
+        {
+            if(_FadeCoroutine != null)
+                StopCoroutine(_FadeCoroutine);
+
+            _FadeCoroutine = StartCoroutine(FXUtilities.FadeTransition(fadeIn, fadeOut, LaserFadeOut));
         }
     }
 }
