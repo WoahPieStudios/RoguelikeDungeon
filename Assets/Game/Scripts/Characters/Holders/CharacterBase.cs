@@ -130,7 +130,7 @@ namespace Game.Characters
         #region Effectable Functions
         public void AddEffects(CharacterBase sender, params Effect[] effects)
         {
-            _EffectsHandler.AddEffects(sender, this);
+            _EffectsHandler.AddEffects(sender, this, effects);
         }
 
         public void RemoveEffects(params Effect[] effects)

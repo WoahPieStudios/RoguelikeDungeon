@@ -11,13 +11,18 @@ public class UIEffectList : MonoBehaviour
     [SerializeField]
     Text _Text;
     [SerializeField]
-    Hero _Hero;
+    CharacterBase _Character;
 
     // Update is called once per frame
     void Update()
     {
-        _Text.text = Time.deltaTime.ToString() + " " + _Hero.effects.Length + "\n";
-        foreach(Effect effect in _Hero.effects)
+        if(!_Character && _Character.effects.Length <= 0)
+            return;
+
+        _Text.text = Time.deltaTime.ToString() + " " + _Character.effects?.Length + "\n";
+
+
+        foreach(Effect effect in _Character.effects)
             _Text.text += effect.name + " " + effect.instanceId + "\n";
     }
 }
