@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+
 using Game.Characters.Animations;
-using System;
+using Game.Characters.Interfaces;
 
 namespace Game.Characters
 {

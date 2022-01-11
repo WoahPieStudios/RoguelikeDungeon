@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Game.Characters.Interfaces;
+
 namespace Game.Characters
 {
     public class Hero : CharacterBase, IMana, ISkill, IUltimate, IPassiveEffects

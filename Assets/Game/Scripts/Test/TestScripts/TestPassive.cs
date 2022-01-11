@@ -4,14 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Game.Characters;
+using Game.Characters.Interfaces;
 
 [CreatableAsset]
-public class TestPassive : PassiveEffect
+public class TestPassive : PassiveEffect, IStackableEffect
 {
+    [SerializeField]
+    bool _IsStackable;
     [SerializeField]
     ActiveEffect _ActiveEffect;
 
     Coroutine _TickCoroutine;
+
+    public bool isStackable => _IsStackable;
 
     IEnumerator Tick()
     {
@@ -23,7 +28,7 @@ public class TestPassive : PassiveEffect
         End();
     }
 
-    public override void Stack(params Effect[] effects)
+    public void Stack(params Effect[] effects)
     {
         Debug.Log("passive stacked");
     }
