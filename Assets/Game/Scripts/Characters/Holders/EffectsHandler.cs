@@ -1,7 +1,10 @@
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
+
+using Game.Characters.Interfaces;
 
 namespace Game.Characters
 {
@@ -54,18 +57,18 @@ namespace Game.Characters
 
                 effectCopy = effect.isCopied ? effect : effect.CreateClone<Effect>();
 
-                if(effect.isStackable)
+                if(effect is IStackableEffect && (effect as IStackableEffect).isStackable)
                 {
                     if(effectsInList.Any()) // If there is already a copy in the list, expected there is always 1 or none in the least.
                     {
                         effect = effectsInList.First();
 
-                        effect.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateClone<Effect>()).ToArray());
+                        effect.IsCast<IStackableEffect>()?.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateClone<Effect>()).ToArray());
                     }
 
                     else
                     {
-                        effectCopy.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateClone<Effect>()).ToArray());
+                        effectCopy.IsCast<IStackableEffect>()?.Stack(effectGroup.Select(e => e.isCopied ? e : e.CreateClone<Effect>()).ToArray());
                         effectCopy.StartEffect(sender, receiver);
 
                         _EffectList.Add(effectCopy);

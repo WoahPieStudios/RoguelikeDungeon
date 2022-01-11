@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Game.Characters;
+using Game.Characters.Interfaces;
 
 [CreatableAsset]
-public class TestActiveEffect : ActiveEffect
+public class TestActiveEffect : ActiveEffect, IStackableEffect
 {
+    [SerializeField]
+    bool _IsStackable;
     int _StackCount = 0;
 
     Coroutine _TickCoroutine;
+
+    public bool isStackable => _IsStackable;
 
     IEnumerator Tick()
     {
@@ -21,7 +26,7 @@ public class TestActiveEffect : ActiveEffect
         End();
     }
 
-    public override void Stack(params Effect[] effects)
+    public void Stack(params Effect[] effects)
     {
         _StackCount += effects.Length;
 

@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using Game.Characters.Interfaces;
+
 namespace Game.Characters.Animations
 {
     public class TestAnimationUltimate : Ultimate, IOnAssignEvent
