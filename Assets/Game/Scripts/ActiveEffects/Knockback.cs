@@ -37,16 +37,9 @@ namespace Game.Characters.ActiveEffects
             End();
         }
 
-        public override void Stack(params Effect[] effects)
-        {
-            
-        }
-
         public override void StartEffect(CharacterBase sender, CharacterBase effected)
         {
             base.StartEffect(sender, effected);
-
-            Debug.Log(effected);
 
             _TickCoroutine = effected.StartCoroutine(Tick());
         }

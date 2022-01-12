@@ -10,11 +10,6 @@ namespace Game.Characters.Magician
         [SerializeField]
         int _BonusDamage;
 
-        public override void Stack(params Effect[] effects)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public override void StartEffect(CharacterBase sender, CharacterBase effected)
         {
             base.StartEffect(sender, effected);

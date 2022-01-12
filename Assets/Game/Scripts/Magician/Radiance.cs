@@ -26,25 +26,22 @@ namespace Game.Characters.Magician
 
         Enemy _ClosestEnemy;
 
+        Vector2 _LightRayOrigSize;
+
         Coroutine _TickCoroutine;
 
         IEnumerator Tick()
         {
-            float currentTime = 0;
+            float currentTime = _FadeOutTime;
 
             _LightRay.FadeInLightRay(_FadeInTime);
 
-            while(currentTime < _FadeInTime)
-            {
-                currentTime += Time.deltaTime;
-
-                _LightRay.transform.position = _ClosestEnemy.transform.position;
-
-                yield return null;
-            }
+            _LightRay.transform.position = _ClosestEnemy.transform.position;
 
             foreach(Enemy enemy in Utilities.GetCharacters<Enemy>(_ClosestEnemy.transform.position, _AoeRange, target))
                 enemy.Damage(_Damage);
+                
+            yield return new WaitForSeconds(_FadeOutTime);
             
             _LightRay.FadeOutLightRay(_FadeOutTime);
 
@@ -62,6 +59,8 @@ namespace Game.Characters.Magician
         {
             base.Use(hero);
 
+            _LightRayOrigSize = _LightRay.size;
+
             _TickCoroutine = StartCoroutine(Tick());
         }
 
@@ -71,6 +70,8 @@ namespace Game.Characters.Magician
 
             if(_TickCoroutine != null)
                 StopCoroutine(_TickCoroutine);
+
+            _LightRay.size = _LightRayOrigSize;
         }
     }
 }
