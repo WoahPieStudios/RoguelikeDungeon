@@ -36,8 +36,6 @@ public class DamageFlasher : MonoBehaviour
         if(_DamageFlashCoroutine != null)
             StopCoroutine(_DamageFlashCoroutine);
 
-        Debug.Log("Damage");
-
         _DamageFlashCoroutine = StartCoroutine(FXUtilities.FadeOut(1, Fade));
     }
 

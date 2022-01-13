@@ -31,17 +31,17 @@ namespace Game.Characters
 
         IEnumerator Tick()
         {
-            Vector3 aoePosition = _ClosestEnemy.transform.position + _Offset;
+            Vector3 aoePosition = _ClosestEnemy.transform.position;
 
             float currentTime = 0;
             float currentInterval = 0;
-            float timePerInterval = _Time / _Damage;
+            float timePerInterval = _Time / (_DamageInterval + 2);
 
             while(currentTime < _Time)
             {
                 currentTime += Time.deltaTime;
 
-                if((Mathf.FloorToInt(currentTime / timePerInterval) + 1) > currentInterval)
+                if(Mathf.FloorToInt(currentTime / timePerInterval) > currentInterval && currentInterval < _DamageInterval)
                 {
                     currentInterval++;
 
@@ -68,7 +68,7 @@ namespace Game.Characters
 
             _TickCoroutine = StartCoroutine(Tick());
 
-            _InstantiatedLightShowerParticles = Instantiate(_LightShowerParticles, _ClosestEnemy.transform.position, Quaternion.identity);
+            _InstantiatedLightShowerParticles = Instantiate(_LightShowerParticles, _ClosestEnemy.transform.position + _Offset, Quaternion.identity);
         }
 
         public override void End()

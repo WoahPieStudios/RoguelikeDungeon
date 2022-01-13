@@ -32,11 +32,10 @@ namespace Game.Characters.Magician
 
         IEnumerator Tick()
         {
-            float currentTime = _FadeOutTime;
-
             _LightRay.FadeInLightRay(_FadeInTime);
-
             _LightRay.transform.position = _ClosestEnemy.transform.position;
+                
+            yield return new WaitForSeconds(_FadeInTime);
 
             foreach(Enemy enemy in Utilities.GetCharacters<Enemy>(_ClosestEnemy.transform.position, _AoeRange, target))
                 enemy.Damage(_Damage);
