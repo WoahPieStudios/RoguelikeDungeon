@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public abstract class Attack : Action
+    public abstract class Attack : CoolDownAction
     {
         [SerializeField]
         int _Damage = 0;

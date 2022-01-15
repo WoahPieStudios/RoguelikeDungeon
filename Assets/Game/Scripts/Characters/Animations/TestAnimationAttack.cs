@@ -1,0 +1,37 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+using Game.Characters.Interfaces;
+
+namespace Game.Characters.Animations
+{
+    public class TestAnimationAttack : Attack, IOnAssignEvent
+    {
+        [SerializeField]
+        AnimationClip _AnimationClip;
+
+        CharacterBase _NearestCharacter;
+
+        public override bool CanUse(CharacterBase attacker)
+        {
+            _NearestCharacter = Utilities.GetNearestCharacter<CharacterBase>(attacker.transform.position, range, attacker);
+
+            return base.CanUse(attacker) && _NearestCharacter;
+        }
+
+        public override void Use(CharacterBase attacker)
+        {
+            base.Use(attacker);
+            
+            target.FaceNearestCharacter(_NearestCharacter);
+
+            target.Play("Attack");
+        }
+
+        public void OnAssign(CharacterBase character)
+        {
+            character.AddAnimation("Attack", _AnimationClip, End);
+        }
+    }
+}

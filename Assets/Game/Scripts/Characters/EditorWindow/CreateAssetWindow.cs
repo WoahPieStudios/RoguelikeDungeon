@@ -22,7 +22,6 @@ namespace Game.CharactersEditor
         SerializedAssetData _NewSerializedAssetData;
 
         bool _IsNameEmpty = false;
-        static Type[] _RootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
 
         [MenuItem("Window/Characters Asset Creation Window")]
         static void OpenWindow()
@@ -32,9 +31,9 @@ namespace Game.CharactersEditor
 
         void OnEnable() 
         {
-            _CreatableAssetTypes = CharactersUtilities.GetAllCreatableAssetTypes().ToArray();
+            _CreatableAssetTypes = CharactersUtilities.allCreatableAssetTypes;
 
-            _CreatableAssetTypeNames = _CreatableAssetTypes.Select(t => CompileInheritedClassNames(t)).ToArray();
+            _CreatableAssetTypeNames = _CreatableAssetTypes.Select(t => t.Name).ToArray();
 
             _CurrentSelectedTypeIndex = 0;
             
@@ -77,14 +76,9 @@ namespace Game.CharactersEditor
             }
         }
 
-        string CompileInheritedClassNames(Type type)
-        {
-            return type.GetBaseTypes(_RootTypes).Select(t => t.Name).Reverse().Concat("/") + type.Name;
-        }
-
         SerializedAssetData CreateNewAssetData(Type type)
         {
-            return new SerializedAssetData(ScriptableObject.CreateInstance(type));
+            return new SerializedAssetData(CreateInstance(type));
         }
 
         SerializedAssetData CopyOverData(SerializedAssetData fromData, SerializedAssetData toData)
@@ -131,7 +125,7 @@ namespace Game.CharactersEditor
         void SaveFile(SerializedAssetData serializedAssetData)
         {
             Type type = serializedAssetData.assetObject.GetType();
-            string path = "Assets/Game/Data/Characters/" + type.GetBaseTypes(CharactersUtilities.creatableAssetRootTypes).Select(t => t.Name).Reverse().Concat("/") + type.Name;
+            string path = "Assets/Game/Data/Characters/" + type.Name;
 
             if(serializedAssetData.name != "")
             {

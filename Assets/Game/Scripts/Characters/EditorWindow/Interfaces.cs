@@ -4,6 +4,16 @@ using UnityEngine;
 
 namespace Game.CharactersEditor
 {
+    public interface IDrawList
+    {
+        void DrawList();
+    }
+    
+    public interface IDrawTile
+    {
+        void DrawTile(float tileSize);
+    }
+
     public interface ISelect
     {
         bool isSelected { get; set; }

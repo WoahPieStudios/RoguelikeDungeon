@@ -13,19 +13,42 @@ using Game.Characters;
 namespace Game.CharactersEditor
 {
     public static class CharactersUtilities
-    { 
-        static Type[] _CreatableAssetRootTypes = new Type[] { typeof(CharacterData), typeof(Characters.Action) };
-        static Type[] _AllCreatableAssetTypes = new Type[] { typeof(HeroData), typeof(EnemyData), typeof(PassiveEffect), typeof(ActiveEffect), typeof(Attack), typeof(Skill), typeof(Ultimate) };
-        
-        public static Type[] creatableAssetRootTypes => _CreatableAssetRootTypes;
-        public static Type[] allCreatableAssetTypes => _AllCreatableAssetTypes;
-        
-        public static IEnumerable<Type> GetAllCreatableAssetTypes()
+    {
+        public static Type[] allCreatableAssetTypes => GetCreatableAssetTypes();
+        public static string[] categoryNames => GetCategoryNames().ToArray();
+
+        static Type[] GetCreatableAssetTypes()
         {
-            foreach(Type t in Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => !t.IsAbstract && (t.IsSubclassOf(typeof(Characters.Action)) || t.IsSubclassOf(typeof(CharacterData)))))
-                yield return t;
+            return Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => t.GetCustomAttribute<CreatableAssetAttribute>() != null && !t.IsAbstract && t.IsSubclassOf(typeof(ScriptableObject))).ToArray();
         }
-        
+        static string[] GetCategoryNames()
+        {
+            List<string> categoryNames = new List<string>();
+
+            foreach(CreatableAssetAttribute c in Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().
+                Select(t => t.GetCustomAttribute<CreatableAssetAttribute>()))
+            {
+                if(c?.categories == null)
+                    continue;
+
+                categoryNames.AddRange(c?.categories.Where(s => !categoryNames.Contains(s)));
+            }
+
+            return categoryNames.ToArray();
+        }
+
+        public static bool ContainsCategoryAttribute(Type t, string categoryName)
+        {
+            CreatableAssetAttribute creatableAssetAttribute = t.GetCustomAttribute<CreatableAssetAttribute>();
+
+            return creatableAssetAttribute != null && creatableAssetAttribute.categories.Where(s => s == categoryName).Count() > 0;
+        }
+
+        public static string[] GetCategories(Type t)
+        {
+            return t.GetCustomAttribute<CreatableAssetAttribute>().categories;
+        }
+
         public static IEnumerable<int> GetIndexesFromByte(int source, int length)
         {
             if(source < 0)

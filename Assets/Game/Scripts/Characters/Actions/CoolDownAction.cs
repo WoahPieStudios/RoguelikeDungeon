@@ -1,13 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
+
+using Game.Characters.Interfaces;
 
 namespace Game.Characters
 {
-    public abstract class CoolDownAction : Action, ICoolDown
+    public abstract class CoolDownAction : MonoBehaviour, IAction<CharacterBase>, ICoolDown
     {
         [SerializeField]
         float _CoolDownTime;
+
+        CharacterBase _Target;
+
+        bool _IsActive = false;
 
         float _CurrentCoolDownTime;
 
@@ -30,11 +37,9 @@ namespace Game.Characters
         /// </summary>
         public bool isCoolingDown => _IsCoolingDown;
 
+        public bool isActive => _IsActive;
 
-        /// <summary>
-        /// Is called whenever the Action is cooling down. **Could be removed one day if no one uses it**
-        /// </summary>
-        protected abstract void OnCooldown();
+        public CharacterBase target => _Target;
 
         /// <summary>
         /// Cool Down Sequence.
@@ -50,8 +55,6 @@ namespace Game.Characters
             {
                 _CurrentCoolDownTime -= Time.deltaTime;
 
-                OnCooldown();
-
                 yield return new WaitForEndOfFrame();
             }
 
@@ -60,14 +63,29 @@ namespace Game.Characters
             _IsCoolingDown = false;
         }
 
+        protected void Begin(CharacterBase target)
+        {
+            _IsActive = true;
+
+            _Target = target;
+        }
+
+        /// <summary>
+        /// Force Starts an action.
+        /// </summary>
+        public virtual void ForceStart()
+        {
+            _IsActive = true;
+        }
+
         /// <summary>
         /// Ends Action. Cool Down Starts afterwards.
         /// </summary>
-        public override void End()
+        public virtual void End()
         {
-            base.End();
+            _IsActive = false;
 
-            _CoolDownCoroutine = target.StartCoroutine(CoolDown());
+            _CoolDownCoroutine = StartCoroutine(CoolDown());
         }
 
         public virtual void StopCoolDown()
@@ -76,7 +94,7 @@ namespace Game.Characters
             {
                 _IsCoolingDown = false;
 
-                target.StopCoroutine(_CoolDownCoroutine);
+                StopCoroutine(_CoolDownCoroutine);
             }
         }
     }

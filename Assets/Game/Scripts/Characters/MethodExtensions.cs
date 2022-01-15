@@ -16,27 +16,12 @@ namespace Game.Characters
         /// <param name="characterLayer">Layer Mask for where the Characters are</param>
         /// <typeparam name="T">Generic For what class the Character is derived from. (Hero, Enemy, or CharacterBase)</typeparam>
         /// <returns>Returns the Nearest T Character</returns>
-        public static T FaceNearestCharacter<T>(this CharacterBase characterBase, float radius, LayerMask characterLayer) where T : CharacterBase
+        public static T FaceNearestCharacter<T>(this CharacterBase characterBase, float radius) where T : CharacterBase
         {
-            IEnumerable<Tuple<T, float>> characterHits = Utilities.GetCharacters(characterBase.transform.position, radius, characterLayer).
-                Where(character => character.collider != characterBase.boxCollider2D).
-                Select(hit => new Tuple<T, float>(hit.collider.GetComponent<T>(), hit.distance));
+            T nearestCharacter = Utilities.GetNearestCharacter<T>(characterBase.transform.position, radius, characterBase);
 
-            T nearestCharacter = null;
-
-            if(characterHits.Any())
-            {
-                Tuple<T, float> nearestCharacterByDistance = characterHits.First(c => characterHits.Min(characterMin => characterMin.Item2) == c.Item2);
-
-                nearestCharacter = nearestCharacterByDistance?.Item1;
-
-                if(nearestCharacter)
-                {
-                    Vector2 direction = nearestCharacter.transform.position - characterBase.transform.position;
-
-                    characterBase.Orient(Vector2Int.RoundToInt(direction.normalized));
-                }
-            }
+            if(nearestCharacter)
+                FaceNearestCharacter(characterBase, nearestCharacter);
 
             return nearestCharacter;
         }
@@ -47,10 +32,37 @@ namespace Game.Characters
         /// <param name="characterBase">Character to be ignored when finding the nearest character</param>
         /// <param name="radius">Radius around the character</param>
         /// <param name="characterLayer">Layer Mask for where the Characters are</param>
-        /// <returns>Returns the Nearest Character</returns>
-        public static CharacterBase FaceNearestCharacter(this CharacterBase characterBase, float radius, LayerMask characterLayer)
+        /// <typeparam name="T">Generic For what class the Character is derived from. (Hero, Enemy, or CharacterBase)</typeparam>
+        /// <returns>Returns the Nearest T Character</returns>
+        public static void FaceNearestCharacter(this CharacterBase characterBase, CharacterBase target)
         {
-            return FaceNearestCharacter<CharacterBase>(characterBase, radius, characterLayer);
+            if(!target)
+                return;
+
+            Vector2 direction = target.transform.position - characterBase.transform.position;
+
+            characterBase.FaceDirection(Vector2Int.RoundToInt(direction.normalized));
+        }
+
+        /// <summary>
+        /// Orients the Character towards the nearest Character.
+        /// </summary>
+        /// <param name="characterBase">Character to be ignored when finding the nearest character</param>
+        /// <param name="radius">Radius around the character</param>
+        /// <param name="characterLayer">Layer Mask for where the Characters are</param>
+        /// <returns>Returns the Nearest Character</returns>
+        public static CharacterBase FaceNearestCharacter(this CharacterBase characterBase, float radius)
+        {
+            return FaceNearestCharacter<CharacterBase>(characterBase, radius);
+        }
+        
+        /// <summary>
+        /// Returns casted variable if it inherits from TCast. If not, null. 
+        /// </summary>
+        /// <typeparam name="TCast"></typeparam>
+        public static TCast IsCast<TCast>(this object source) where TCast : class
+        {
+            return source is TCast ? source as TCast : null;
         }
     }
 }
