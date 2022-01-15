@@ -1,0 +1,9 @@
+apiRules:
+- include:
+  uidRegex: ^Game
+  type: Namespace
+- include:
+  hasAttribute:
+    uid: UnityEngine.CoreModule
+    ctorArguments:
+    - UnityEngine.CoreModule.SerializeField
