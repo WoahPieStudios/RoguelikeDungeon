@@ -7,7 +7,7 @@ using Game.Characters.Interfaces;
 
 namespace Game.Characters
 {
-    public abstract class ActiveEffect : Effect, IRestrainActionEffect
+    public abstract class ActiveEffect : Effect, IActionRestricter
     {
         [SerializeField]
         RestrictAction _RestictAction;

@@ -23,11 +23,13 @@ public class TestAttack : Attack
         End();
     }
 
-    public override void Use(CharacterBase attacker)
+    public override bool Use(CharacterBase attacker)
     {
-        base.Use(attacker);
+        bool canUse = base.Use(attacker);
 
         _TickCoroutine = target.StartCoroutine(Tick());
+
+        return canUse;
     }
 
     public override void End()

@@ -9,7 +9,6 @@ namespace Game.Characters.Interfaces
         bool isActive { get; }
         T target { get; }
 
-        void ForceStart();
         void End();
     }
 
@@ -33,26 +32,44 @@ namespace Game.Characters.Interfaces
         bool isCoolingDown { get; }
     }
     
-    public interface IUltimate
-    {
-        Ultimate ultimate { get; }
-        bool UseUltimate();
-    }
-
-    public interface ISkill
-    {
-        Skill skill { get; }
-        bool UseSkill();
-    }
-
-    public interface IAttack
-    {
-        Attack attack { get; }
-        bool UseAttack();
-    }
-
     public interface IIcon
     {
         Sprite icon { get; }
+    }
+
+    public interface IActionTracker
+    {
+        TrackAction trackAction { get; }
+    }
+
+    public interface IActionRestricter
+    {
+        RestrictAction restrictAction { get; }
+    }
+
+    public interface IRestrictableAction
+    {
+        void OnRestrict(RestrictAction restrictActions);
+    }
+
+    public interface ITrackableAction
+    {
+        event System.Action<TrackAction> onActionTracked;
+    }
+
+    public interface IRestrictableActionsHandler
+    {
+        RestrictAction restrictedActions { get; }
+        IRestrictableAction[] restrictableActions { get; }
+        void AddRestrictable(params IRestrictableAction[] restrictableActions);
+        void RemoveRestrictable(params IRestrictableAction[] restrictableActions);
+    }
+
+    public interface ITrackableActionsHandler
+    {
+        TrackAction trackedActions { get; }
+        ITrackableAction[] trackableActions { get; }
+        void AddTrackable(params ITrackableAction[] trackableActions);
+        void RemoveTrackable(params ITrackableAction[] trackableActions);
     }
 }

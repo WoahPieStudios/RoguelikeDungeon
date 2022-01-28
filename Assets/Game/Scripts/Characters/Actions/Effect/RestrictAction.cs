@@ -15,6 +15,7 @@ namespace Game.Characters
         Attack = 1 << 2,
         Passive = 1 << 3,
         Skill = 1 << 4,
-        Ultimate = 1 << 5
+        Ultimate = 1 << 5,
+        Orientation = 1 << 5
     }
 }

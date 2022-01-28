@@ -6,30 +6,30 @@ using Game.Characters.Interfaces;
 
 namespace Game.Characters.Animations
 {
-    public class TestAnimationUltimate : Ultimate, IOnAssignEvent
+    public class TestAnimationUltimate : Ultimate
     {
         [SerializeField]
         AnimationClip _AnimationClip;
 
         Coroutine _TickCoroutine;
 
-        protected IEnumerator Tick()
-        {
-            yield return new WaitForSeconds(2);
+        IAnimationsHandler animationHandler;
 
-            End();
+        void Awake() 
+        {
+            animationHandler = GetComponent<CharacterBase>().animationHandler;
+
+            animationHandler.AddAnimation("Ultimate", _AnimationClip);
         }
 
-        public override void Activate(Hero hero)
+        public override bool Use(Hero hero)
         {
-            base.Activate(hero);
+            bool canUse = base.Use(hero);
 
-            hero.Play("Ultimate");
-        }
+            if(canUse)
+                animationHandler.Play("Ultimate");
 
-        public void OnAssign(CharacterBase character)
-        {
-            character.AddAnimation("Ultimate", _AnimationClip);
+            return canUse;
         }
     }
 }

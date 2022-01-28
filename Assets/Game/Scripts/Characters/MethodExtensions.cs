@@ -41,7 +41,7 @@ namespace Game.Characters
 
             Vector2 direction = target.transform.position - characterBase.transform.position;
 
-            characterBase.FaceDirection(Vector2Int.RoundToInt(direction.normalized));
+            characterBase.orientation.FaceDirection(Vector2Int.RoundToInt(direction.normalized));
         }
 
         /// <summary>

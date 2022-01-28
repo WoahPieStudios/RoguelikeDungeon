@@ -11,7 +11,6 @@ namespace Game.Characters
     public class EffectsHandler
     {
         RestrictAction _RestrictedActions;
-        
         List<Effect> _EffectList = new List<Effect>();
 
         /// <summary>
@@ -25,12 +24,15 @@ namespace Game.Characters
         /// <returns></returns>
         public Effect[] effects => _EffectList.ToArray();
 
+        public event System.Action<CharacterBase, Effect[]> onAddEffectsEvent;
+        public event System.Action<Effect[]> onRemoveEffectsEvent;
+
         protected void UpdateRestrainedActions()
         {
             RestrictAction restrainedActions = default;
 
             // Adds Restrict Actions to RestrainedActions
-            foreach(RestrictAction r in _EffectList.Where(effect => effect.GetType() is IRestrainActionEffect).Select(effect => (effect as IRestrainActionEffect).restrictAction))
+            foreach(RestrictAction r in _EffectList.Where(effect => effect.GetType() is IActionRestricter).Select(effect => (effect as IActionRestricter).restrictAction))
                 restrainedActions |= r;
 
             _RestrictedActions = restrainedActions;
@@ -101,6 +103,8 @@ namespace Game.Characters
             }
             
             UpdateRestrainedActions();
+
+            onAddEffectsEvent?.Invoke(sender, effects);
         }
 
         /// <summary>
@@ -113,6 +117,8 @@ namespace Game.Characters
                 _EffectList.Remove(effect);
 
             UpdateRestrainedActions();
+
+            onRemoveEffectsEvent?.Invoke(effects);
         }
     }
 }
