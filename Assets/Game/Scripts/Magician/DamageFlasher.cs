@@ -23,12 +23,12 @@ public class DamageFlasher : MonoBehaviour
 
         _Character = GetComponent<CharacterBase>();
 
-        _Character.onDamageEvent += OnDamage;
+        _Character.health.onDamageEvent += OnDamage;
     }
 
     void OnDestroy() 
     {
-        _Character.onDamageEvent -= OnDamage;
+        _Character.health.onDamageEvent -= OnDamage;
     }
 
     void OnDamage(IHealth health, int damage)

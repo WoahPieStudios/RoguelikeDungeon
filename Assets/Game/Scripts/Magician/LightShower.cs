@@ -27,8 +27,6 @@ namespace Game.Characters
 
         Coroutine _TickCoroutine;
 
-        ParticleSystem _InstantiatedLightShowerParticles;
-
         IEnumerator Tick()
         {
             Vector3 aoePosition = _ClosestEnemy.transform.position;
@@ -46,7 +44,7 @@ namespace Game.Characters
                     currentInterval++;
 
                     foreach(CharacterBase character in Utilities.GetCharacters<Enemy>(aoePosition, _Radius, target))
-                        character.Damage(_Damage);
+                        character.health.Damage(_Damage);
                 }
 
                 yield return null;
@@ -62,13 +60,20 @@ namespace Game.Characters
             return base.CanUse(hero) && _ClosestEnemy;
         }
 
-        public override void Activate(Hero hero)
+        public override bool Use(Hero hero)
         {
-            base.Activate(hero);
+            bool canUse = base.Use(hero);
 
-            _TickCoroutine = StartCoroutine(Tick());
+            if(canUse)
+            {
+                _TickCoroutine = StartCoroutine(Tick());
 
-            _InstantiatedLightShowerParticles = Instantiate(_LightShowerParticles, _ClosestEnemy.transform.position + _Offset, Quaternion.identity);
+                _LightShowerParticles.transform.SetParent(null, false);
+                _LightShowerParticles.transform.position = _ClosestEnemy.transform.position + _Offset;
+                _LightShowerParticles.Play();
+            }
+
+            return canUse;
         }
 
         public override void End()
@@ -78,7 +83,10 @@ namespace Game.Characters
             if(_TickCoroutine != null)
                 StopCoroutine(_TickCoroutine);
 
-            Destroy(_InstantiatedLightShowerParticles.gameObject);
+            _LightShowerParticles.Stop();
+            _LightShowerParticles.transform.SetParent(transform, false);
+
+            // Destroy(_InstantiatedLightShowerParticles.gameObject);
         }
     }
 }

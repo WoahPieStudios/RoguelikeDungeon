@@ -37,18 +37,23 @@ namespace Game.Characters.Magician
 
         }
 
-        public override void Use(CharacterBase attacker)
+        public override bool Use(CharacterBase attacker)
         {
-            base.Use(attacker);
+            bool canUse = base.Use(attacker);
 
-            target.FaceNearestCharacter(_ClosestEnemy);
+            if(canUse)
+            {
+                target.FaceNearestCharacter(_ClosestEnemy);
 
-            SetupLightRay();
+                SetupLightRay();
 
-            _ClosestEnemy.Damage(damage);
-            _ClosestEnemy.AddEffects(attacker, _Knockback);
+                _ClosestEnemy.health.Damage(damage);
+                _ClosestEnemy.AddEffects(attacker, _Knockback);
 
-            End();
+                End();
+            }
+
+            return canUse;
         }
 
         public override bool CanUse(CharacterBase attacker)

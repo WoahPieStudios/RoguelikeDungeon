@@ -24,6 +24,6 @@ public class UIEffectList : MonoBehaviour
         foreach(Effect effect in _Character.effects)
             _Text.text += effect.name + " " + effect.instanceId + "\n";
         
-        _Text.text += _Character.currentHealth;
+        _Text.text += _Character.health.currentHealth;
     }
 }

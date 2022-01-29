@@ -15,6 +15,16 @@ namespace Game.Characters.Magician
         float _AoeRange;
         [SerializeField]
         int _Damage;
+
+        [Header("Sun Ray")]
+        [SerializeField]
+        SpriteRenderer _SunRay;
+        [SerializeField]
+        Gradient _FadeGradient;
+        [SerializeField]
+        float _SunRayFadeInTime;
+        [SerializeField]
+        float _SunRayFadeOutTime;
         
         [Header("Light Ray")]
         [SerializeField]
@@ -26,23 +36,29 @@ namespace Game.Characters.Magician
 
         Enemy _ClosestEnemy;
 
-        Vector2 _LightRayOrigSize;
-
         Coroutine _TickCoroutine;
+
+        void SunRayFade(float value)
+        {
+            _SunRay.color = _FadeGradient.Evaluate(value);
+        }
 
         IEnumerator Tick()
         {
+            yield return FX.FXUtilities.FadeIn(_SunRayFadeInTime, SunRayFade);
+
             _LightRay.FadeInLightRay(_FadeInTime);
-            _LightRay.transform.position = _ClosestEnemy.transform.position;
                 
             yield return new WaitForSeconds(_FadeInTime);
 
             foreach(Enemy enemy in Utilities.GetCharacters<Enemy>(_ClosestEnemy.transform.position, _AoeRange, target))
-                enemy.Damage(_Damage);
+                enemy.health.Damage(_Damage);
                 
             yield return new WaitForSeconds(_FadeOutTime);
             
             _LightRay.FadeOutLightRay(_FadeOutTime);
+
+            yield return FX.FXUtilities.FadeOut(_SunRayFadeOutTime, SunRayFade);
 
             End();
         }
@@ -54,13 +70,22 @@ namespace Game.Characters.Magician
             return base.CanUse(hero) && _ClosestEnemy;
         }
 
-        public override void Use(Hero hero)
+        public override bool Use(Hero hero)
         {
-            base.Use(hero);
+            bool canUse = base.Use(hero);
 
-            _LightRayOrigSize = _LightRay.size;
+            if(canUse)
+            {
+                _LightRay.transform.SetParent(null, false);
+                _LightRay.transform.position = _ClosestEnemy.transform.position;
 
-            _TickCoroutine = StartCoroutine(Tick());
+                _TickCoroutine = StartCoroutine(Tick());
+
+                _SunRay.transform.SetParent(null, false);
+                _SunRay.transform.position = _ClosestEnemy.transform.position;
+            }
+
+            return canUse;
         }
 
         public override void End()
@@ -70,7 +95,11 @@ namespace Game.Characters.Magician
             if(_TickCoroutine != null)
                 StopCoroutine(_TickCoroutine);
 
-            _LightRay.size = _LightRayOrigSize;
+            _SunRay.color = _FadeGradient.Evaluate(0);
+            _SunRay.transform.SetParent(transform, false);
+
+            
+            _LightRay.transform.SetParent(transform, false);
         }
     }
 }

@@ -13,8 +13,8 @@ namespace Game.Characters
 
         private void Update()
         {
-            if(Input.GetKeyDown(KeyCode.U))
-                UseAttack();
+            // if(Input.GetKeyDown(KeyCode.U))
+            //     attack.Use(this);
         }
     }
 }
