@@ -7,16 +7,6 @@ using Game.Characters;
 
 public class TestHero : Hero
 {
-    [SerializeField]
-    HeroData _HeroData;
-
-    protected override void Awake() 
-    {
-        base.Awake();
-        
-        AssignData(_HeroData);    
-    }
-
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.A))
@@ -27,7 +17,5 @@ public class TestHero : Hero
         
         if(Input.GetKeyDown(KeyCode.S))
             Debug.Log("Attack " + UseAttack());
-
-        
     }
 }

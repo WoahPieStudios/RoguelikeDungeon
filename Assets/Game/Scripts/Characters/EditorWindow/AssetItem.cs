@@ -7,28 +7,23 @@ using UnityEditor;
 
 namespace Game.CharactersEditor
 {
-    public class AssetItem : IRename, IDuplicate
+    public class AssetItem : SerializedAssetData, IRename, IDuplicate, IDrawList, IDrawTile
     {
         Rect _Rect;
-        SerializedAssetData _SerializedAssetData;
         string _Path;
 
         bool _IsRenaming = false;
         string _NewName;
 
-        public SerializedAssetData serializedAssetData => _SerializedAssetData;
-        public Object assetObject => _SerializedAssetData.assetObject;
-        public string name => _SerializedAssetData.name;
-        public Texture icon => _SerializedAssetData.icon;
+        string[] _Categories;
+
         public string path => _Path;
 
         public bool isSelected { get; set; } = false;
         public bool isRenaming => _IsRenaming;
 
-        public AssetItem(Object assetObject, string path)
+        public AssetItem(Object assetObject, string path) : base(assetObject)
         {
-            _SerializedAssetData = new SerializedAssetData(assetObject);
-
             _Path = path;
         }
 
@@ -67,28 +62,28 @@ namespace Game.CharactersEditor
                 _NewName = EditorGUILayout.TextField(_NewName);
 
             else
-                GUILayout.Label(LimitLabel(_SerializedAssetData.name), textStyle, options);
+                GUILayout.Label(LimitLabel(name), textStyle, options);
         }
 
-        public void DrawInTileForm(float size)
+        public void DrawTile(float tileSize)
         {
             GUIStyle box = GetBox();
             GUIStyle textStyle = GetTextStyle();
 
             textStyle.alignment = TextAnchor.MiddleCenter;
 
-            EditorGUILayout.BeginVertical(box, GUILayout.Width(size), GUILayout.Height(size));
+            EditorGUILayout.BeginVertical(box, GUILayout.Width(tileSize), GUILayout.Height(tileSize));
 
-            GUILayout.Box(icon, GUILayout.Width(size), GUILayout.Height(size));
+            GUILayout.Box(icon, GUILayout.Width(tileSize), GUILayout.Height(tileSize));
 
-            DrawName(textStyle, GUILayout.Width(size));
+            DrawName(textStyle, GUILayout.Width(tileSize));
 
             EditorGUILayout.EndVertical();
 
             _Rect = GUILayoutUtility.GetLastRect();
         }
 
-        public void DrawInListForm()
+        public void DrawList()
         {
             GUIStyle box = GetBox();
             GUIStyle textStyle = GetTextStyle();
@@ -97,7 +92,7 @@ namespace Game.CharactersEditor
 
             EditorGUILayout.BeginHorizontal(box);
 
-            GUILayout.Box(_SerializedAssetData.icon, GUILayout.Width(20), GUILayout.Height(20));
+            GUILayout.Box(icon, GUILayout.Width(20), GUILayout.Height(20));
 
             DrawName(textStyle);
 
@@ -138,6 +133,12 @@ namespace Game.CharactersEditor
             string newFileName = $"/{name} - copy.asset";
 
             AssetDatabase.CreateAsset(newAssetObject, path.Remove(path.Length - fileName.Length - 1, fileName.Length) + newFileName);
+        }
+
+        public void UpdatePath(string newPath)
+        {
+            if(AssetDatabase.IsValidFolder(path))
+                _Path = newPath;
         }
     }
 }

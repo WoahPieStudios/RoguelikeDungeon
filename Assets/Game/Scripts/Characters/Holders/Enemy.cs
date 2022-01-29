@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Enemy : Character<EnemyData>
+    public class Enemy : CharacterBase//Character<EnemyData>
     {
         [SerializeField] private int health;
         [SerializeField] private SpriteRenderer _spriteRenderer;

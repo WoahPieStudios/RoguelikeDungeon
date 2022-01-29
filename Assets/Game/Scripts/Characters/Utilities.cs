@@ -9,56 +9,49 @@ namespace Game.Characters
     public static class Utilities
     {
         /// <summary>
-        /// Gets the nearest T Character.
+        /// Gets Characters inside the circle. 
         /// </summary>
-        /// <param name="center">Center of the circle.</param>
-        /// <param name="radius">Radius of the circle</param>
-        /// <param name="characterLayer">LayerMask of where the Character are assigned to.</param>
-        /// <typeparam name="T">Generic for what Character derives from (Hero, Enemy, or CharacterBase)</typeparam>
-        /// <returns>Returns the T Character</returns>
-        public static T GetNearestCharacter<T>(Vector3 center, float radius, LayerMask characterLayer) where T : CharacterBase
+        /// <param name="center"></param>
+        /// <param name="radius"></param>
+        /// <param name="exceptCharacters"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static Tuple<T, float>[] GetCharactersAndDistances<T>(Vector3 center, float radius, params CharacterBase[] exceptCharacters) where T : CharacterBase
         {
-            IEnumerable<(T, float)> characterHits = GetCharacters(center, radius, characterLayer).
-                Select(hit =>(hit.collider.GetComponent<T>(), hit.distance));
-
-            T nearestCharacter = null;
-
-            if(characterHits.Any())
-            {
-                float minDistance = characterHits.Min(enemyHit => enemyHit.Item2);
-
-                nearestCharacter = characterHits.First(enemyHit => enemyHit.Item2 == minDistance).Item1;
-            }
-
-            return nearestCharacter;
+            return CharacterBase.characters.Except(exceptCharacters).
+                Select(character => new Tuple<CharacterBase, float>(character, (center - character.transform.position).magnitude)).
+                Where(item => item.Item1 is T && item.Item2 <= radius).
+                Select(item => new Tuple<T, float>(item.Item1 as T, item.Item2)).
+                ToArray();
         }
 
         /// <summary>
-        /// Gets the characters inside the circle but returns an array of RaycastHit2D.
+        /// Gets Characters inside the circle. 
         /// </summary>
-        /// <param name="center">Center of the circle.</param>
-        /// <param name="radius">Radius of the circle</param>
-        /// <param name="characterLayer">LayerMask of where the Character are assigned to.</param>
-        /// <returns>Returns an array of RaycastHit2D</returns>
-        public static RaycastHit2D[] GetCharacters(Vector3 center, float radius, LayerMask characterLayer)
+        /// <param name="center"></param>
+        /// <param name="radius"></param>
+        /// <param name="exceptCharacters"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>w
+        public static T[] GetCharacters<T>(Vector3 center, float radius, params CharacterBase[] exceptCharacters) where T : CharacterBase
         {
-            return Physics2D.CircleCastAll(center, radius, Vector2.zero, 0, characterLayer).Where(hit => hit.collider.TryGetComponent<CharacterBase>(out CharacterBase nearest)).ToArray();
+            return GetCharactersAndDistances<T>(center, radius, exceptCharacters).
+                Select(t => t.Item1).
+                ToArray();
         }
 
         /// <summary>
-        /// Gets the T characters inside the circle.
+        /// Gets nearest Character inside the circle.
         /// </summary>
-        /// <param name="center">Center of the circle.</param>
-        /// <param name="radius">Radius of the circle</param>
-        /// <param name="characterLayer">LayerMask of where the Character are assigned to.</param>
-        /// <typeparam name="T">Generic for what Character derives from (Hero, Enemy, or CharacterBase)</typeparam>
-        /// <returns>Returns the T Character</returns>
-        public static T[] GetCharacters<T>(Vector3 center, float radius, LayerMask characterLayer) where T : CharacterBase
+        /// <param name="center"></param>
+        /// <param name="radius"></param>
+        /// <param name="exceptCharacters"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T GetNearestCharacter<T>(Vector3 center, float radius, params CharacterBase[] exceptCharacters) where T : CharacterBase
         {
-            IEnumerable<T> characterHits = GetCharacters(center, radius, characterLayer).
-                Select(hit => hit.collider.GetComponent<T>());
-
-            return characterHits.ToArray();
+            return GetCharactersAndDistances<T>(center, radius, exceptCharacters)?.OrderBy(item => item.Item2)?.
+                FirstOrDefault()?.Item1;
         }
     }
 }

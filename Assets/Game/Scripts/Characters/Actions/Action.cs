@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
+
+using Game.Characters.Interfaces;
 
 namespace Game.Characters
 {
-    public abstract class Action : ScriptableObject, IIcon, ICopyable
+    public abstract class Action : ScriptableObject, IAction<CharacterBase>, IIcon, ICloneable
     {
         [SerializeField]
         Sprite _Icon;
@@ -15,14 +18,7 @@ namespace Game.Characters
 
         int _InstanceId;
 
-        Coroutine _TickCoroutine;
-
         CharacterBase _Target;
-
-        /// <summary>
-        /// Target of the Action.
-        /// </summary>
-        protected CharacterBase target => _Target;
 
         /// <summary>
         /// To see if Action is Active.
@@ -46,12 +42,10 @@ namespace Game.Characters
         /// <returns></returns>
         public int instanceId => _InstanceId;
 
-        // Tick, to update your action, also in IEnumerator for to set update in Fixed or normal Update. **DO NOT SETACTIVE(FALSE) GAMEOBJECT AS IT WILL STOP ALL TICKS**
         /// <summary>
-        /// Updates the action. **DO NOT SETACTIVE(FALSE) GAMEOBJECT AS IT WILL STOP ALL TICKS**
+        /// Target of the Action.
         /// </summary>
-        /// <returns></returns>
-        protected abstract IEnumerator Tick();
+        public CharacterBase target => _Target;
 
         /// <summary>
         /// Starts the Action, Sets up Variables and runs Tick
@@ -62,8 +56,14 @@ namespace Game.Characters
             _IsActive = true;
 
             _Target = target;
+        }
 
-            _TickCoroutine = target.StartCoroutine(Tick());
+        /// <summary>
+        /// Force Starts the action.
+        /// </summary>
+        public virtual void ForceStart()
+        {
+            _IsActive = true;
         }
 
         /// <summary>
@@ -72,9 +72,6 @@ namespace Game.Characters
         public virtual void End()
         {
             _IsActive = false;
-
-            if(_TickCoroutine != null)
-                _Target.StopCoroutine(_TickCoroutine);
         }
 
         /// <summary>
@@ -82,14 +79,20 @@ namespace Game.Characters
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T CreateCopy<T>() where T : Action
+        public T CreateClone<T>() where T : Object, ICloneable
         {
             T copy = Instantiate(this) as T;
 
-            copy._InstanceId = GetInstanceID();
-            copy._IsCopy = true;
+            copy.InitializeClone(GetInstanceID());
 
             return copy;
+        }
+
+        public void InitializeClone(int instanceid)
+        {
+            _InstanceId = instanceid;
+
+            _IsCopy = true;
         }
     }
 }

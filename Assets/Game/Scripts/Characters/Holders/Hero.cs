@@ -1,46 +1,59 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
 
+using Game.Characters.Interfaces;
+
 namespace Game.Characters
 {
-    public class Hero : Character<HeroData>, ISkillUser, IUltimateUser, IPassiveEffects
+    public class Hero : CharacterBase, IMana, ISkill, IUltimate, IPassiveEffects
     {
-        int _CurrentMana;
-        Dictionary<TrackAction, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackAction, PassiveEffect[]>();
+        [SerializeField]
+        Mana _Mana;
+        [SerializeField]
+        PassiveEffect[] _PassiveEffects;
 
-        IEnumerable<PassiveEffect> _AttackPassives;
-        IEnumerable<PassiveEffect> _SkillPassives;
-        IEnumerable<PassiveEffect> _UltimatePassives;
+        #region Mana
+        /// <summary>
+        /// Current Mana of the Hero
+        /// </summary>
+        public int currentMana => _Mana.currentMana;
 
+        /// <summary>
+        /// Max Mana of the Hero
+        /// </summary>
+        public int maxMana => _Mana.maxMana;
+        
+        public event Action<IMana, int> onUseManaEvent;
+        public event Action<IMana, int> onAddManaEvent;
+        public event System.Action onResetManaEvent;
+        public event System.Action onDrainManaEvent;
+        #endregion
+
+        #region Skill
         Skill _Skill;
-
-        Ultimate _Ultimate;
-
-        // Skill
+        
         /// <summary>
         /// Skill of the Hero
         /// </summary>
         public Skill skill => _Skill;
+        #endregion
+
+        #region Ultimate
+        Ultimate _Ultimate;
 
         // Ultimate
         /// <summary>
         /// Ultimate of the Hero
         /// </summary>
         public Ultimate ultimate => _Ultimate;
-
-        // Mana
-        /// <summary>
-        /// Current Mana of the Hero
-        /// </summary>
-        public int currentMana => _CurrentMana;
-
-        /// <summary>
-        /// Max Mana of the Hero
-        /// </summary>
-        public int maxMana => data.maxMana;
+        #endregion
+        
+        #region Passive Effects
+        Dictionary<TrackAction, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackAction, PassiveEffect[]>();
 
         // Passives
         /// <summary>
@@ -51,39 +64,27 @@ namespace Game.Characters
         /// <summary>
         /// Passive Effects of the Hero
         /// </summary>
-        public PassiveEffect[] passiveEffects => data.passiveEffects;
+        public PassiveEffect[] passiveEffects => _PassiveEffects;
+        #endregion
 
-        void SetupPassives(IEnumerable<PassiveEffect> passiveEffects)
+        #region Unity Functions
+        protected override void Awake()
         {
-            _AttackPassives = passiveEffects.Where(passives => passives.trackAction.HasFlag(TrackAction.Attack));
-            _SkillPassives = passiveEffects.Where(passives => passives.trackAction.HasFlag(TrackAction.Skill));
-            _UltimatePassives = passiveEffects.Where(passives => passives.trackAction.HasFlag(TrackAction.Ultimate));
+            base.Awake();
+            
+            _Mana.ResetMana();
+
+            _Skill = GetComponent<Skill>();
+            _Skill.IsCast<IOnAssignEvent>()?.OnAssign(this);
+
+            _Ultimate = GetComponent<Ultimate>();
+            _Ultimate.IsCast<IOnAssignEvent>()?.OnAssign(this);
+
+            SetupPassives(passiveEffects.Select(passive => passive.CreateClone<PassiveEffect>()));
         }
+        #endregion
 
-        // Mana
-        /// <summary>
-        /// Adds Mana.
-        /// </summary>
-        /// <param name="mana">Amount added.</param>
-        public virtual void AddMana(int mana)
-        {
-            int newMana = _CurrentMana + mana;
-
-            _CurrentMana = newMana > maxMana ? maxMana : newMana;
-        }
-
-        /// <summary>
-        /// Reduces the Mana.
-        /// </summary>
-        /// <param name="mana">Amount reduced</param>
-        public virtual void UseMana(int mana)
-        {
-            int newMana = _CurrentMana - mana;
-
-            _CurrentMana = newMana > 0 ? newMana : 0;
-        }
-
-        // Attack
+        #region Attack Functions
         /// <summary>
         /// Starts the Attack.
         /// </summary>
@@ -94,16 +95,57 @@ namespace Game.Characters
 
             if(canAttack)
             {
-                if(_AttackPassives.Any())
-                    AddEffects(this, _AttackPassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
-                // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Attack))
-                //     AddEffects(_TrackActionPassiveEffects[TrackAction.Attack].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Attack))
+                    AddEffects(this, _TrackActionPassiveEffects[TrackAction.Attack].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
 
             return canAttack;
         }
 
-        // Skill
+        #endregion
+
+        #region Mana Functions
+        /// <summary>
+        /// Adds Mana.
+        /// </summary>
+        /// <param name="mana">Amount added.</param>
+        public virtual void AddMana(int mana)
+        {
+            _Mana.AddMana(mana);
+
+            onAddManaEvent?.Invoke(this, mana);
+        }
+
+        /// <summary>
+        /// Reduces the Mana.
+        /// </summary>
+        /// <param name="mana">Amount reduced</param>
+        public virtual void UseMana(int mana)
+        {
+            _Mana.UseMana(mana);
+
+            if(currentMana > 0)
+                onUseManaEvent?.Invoke(this, mana);
+            else
+                onDrainManaEvent?.Invoke();
+        }
+        
+        public void ResetMana()
+        {
+            _Mana.ResetMana();
+
+            onResetManaEvent?.Invoke();
+        }
+        
+        public void DrainMana()
+        {
+            _Mana.DrainMana();
+
+            onDrainManaEvent?.Invoke();
+        }
+        #endregion
+
+        #region Skill Functions
         /// <summary>
         /// Starts the Skill.
         /// </summary>
@@ -115,17 +157,17 @@ namespace Game.Characters
             if(canUse)
             {
                 _Skill.Use(this);
-
-                if(_SkillPassives.Any())
-                    AddEffects(this, _SkillPassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
-                // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Skill))
-                //     AddEffects(_TrackActionPassiveEffects[TrackAction.Skill].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                
+                if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Skill))
+                    AddEffects(this, _TrackActionPassiveEffects[TrackAction.Skill].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
 
             return canUse;
         }
 
-        // Ultimate
+        #endregion
+
+        #region Ultimate Functions
         /// <summary>
         /// Starts the Ultimate.
         /// </summary>
@@ -138,31 +180,23 @@ namespace Game.Characters
             {
                 _Ultimate.Activate(this);
                 
-                if(_UltimatePassives.Any())
-                    AddEffects(this, _UltimatePassives.Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
-                // if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Ultimate))
-                //     AddEffects(_TrackActionPassiveEffects[TrackAction.Ultimate].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
+                if(_TrackActionPassiveEffects.ContainsKey(TrackAction.Ultimate))
+                    AddEffects(this, _TrackActionPassiveEffects[TrackAction.Ultimate].Where(passiveEffect => passiveEffect.CanUse(this)).ToArray());
             }
 
             return canUse;
         }
-        
-        // Character Data
-        /// <summary>
-        /// Assigns the Data of the Hero and setups up their corresponding variables.
-        /// </summary>
-        /// <param name="data">Data of the Hero</param>
-        public override void AssignData(HeroData data)
+        #endregion
+    
+        #region Passive Effects Functions
+        void SetupPassives(IEnumerable<PassiveEffect> passiveEffects)
         {
-            base.AssignData(data);
+            foreach(PassiveEffect passiveEffect in passiveEffects)
+                passiveEffects.IsCast<IOnAssignEvent>()?.OnAssign(this);
 
-            SetupPassives(data.passiveEffects.Select(passive => passive.CreateCopy<PassiveEffect>()));
-
-            _CurrentMana = data.maxMana;
-
-            _Skill = data.skill.CreateCopy<Skill>();
-
-            _Ultimate = data.ultimate.CreateCopy<Ultimate>();
+            foreach(Enum e in Enum.GetValues(typeof(TrackAction)) )
+                _TrackActionPassiveEffects.Add((TrackAction)e, passiveEffects.Where(p => p.trackAction.HasFlag(e)).ToArray());
         }
+        #endregion
     }
 }

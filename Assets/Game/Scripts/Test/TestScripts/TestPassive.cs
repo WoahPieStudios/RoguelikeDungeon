@@ -4,14 +4,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Game.Characters;
+using Game.Characters.Interfaces;
 
-[CreateAssetMenu(menuName = "Data/TestPassive")]
-public class TestPassive : PassiveEffect
+[CreatableAsset]
+public class TestPassive : PassiveEffect, IStackableEffect
 {
+    [SerializeField]
+    bool _IsStackable;
     [SerializeField]
     ActiveEffect _ActiveEffect;
 
-    protected override IEnumerator Tick()
+    Coroutine _TickCoroutine;
+
+    public bool isStackable => _IsStackable;
+
+    IEnumerator Tick()
     {
         Debug.Log("Passive");
 
@@ -21,13 +28,23 @@ public class TestPassive : PassiveEffect
         End();
     }
 
-    public override void Stack(params Effect[] effects)
+    public void Stack(params Effect[] effects)
     {
         Debug.Log("passive stacked");
     }
 
-    public override bool CanUse(Hero hero)
+    public override void StartEffect(CharacterBase sender, CharacterBase effected)
     {
-        return base.CanUse(hero);
+        base.StartEffect(sender, effected);
+
+        _TickCoroutine = target.StartCoroutine(Tick());
+    }
+
+    public override void End()
+    {
+        base.End();
+
+        if(_TickCoroutine != null)
+            target.StopCoroutine(_TickCoroutine);
     }
 }
