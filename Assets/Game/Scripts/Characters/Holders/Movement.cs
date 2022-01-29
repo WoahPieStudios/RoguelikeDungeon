@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using Game.Characters.Interfaces;
 using UnityEngine;
 
 namespace Game.Characters
 {
-    public class Movement : MonoBehaviour
+    public class Movement : MonoBehaviour, IMovementHandler, IRestrictableAction
     {
         [SerializeField]
         float _MoveSpeed;
@@ -17,14 +17,30 @@ namespace Game.Characters
 
         public Vector2 velocity => _Velocity;
 
+        bool _CanMove = true;
+
+        public event Action<Vector2> onMoveEvent;
+
         void Update() 
         {
             transform.position += (Vector3)_Velocity;
         }
 
-        public virtual void Move(Vector2 direction)
+        public virtual bool Move(Vector2 direction)
         {
-            _Velocity = direction * moveSpeed * Time.fixedDeltaTime;
+            if(_CanMove)
+            {
+                _Velocity = direction * moveSpeed * Time.fixedDeltaTime;
+
+                onMoveEvent?.Invoke(direction);
+            }
+
+            return _CanMove;
+        }
+
+        public virtual void OnRestrict(RestrictAction restrictActions)
+        {
+            _CanMove = !restrictActions.HasFlag(RestrictAction.Movement); 
         }
     }
 }

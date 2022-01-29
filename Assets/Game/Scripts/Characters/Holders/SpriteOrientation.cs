@@ -16,9 +16,11 @@ namespace Game.Characters
             _SpriteRenderer = GetComponent<SpriteRenderer>();
         }
 
-        protected override void SetDirection(Vector2Int faceDirection)
+        protected override Vector2Int SetDirection(Vector2Int faceDirection)
         {
             _SpriteRenderer.flipX = !(Mathf.Sign(faceDirection.x) == 1);
+
+            return faceDirection;
         }
     }
 }

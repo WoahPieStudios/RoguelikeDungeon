@@ -15,11 +15,14 @@ namespace Game.Characters
             End();
         }
 
-        public override void Activate(Hero hero)
+        public override bool Use(Hero hero)
         {
-            base.Activate(hero);
+            bool canUse = base.Use(hero);
 
-            _TickCoroutine = target.StartCoroutine(Tick());
+            if(canUse)
+                _TickCoroutine = target.StartCoroutine(Tick());
+
+            return canUse;
         }
 
         public override void End()

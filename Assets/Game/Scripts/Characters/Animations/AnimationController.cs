@@ -1,11 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
+
+using Game.Characters.Interfaces;
 
 namespace Game.Characters.Animations
 {
     [RequireComponent(typeof(Animation))]
-    public class AnimationController : MonoBehaviour
+    public class AnimationController : MonoBehaviour, IAnimationsHandler
     {
         System.Action[] _CurrentAnimationEvents;
 

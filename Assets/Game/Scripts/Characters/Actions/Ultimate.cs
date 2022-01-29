@@ -1,28 +1,45 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
+
+using Game.Characters.Interfaces;
 
 namespace Game.Characters
 {
-    public abstract class Ultimate : CoolDownAction
+    public abstract class Ultimate : CoolDownAction, ITrackableAction, IRestrictableAction
     {
         [SerializeField]
         int _ManaCost;
+
+        bool _IsRestricted = false;
 
         /// <summary>
         /// Mana cost of the Ultimate
         /// </summary>
         public int manaCost => _ManaCost;
 
+        public event Action<TrackAction> onActionTracked;
+
         /// <summary>
         /// Activates the Ultimate.
         /// </summary>
         /// <param name="hero">The Hero who will use the Ultimate</param>
-        public virtual void Activate(Hero hero)
+        public virtual bool Use(Hero hero)
         {
-            hero.UseMana(_ManaCost);
-            
-            Begin(hero);
+            bool canUse = CanUse(hero);
+
+            if(canUse)
+            {
+                hero.mana.UseMana(_ManaCost);
+                
+                Begin(hero);
+
+                onActionTracked?.Invoke(TrackAction.Ultimate);
+            }
+
+            return canUse;
         }
 
         // To check if it can be used. VERY IMPORTANT. Actually everything is important. 
@@ -33,7 +50,12 @@ namespace Game.Characters
         /// <returns></returns>
         public virtual bool CanUse(Hero hero)
         {
-            return !isActive && hero.currentMana >= _ManaCost && !isCoolingDown;
+            return !_IsRestricted && !isActive && hero.mana.currentMana >= _ManaCost && !isCoolingDown;
+        }
+
+        public void OnRestrict(RestrictAction restrictActions)
+        {
+            _IsRestricted = restrictActions.HasFlag(RestrictAction.Ultimate);
         }
     }
 }

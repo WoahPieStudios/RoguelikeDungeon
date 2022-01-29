@@ -6,12 +6,21 @@ using Game.Characters.Interfaces;
 
 namespace Game.Characters.Animations
 {
-    public class TestAnimationAttack : Attack, IOnAssignEvent
+    public class TestAnimationAttack : Attack
     {
         [SerializeField]
         AnimationClip _AnimationClip;
 
         CharacterBase _NearestCharacter;
+
+        IAnimationsHandler animationHandler;
+
+        void Awake() 
+        {
+            animationHandler = GetComponent<CharacterBase>().animationHandler;
+
+            animationHandler.AddAnimation("Attack", _AnimationClip, End);
+        }
 
         public override bool CanUse(CharacterBase attacker)
         {
@@ -20,18 +29,18 @@ namespace Game.Characters.Animations
             return base.CanUse(attacker) && _NearestCharacter;
         }
 
-        public override void Use(CharacterBase attacker)
+        public override bool Use(CharacterBase attacker)
         {
-            base.Use(attacker);
-            
-            target.FaceNearestCharacter(_NearestCharacter);
+            bool canUse = base.Use(attacker);
 
-            target.Play("Attack");
-        }
+            if(canUse)
+            {
+                target.FaceNearestCharacter(_NearestCharacter);
 
-        public void OnAssign(CharacterBase character)
-        {
-            character.AddAnimation("Attack", _AnimationClip, End);
+                animationHandler.Play("Attack");
+            }
+
+            return canUse;
         }
     }
 }
