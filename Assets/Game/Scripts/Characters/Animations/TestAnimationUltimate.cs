@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-using Game.Characters.Interfaces;
+using Game.Characters.Actions;
 
 namespace Game.Characters.Animations
 {
@@ -13,21 +14,23 @@ namespace Game.Characters.Animations
 
         Coroutine _TickCoroutine;
 
-        IAnimationsHandler animationHandler;
+        AnimationController animationController;
 
-        void Awake() 
+        protected override void Awake() 
         {
-            animationHandler = GetComponent<CharacterBase>().animationHandler;
+            base.Awake();
+            
+            animationController = GetComponent<AnimationController>();
 
-            animationHandler.AddAnimation("Ultimate", _AnimationClip);
+            animationController.AddAnimation("Ultimate", _AnimationClip);
         }
 
-        public override bool Use(Hero hero)
+        public override bool Use()
         {
-            bool canUse = base.Use(hero);
+            bool canUse = base.Use();
 
             if(canUse)
-                animationHandler.Play("Ultimate");
+                animationController.Play("Ultimate");
 
             return canUse;
         }

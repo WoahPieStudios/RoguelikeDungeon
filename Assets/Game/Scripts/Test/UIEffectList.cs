@@ -5,13 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 using Game.Characters;
+using Game.Characters.Effects;
 
 public class UIEffectList : MonoBehaviour
 {
     [SerializeField]
     Text _Text;
     [SerializeField]
-    CharacterBase _Character;
+    Character _Character;
 
     // Update is called once per frame
     void Update()

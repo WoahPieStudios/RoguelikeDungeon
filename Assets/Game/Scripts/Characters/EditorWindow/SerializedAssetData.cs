@@ -9,7 +9,6 @@ using UnityEngine;
 using UnityEditor;
 
 using Game.Characters;
-using Game.Characters.Interfaces;
 
 namespace Game.CharactersEditor
 {

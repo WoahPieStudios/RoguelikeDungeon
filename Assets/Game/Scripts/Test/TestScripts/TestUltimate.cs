@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-namespace Game.Characters
+using Game.Characters.Actions;
+
+namespace Game.Characters.Test
 {
     public class TestUltimate : Ultimate
     {
@@ -15,12 +18,12 @@ namespace Game.Characters
             End();
         }
 
-        public override bool Use(Hero hero)
+        public override bool Use()
         {
-            bool canUse = base.Use(hero);
+            bool canUse = base.Use();
 
             if(canUse)
-                _TickCoroutine = target.StartCoroutine(Tick());
+                _TickCoroutine = StartCoroutine(Tick());
 
             return canUse;
         }
@@ -30,7 +33,7 @@ namespace Game.Characters
             base.End();
 
             if(_TickCoroutine != null)
-                target.StopCoroutine(_TickCoroutine);
+                StopCoroutine(_TickCoroutine);
         }
     }
 }

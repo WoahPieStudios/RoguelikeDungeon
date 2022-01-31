@@ -3,18 +3,14 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Characters.Interfaces;
+using Game.Actions;
 
-namespace Game.Characters
+namespace Game.Characters.Actions
 {
-    public abstract class CoolDownAction : MonoBehaviour, IAction<CharacterBase>, ICoolDown
+    public abstract class CoolDownAction : ActorAction, ICoolDownAction
     {
         [SerializeField]
         float _CoolDownTime;
-
-        CharacterBase _Target;
-
-        bool _IsActive = false;
 
         float _CurrentCoolDownTime;
 
@@ -37,10 +33,6 @@ namespace Game.Characters
         /// </summary>
         public bool isCoolingDown => _IsCoolingDown;
 
-        public bool isActive => _IsActive;
-
-        public CharacterBase target => _Target;
-
         /// <summary>
         /// Cool Down Sequence.
         /// </summary>
@@ -57,45 +49,37 @@ namespace Game.Characters
 
                 yield return new WaitForEndOfFrame();
             }
-
-            _CurrentCoolDownTime = 0;
-
-            _IsCoolingDown = false;
-        }
-
-        protected void Begin(CharacterBase target)
-        {
-            _IsActive = true;
-
-            _Target = target;
-        }
-
-        /// <summary>
-        /// Force Starts an action.
-        /// </summary>
-        public virtual void ForceStart()
-        {
-            _IsActive = true;
+            
+            StopCoolDown();
         }
 
         /// <summary>
         /// Ends Action. Cool Down Starts afterwards.
         /// </summary>
-        public virtual void End()
+        public override void End()
         {
-            _IsActive = false;
+            base.End();
+            
+            StartCoolDown();
+        }
 
+        public virtual void StartCoolDown()
+        {
             _CoolDownCoroutine = StartCoroutine(CoolDown());
         }
 
         public virtual void StopCoolDown()
         {
-            if(_CoolDownCoroutine != null)
-            {
-                _IsCoolingDown = false;
+            if(!_IsCoolingDown)
+                return;
+                
+            _CurrentCoolDownTime = 0;
 
+            _IsCoolingDown = false;
+                
+            if(_CoolDownCoroutine != null)
                 StopCoroutine(_CoolDownCoroutine);
-            }
         }
+
     }
 }
