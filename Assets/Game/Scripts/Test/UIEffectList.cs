@@ -19,12 +19,11 @@ public class UIEffectList : MonoBehaviour
     {
         if(!_Character && _Character.effects.Length <= 0)
             return;
+            
 
         _Text.text = Time.deltaTime.ToString() + " " + _Character.effects?.Length + "\n";
 
         foreach(Effect effect in _Character.effects)
             _Text.text += effect.name + " " + effect.instanceId + "\n";
-        
-        _Text.text += _Character.health.currentHealth;
     }
 }

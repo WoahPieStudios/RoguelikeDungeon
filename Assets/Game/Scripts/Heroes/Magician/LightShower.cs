@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-namespace Game.Characters
+using Game.Characters;
+using Game.Characters.Actions;
+
+namespace Game.Heroes.Magician
 {
-    [CreatableAsset("Magician")]
     public class LightShower : Ultimate
     {
         [SerializeField]
@@ -43,8 +46,8 @@ namespace Game.Characters
                 {
                     currentInterval++;
 
-                    foreach(CharacterBase character in Utilities.GetCharacters<Enemy>(aoePosition, _Radius, target))
-                        character.health.Damage(_Damage);
+                    foreach(Enemy enemy in Utilities.GetCharacters<Enemy>(aoePosition, _Radius, owner as Character))
+                        enemy.health.Damage(_Damage);
                 }
 
                 yield return null;
@@ -53,16 +56,17 @@ namespace Game.Characters
             End();
         }
 
-        public override bool CanUse(Hero hero)
+        public override bool CanUse()
         {
-            _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(hero.transform.position, _FindingRange);
 
-            return base.CanUse(hero) && _ClosestEnemy;
+            _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, _FindingRange);
+
+            return base.CanUse() && _ClosestEnemy;
         }
 
-        public override bool Use(Hero hero)
+        public override bool Use()
         {
-            bool canUse = base.Use(hero);
+            bool canUse = base.Use();
 
             if(canUse)
             {

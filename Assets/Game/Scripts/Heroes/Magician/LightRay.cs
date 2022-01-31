@@ -5,7 +5,7 @@ using UnityEngine;
 
 using Game.FX;
 
-namespace Game.Characters.Magician
+namespace Game.Heroes.Magician
 {
     [RequireComponent(typeof(SpriteRenderer))]
     public class LightRay : MonoBehaviour

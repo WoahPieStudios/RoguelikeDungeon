@@ -4,11 +4,12 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Characters.ActiveEffects;
+using Game.Characters;
+using Game.Characters.Actions;
+using Game.Characters.Effects;
 
-namespace Game.Characters.Magician
+namespace Game.Heroes.Magician
 {
-    [CreatableAsset("Magician")]
     public class Sparkles : Attack, IBonusDamage
     {
         [SerializeField]
@@ -27,9 +28,9 @@ namespace Game.Characters.Magician
 
         void SetupLightRay()
         {
-            Vector2 enemyDirection = _ClosestEnemy.transform.position - target.transform.position;
+            Vector2 enemyDirection = _ClosestEnemy.transform.position - transform.position;
 
-            _LightRay.position = target.transform.position + (Vector3)enemyDirection.normalized * (range / 2);
+            _LightRay.position = transform.position + (Vector3)enemyDirection.normalized * (range / 2);
             _LightRay.rotation = Quaternion.LookRotation(Vector3.forward, enemyDirection);
             _LightRay.size = new Vector2(_LightRay.size.x, range);
 
@@ -37,30 +38,29 @@ namespace Game.Characters.Magician
 
         }
 
-        public override bool Use(CharacterBase attacker)
+        public override bool Use()
         {
-            bool canUse = base.Use(attacker);
+            bool canUse = base.Use();
 
             if(canUse)
             {
-                target.FaceNearestCharacter(_ClosestEnemy);
+                (owner as Character).FaceNearestCharacter(_ClosestEnemy);
 
                 SetupLightRay();
 
                 _ClosestEnemy.health.Damage(damage);
-                _ClosestEnemy.AddEffects(attacker, _Knockback);
-
+                _ClosestEnemy.AddEffects(owner as Character, _Knockback);
                 End();
             }
 
             return canUse;
         }
 
-        public override bool CanUse(CharacterBase attacker)
+        public override bool CanUse()
         {
-            _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(attacker.transform.position, range);
+            _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, range);
 
-            return base.CanUse(attacker) && _ClosestEnemy;
+            return base.CanUse() && _ClosestEnemy;
         }
     }
 }

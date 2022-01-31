@@ -3,9 +3,11 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace Game.Characters.Magician
+using Game.Characters;
+using Game.Characters.Actions;
+
+namespace Game.Heroes.Magician
 {
-    [CreatableAsset("Magician")]
     public class Radiance : Skill
     {
         [Header("Targetting")]
@@ -51,7 +53,7 @@ namespace Game.Characters.Magician
                 
             yield return new WaitForSeconds(_FadeInTime);
 
-            foreach(Enemy enemy in Utilities.GetCharacters<Enemy>(_ClosestEnemy.transform.position, _AoeRange, target))
+            foreach(Enemy enemy in Utilities.GetCharacters<Enemy>(_ClosestEnemy.transform.position, _AoeRange, owner as Character))
                 enemy.health.Damage(_Damage);
                 
             yield return new WaitForSeconds(_FadeOutTime);
@@ -63,16 +65,16 @@ namespace Game.Characters.Magician
             End();
         }
 
-        public override bool CanUse(Hero hero)
+        public override bool CanUse()
         {
-            _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(hero.transform.position, _FindingRange);
+            _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, _FindingRange);
 
-            return base.CanUse(hero) && _ClosestEnemy;
+            return base.CanUse() && _ClosestEnemy;
         }
 
-        public override bool Use(Hero hero)
+        public override bool Use()
         {
-            bool canUse = base.Use(hero);
+            bool canUse = base.Use();
 
             if(canUse)
             {

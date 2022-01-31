@@ -1,10 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-namespace Game.Characters.ActiveEffects
+namespace Game.Characters.Effects
 {
-    [CreatableAsset]
     public class Knockback : ActiveEffect
     {
         [SerializeField]
@@ -19,9 +19,10 @@ namespace Game.Characters.ActiveEffects
         {
             float currentTime = 0;
 
-            Vector3 direction = target.transform.position - sender.transform.position;
+            Transform receiverTransform = (receiver as MonoBehaviour).transform;
 
-            Vector3 newPosition = target.transform.position + direction * _KnockbackDistance;
+            Vector3 direction = receiverTransform.position - (sender as MonoBehaviour).transform.position;
+            Vector3 newPosition = receiverTransform.transform.position + direction * _KnockbackDistance;
 
             while(currentTime < _KnockbackTime)
             {
@@ -29,7 +30,7 @@ namespace Game.Characters.ActiveEffects
 
                 float c = _KnockbackCurve.Evaluate(currentTime / _KnockbackTime);
 
-                target.transform.position = Vector3.Lerp(target.transform.position, newPosition, c);
+                receiverTransform.position = Vector3.Lerp(receiverTransform.position, newPosition, c);
 
                 yield return new WaitForFixedUpdate();
             }
@@ -37,18 +38,18 @@ namespace Game.Characters.ActiveEffects
             End();
         }
 
-        public override void StartEffect(CharacterBase sender, CharacterBase effected)
+        public override void StartEffect(IEffectable sender, IEffectable receiver)
         {
-            base.StartEffect(sender, effected);
+            base.StartEffect(sender, receiver);
 
-            _TickCoroutine = effected.StartCoroutine(Tick());
+            _TickCoroutine = StartCoroutine(Tick());
         }
 
         public override void End()
         {
             base.End();
 
-            target.StopCoroutine(_TickCoroutine);
+            StopCoroutine(_TickCoroutine);
         }
     }
 }

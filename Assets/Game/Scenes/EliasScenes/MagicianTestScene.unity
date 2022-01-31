@@ -930,6 +930,7 @@ MonoBehaviour:
     _MaxMana: 10
     _CurrentMana: 0
   _PassiveEffects: []
+  _InputLerpTime: 0.5
 --- !u!212 &1739015349
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1042,8 +1043,7 @@ MonoBehaviour:
   _Damage: 0
   _Range: 10
   _Speed: 0
-  _ActiveEffects: []
-  _Knockback: {fileID: 11400000, guid: c6cce35f56118ef4fa4399fc2f8cb3ea, type: 2}
+  _Knockback: {fileID: 2129709150088808372, guid: 0be26bb9c5ff1784f9a6f5b8a20ea2d2, type: 3}
   _LightRay: {fileID: 2067724370}
   _FadeInTime: 0.001
   _FadeOutTime: 1
@@ -1068,10 +1068,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1739015346}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a3650731a98e8804a91f55611f9f0ac2, type: 3}
+  m_Script: {fileID: 11500000, guid: 8fd966a68144f354f9c4c1a94343f4fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _MoveSpeed: 0
+  _MoveSpeed: 5
+  _LerpTime: 0.5
 --- !u!114 &1739015356
 MonoBehaviour:
   m_ObjectHideFlags: 0
