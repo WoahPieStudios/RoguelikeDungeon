@@ -4,11 +4,11 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Characters.Interfaces;
+using Game.Characters.Properties;
 
-namespace Game.Characters
+namespace Game.Characters.Actions
 {
-    public abstract class Ultimate : CoolDownAction, ITrackableAction, IRestrictableAction
+    public abstract class Ultimate : CoolDownAction, IUltimateAction, ITrackableAction, IRestrictableAction
     {
         [SerializeField]
         int _ManaCost;
@@ -20,24 +20,36 @@ namespace Game.Characters
         /// </summary>
         public int manaCost => _ManaCost;
 
-        public event Action<TrackAction> onActionTracked;
+        public bool isRestricted => _IsRestricted;
+
+        public event Action<TrackActionType> onActionEvent;
+
+        protected virtual void OnActionEvent(TrackActionType trackAction)
+        {
+            onActionEvent?.Invoke(trackAction);
+        }
+
+        protected override void Begin()
+        {
+            base.Begin();
+
+            Mana mana = owner.GetProperty<Mana>();
+
+            mana.UseMana(_ManaCost);
+
+            OnActionEvent(TrackActionType.Ultimate);
+        }
 
         /// <summary>
         /// Activates the Ultimate.
         /// </summary>
         /// <param name="hero">The Hero who will use the Ultimate</param>
-        public virtual bool Use(Hero hero)
+        public virtual bool Use()
         {
-            bool canUse = CanUse(hero);
+            bool canUse = CanUse();
 
             if(canUse)
-            {
-                hero.mana.UseMana(_ManaCost);
-                
-                Begin(hero);
-
-                onActionTracked?.Invoke(TrackAction.Ultimate);
-            }
+                Begin();
 
             return canUse;
         }
@@ -48,14 +60,16 @@ namespace Game.Characters
         /// </summary>
         /// <param name="hero">The Hero who will use the Ultimate</param>
         /// <returns></returns>
-        public virtual bool CanUse(Hero hero)
+        public virtual bool CanUse()
         {
-            return !_IsRestricted && !isActive && hero.mana.currentMana >= _ManaCost && !isCoolingDown;
+            Mana mana = owner.GetProperty<Mana>();
+
+            return !isRestricted && !isActive && mana.currentMana >= _ManaCost && !isCoolingDown;
         }
 
-        public void OnRestrict(RestrictAction restrictActions)
+        public void OnRestrict(RestrictActionType restrictActions)
         {
-            _IsRestricted = restrictActions.HasFlag(RestrictAction.Ultimate);
+            _IsRestricted = restrictActions.HasFlag(RestrictActionType.Ultimate);
         }
     }
 }

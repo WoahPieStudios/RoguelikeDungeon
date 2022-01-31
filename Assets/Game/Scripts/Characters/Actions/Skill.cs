@@ -4,30 +4,38 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Characters.Interfaces;
-
-namespace Game.Characters
+namespace Game.Characters.Actions
 {
-    public abstract class Skill : CoolDownAction, ITrackableAction, IRestrictableAction
+    public abstract class Skill : CoolDownAction, ISkillAction, ITrackableAction, IRestrictableAction
     {
         bool _IsRestricted = false;
 
-        public event Action<TrackAction> onActionTracked;
+        public bool isRestricted => _IsRestricted;
+
+        public event Action<TrackActionType> onActionEvent;
+
+        protected virtual void OnActionEvent(TrackActionType trackAction)
+        {
+            onActionEvent?.Invoke(trackAction);
+        }
+
+        protected override void Begin()
+        {
+            base.Begin();
+
+            OnActionEvent(TrackActionType.Skill);
+        }
 
         /// <summary>
         /// Start Skill.
         /// </summary>
         /// <param name="hero">The Hero who will use the Skill</param>
-        public virtual bool Use(Hero hero)
+        public virtual bool Use()
         {
-            bool canUse = CanUse(hero);
+            bool canUse = CanUse();
 
             if(canUse)
-            {
-                Begin(hero);
-
-                onActionTracked?.Invoke(TrackAction.Skill);
-            }
+                Begin();
 
             return canUse;
         }
@@ -38,14 +46,14 @@ namespace Game.Characters
         /// </summary>
         /// <param name="hero">The Hero who will use the Skill</param>
         /// <returns></returns>
-        public virtual bool CanUse(Hero hero)
+        public virtual bool CanUse()
         {
-            return !isActive && !isCoolingDown && !_IsRestricted;
+            return !isActive && !isCoolingDown && !isRestricted;
         }
 
-        public void OnRestrict(RestrictAction restrictActions)
+        public void OnRestrict(RestrictActionType restrictActions)
         {
-            _IsRestricted = restrictActions.HasFlag(RestrictAction.Skill);
+            _IsRestricted = restrictActions.HasFlag(RestrictActionType.Skill);
         }
     }
 }

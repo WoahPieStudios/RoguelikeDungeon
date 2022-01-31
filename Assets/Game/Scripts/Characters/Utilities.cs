@@ -16,10 +16,10 @@ namespace Game.Characters
         /// <param name="exceptCharacters"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static Tuple<T, float>[] GetCharactersAndDistances<T>(Vector3 center, float radius, params CharacterBase[] exceptCharacters) where T : CharacterBase
+        public static Tuple<T, float>[] GetCharactersAndDistances<T>(Vector3 center, float radius, params Character[] exceptCharacters) where T : Character
         {
-            return CharacterBase.characters.Except(exceptCharacters).
-                Select(character => new Tuple<CharacterBase, float>(character, (center - character.transform.position).magnitude)).
+            return Character.characters.Except(exceptCharacters).
+                Select(character => new Tuple<Character, float>(character, (center - character.transform.position).magnitude)).
                 Where(item => item.Item1 is T && item.Item2 <= radius).
                 Select(item => new Tuple<T, float>(item.Item1 as T, item.Item2)).
                 ToArray();
@@ -33,7 +33,7 @@ namespace Game.Characters
         /// <param name="exceptCharacters"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>w
-        public static T[] GetCharacters<T>(Vector3 center, float radius, params CharacterBase[] exceptCharacters) where T : CharacterBase
+        public static T[] GetCharacters<T>(Vector3 center, float radius, params Character[] exceptCharacters) where T : Character
         {
             return GetCharactersAndDistances<T>(center, radius, exceptCharacters).
                 Select(t => t.Item1).
@@ -48,7 +48,7 @@ namespace Game.Characters
         /// <param name="exceptCharacters"></param>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static T GetNearestCharacter<T>(Vector3 center, float radius, params CharacterBase[] exceptCharacters) where T : CharacterBase
+        public static T GetNearestCharacter<T>(Vector3 center, float radius, params Character[] exceptCharacters) where T : Character
         {
             return GetCharactersAndDistances<T>(center, radius, exceptCharacters)?.OrderBy(item => item.Item2)?.
                 FirstOrDefault()?.Item1;

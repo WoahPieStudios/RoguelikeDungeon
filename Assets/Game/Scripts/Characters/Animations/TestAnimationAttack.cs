@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-using Game.Characters.Interfaces;
+using Game.Actions;
+using Game.Characters.Actions;
 
 namespace Game.Characters.Animations
 {
@@ -11,33 +13,37 @@ namespace Game.Characters.Animations
         [SerializeField]
         AnimationClip _AnimationClip;
 
-        CharacterBase _NearestCharacter;
+        Character _NearestCharacter;
 
-        IAnimationsHandler animationHandler;
+        AnimationController _AnimationController;
 
-        void Awake() 
+        IActor _Owner;
+
+        protected override void Awake() 
         {
-            animationHandler = GetComponent<CharacterBase>().animationHandler;
+            base.Awake();
 
-            animationHandler.AddAnimation("Attack", _AnimationClip, End);
+            _AnimationController = GetComponent<AnimationController>();
+
+            _AnimationController.AddAnimation("Attack", _AnimationClip, End);
         }
 
-        public override bool CanUse(CharacterBase attacker)
+        public override bool CanUse()
         {
-            _NearestCharacter = Utilities.GetNearestCharacter<CharacterBase>(attacker.transform.position, range, attacker);
+            _NearestCharacter = Utilities.GetNearestCharacter<Character>(transform.position, range, owner as Character);
 
-            return base.CanUse(attacker) && _NearestCharacter;
+            return base.CanUse() && _NearestCharacter;
         }
 
-        public override bool Use(CharacterBase attacker)
+        public override bool Use()
         {
-            bool canUse = base.Use(attacker);
+            bool canUse = base.Use();
 
             if(canUse)
             {
-                target.FaceNearestCharacter(_NearestCharacter);
+                (owner as Character).FaceNearestCharacter(_NearestCharacter);
 
-                animationHandler.Play("Attack");
+                _AnimationController.Play("Attack");
             }
 
             return canUse;

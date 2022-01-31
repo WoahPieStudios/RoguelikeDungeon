@@ -3,12 +3,10 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Characters.Interfaces;
-
 namespace Game.Characters.Animations
 {
     [RequireComponent(typeof(Animation))]
-    public class AnimationController : MonoBehaviour, IAnimationsHandler
+    public class AnimationController : MonoBehaviour
     {
         System.Action[] _CurrentAnimationEvents;
 

@@ -5,26 +5,35 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Characters.Interfaces;
+using Game.Characters.Actions;
+using Game.Characters.Effects;
+using Game.Characters.Properties;
 
 namespace Game.Characters
 {
-    public class Hero : CharacterBase, ITrackableActionsHandler
+    public class Hero : Character, ITrackableActionsHandler
     {
+        [SerializeField]
+        Health _Health;
         [SerializeField]
         Mana _Mana;
         [SerializeField]
         PassiveEffect[] _PassiveEffects;
 
-        TrackAction _TrackAction;
+        TrackActionType _TrackAction;
         List<ITrackableAction> _TrackableActionList = new List<ITrackableAction>();
 
-        Dictionary<TrackAction, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackAction, PassiveEffect[]>();
+        Dictionary<TrackActionType, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackActionType, PassiveEffect[]>();
 
+        Attack _Attack;
         Skill _Skill;
         Ultimate _Ultimate;
 
+        public Health health => _Health;
+
         public Mana mana => _Mana;
+
+        public Attack attack => _Attack;
         
         /// <summary>
         /// Skill of the Hero
@@ -38,46 +47,34 @@ namespace Game.Characters
 
         public ITrackableAction[] trackableActions => _TrackableActionList.ToArray();
 
-        public TrackAction trackedActions => _TrackAction;
+        public TrackActionType trackedActions => _TrackAction;
 
         protected override void Awake()
         {
             base.Awake();
-            
+
+            _Health.owner = this;
+            _Health.ResetHealth();
+
+            _Mana.owner = this;
             _Mana.ResetMana();
 
-            _Skill = GetComponent<Skill>();
+            _Attack = GetProperty<Attack>();
+            _Skill = GetProperty<Skill>();
+            _Ultimate = GetProperty<Ultimate>();
 
-            _Ultimate = GetComponent<Ultimate>();
+            SegregatePassiveEffects(_PassiveEffects);
 
-            SetupPassives(_PassiveEffects.Select(passive => passive.CreateClone<PassiveEffect>()));
+            AddProperty(_Health, _Mana);
 
-            AddTrackable(GetComponents<ITrackableAction>());
-
-            onAddEffectsEvent += OnAddEffects;
-            onRemoveEffectsEvent += OnRemoveEffects;
-        }
-
-        void OnAddEffects(CharacterBase sender, Effect[] effects)
-        {
-            foreach(IRestrictableAction restrictable in restrictableActions)
-                restrictable.OnRestrict(restrictedActions);
-        }
-
-        void OnRemoveEffects(Effect[] effects)
-        {
-            foreach(IRestrictableAction restrictable in restrictableActions)
-                restrictable.OnRestrict(restrictedActions);
+            AddTrackable(GetProperties<ITrackableAction>());
         }
     
-        void SetupPassives(IEnumerable<PassiveEffect> passiveEffects)
+        void SegregatePassiveEffects(IEnumerable<PassiveEffect> passiveEffects)
         {
-            foreach(PassiveEffect passiveEffect in passiveEffects)
-                passiveEffects.IsCast<IOnAssignEvent>()?.OnAssign(this);
-
-            foreach(Enum e in Enum.GetValues(typeof(TrackAction)))
+            foreach(Enum e in Enum.GetValues(typeof(TrackActionType)))
             {
-                TrackAction trackAction = (TrackAction)e;
+                TrackActionType trackAction = (TrackActionType)e;
 
                 PassiveEffect[] sortedPassiveEffects = passiveEffects.Where(p => p.trackAction.HasFlag(e)).ToArray();
 
@@ -90,16 +87,18 @@ namespace Game.Characters
             }
         }
 
-        void OnActionTracked(TrackAction trackAction)
+        void OnActionTracked(TrackActionType trackAction)
         {
-            foreach(Enum e in Enum.GetValues(typeof(TrackAction)))
+            foreach(Enum e in Enum.GetValues(typeof(TrackActionType)))
             {
-                if(trackAction.HasFlag((TrackAction)e) && _TrackActionPassiveEffects.ContainsKey(trackAction))
+                if(trackAction.HasFlag((TrackActionType)e) && _TrackActionPassiveEffects.ContainsKey(trackAction))
                 {
                     PassiveEffect[] passiveEffects = _TrackActionPassiveEffects[trackAction];
 
                     if(passiveEffects.Any())
                         AddEffects(this, passiveEffects.Where(p => p.CanUse(this)).ToArray());
+
+                    return;
                 }
             }
         }
@@ -108,7 +107,7 @@ namespace Game.Characters
         {
             foreach(ITrackableAction trackable in trackables.Where(t => !_TrackableActionList.Contains(t)))
             {
-                trackable.onActionTracked += OnActionTracked;
+                trackable.onActionEvent += OnActionTracked;
 
                 _TrackableActionList.Add(trackable);
             }
@@ -118,7 +117,7 @@ namespace Game.Characters
         {
             foreach(ITrackableAction trackable in trackables.Where(t => _TrackableActionList.Contains(t)))
             {
-                trackable.onActionTracked -= OnActionTracked;
+                trackable.onActionEvent -= OnActionTracked;
 
                 _TrackableActionList.Remove(trackable);
             }

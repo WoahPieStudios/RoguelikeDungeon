@@ -10,7 +10,6 @@ using UnityEditor;
 using UnityEditor.Callbacks;
 
 using Game.Characters;
-using Game.Characters.Interfaces;
 
 namespace Game.CharactersEditor
 {

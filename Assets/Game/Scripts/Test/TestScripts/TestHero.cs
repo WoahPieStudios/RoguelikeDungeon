@@ -5,26 +5,36 @@ using UnityEngine;
 
 using Game.Characters;
 
-public class TestHero : Hero
+namespace Game.Characters.Test
 {
-    void Update()
+    public class TestHero : Hero
     {
-        Vector2 input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")).normalized;
+        [SerializeField]
+        float _InputLerpTime;
 
-        if(input != Vector2.zero)
-            orientation.FaceDirection(Vector2Int.RoundToInt(input));
+        Vector2 _Input;
 
-        movement.Move(input);
+        void Update()
+        {
+            Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical")).normalized;
 
+            // if(input != Vector2.zero)
+            //     orientation.Orientate(Vector2Int.RoundToInt(input));
 
-        
-        if(Input.GetKeyDown(KeyCode.U))
-            Debug.Log("Attack " + attack.Use(this));
+            orientation.Orientate(Vector2Int.CeilToInt(input));
 
-        if(Input.GetKeyDown(KeyCode.I))
-            Debug.Log("Skill " + skill.Use(this));
+            _Input = Vector2.Lerp(_Input, input, _InputLerpTime);
 
-        if(Input.GetKeyDown(KeyCode.O))
-            Debug.Log("Ultimate " + ultimate.Use(this));
+            movement.Move(_Input);
+
+            if(Input.GetKeyDown(KeyCode.U))
+                Debug.Log("Attack " + attack.Use());
+
+            if(Input.GetKeyDown(KeyCode.I))
+                Debug.Log("Skill " + skill.Use());
+
+            if(Input.GetKeyDown(KeyCode.O))
+                Debug.Log("Ultimate " + ultimate.Use());
+        }
     }
 }
