@@ -14,8 +14,6 @@ namespace Game.Characters
     public class Hero : Character, ITrackableActionsHandler
     {
         [SerializeField]
-        Health _Health;
-        [SerializeField]
         Mana _Mana;
         [SerializeField]
         PassiveEffect[] _PassiveEffects;
@@ -28,8 +26,6 @@ namespace Game.Characters
         Attack _Attack;
         Skill _Skill;
         Ultimate _Ultimate;
-
-        public Health health => _Health;
 
         public Mana mana => _Mana;
 
@@ -53,9 +49,6 @@ namespace Game.Characters
         {
             base.Awake();
 
-            _Health.owner = this;
-            _Health.ResetHealth();
-
             _Mana.owner = this;
             _Mana.ResetMana();
 
@@ -65,7 +58,7 @@ namespace Game.Characters
 
             SegregatePassiveEffects(_PassiveEffects);
 
-            AddProperty(_Health, _Mana);
+            AddProperty(_Mana);
 
             AddTrackable(GetProperties<ITrackableAction>());
         }

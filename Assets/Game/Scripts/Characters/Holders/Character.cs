@@ -8,19 +8,25 @@ using UnityEngine;
 using Game.Actions;
 using Game.Characters.Actions;
 using Game.Characters.Effects;
-using Game.Characters.Animations;
+using Game.Characters.Properties;
 
 
 namespace Game.Characters
 {
     public class Character : Actor, IEffectable, IRestrictableActionsHandler
     {
+        [SerializeField]
+        Health _Health;
+
         RestrictActionType _RestrictedActions;
         EffectsHandler _EffectsHandler = new EffectsHandler();
         IMovementAction _Movement;
         IOrientationAction _Orientation;
 
         List<IRestrictableAction> _RestrictableActionsList = new List<IRestrictableAction>();
+
+
+        public Health health => _Health;
 
         public IMovementAction movement => _Movement;
         public IOrientationAction orientation => _Orientation;
@@ -41,8 +47,13 @@ namespace Game.Characters
 
             _CharacterList.Add(this);
 
+            _Health.owner = this;
+            _Health.ResetHealth();
+
             _Movement = GetProperty<Movement>();
             _Orientation = GetProperty<Orientation>();
+
+            AddProperty(_Health);
 
             AddRestrictable(GetProperties<IRestrictableAction>());
 

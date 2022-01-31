@@ -22,7 +22,6 @@ public class UIEffectList : MonoBehaviour
 
         _Text.text = Time.deltaTime.ToString() + " " + _Character.effects?.Length + "\n";
 
-
         foreach(Effect effect in _Character.effects)
             _Text.text += effect.name + " " + effect.instanceId + "\n";
     }
