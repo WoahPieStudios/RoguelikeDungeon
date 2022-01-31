@@ -22,7 +22,7 @@ namespace Game.Characters.Effects
         /// </summary>
         public override void End()
         {
-            sender.RemoveEffects(this);
+            receiver.RemoveEffects(this);
         }
     }
 }
