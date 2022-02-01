@@ -11,7 +11,7 @@ using Game.Characters.Properties;
 
 namespace Game.Characters
 {
-    public class Hero : Character, ITrackableActionsHandler
+    public class Hero : Character, IHeroActor
     {
         [SerializeField]
         Mana _Mana;
@@ -23,23 +23,23 @@ namespace Game.Characters
 
         Dictionary<TrackActionType, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackActionType, PassiveEffect[]>();
 
-        Attack _Attack;
-        Skill _Skill;
-        Ultimate _Ultimate;
+        IAttackAction _Attack;
+        ISkillAction _Skill;
+        IUltimateAction _Ultimate;
 
-        public Mana mana => _Mana;
+        public IMana mana => _Mana;
 
-        public Attack attack => _Attack;
+        public IAttackAction attack => _Attack;
         
         /// <summary>
         /// Skill of the Hero
         /// </summary>
-        public Skill skill => _Skill;
+        public ISkillAction skill => _Skill;
 
         /// <summary>
         /// Ultimate of the Hero
         /// </summary>
-        public Ultimate ultimate => _Ultimate;
+        public IUltimateAction ultimate => _Ultimate;
 
         public ITrackableAction[] trackableActions => _TrackableActionList.ToArray();
 
@@ -52,9 +52,9 @@ namespace Game.Characters
             _Mana.owner = this;
             _Mana.ResetMana();
 
-            _Attack = GetProperty<Attack>();
-            _Skill = GetProperty<Skill>();
-            _Ultimate = GetProperty<Ultimate>();
+            _Attack = GetProperty<IAttackAction>();
+            _Skill = GetProperty<ISkillAction>();
+            _Ultimate = GetProperty<IUltimateAction>();
 
             SegregatePassiveEffects(_PassiveEffects);
 

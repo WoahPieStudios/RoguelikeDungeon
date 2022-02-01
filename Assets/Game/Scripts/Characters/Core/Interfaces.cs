@@ -1,0 +1,37 @@
+using System.Collections;
+using System.Collections.Generic;
+
+using UnityEngine;
+
+using Game.Actions;
+using Game.Characters.Actions;
+using Game.Characters.Effects;
+using Game.Characters.Properties;
+
+namespace Game.Characters
+{
+    public interface ICharacterActor : IActor, IEffectable, IRestrictableActionsHandler
+    {
+        IHealth health { get; }
+
+        public IMovementAction movement { get; }
+        public IOrientationAction orientation { get; }
+    }
+
+    public interface IHeroActor : ICharacterActor, ITrackableActionsHandler
+    {
+        IMana mana{ get; }
+
+        IAttackAction attack { get; }
+        
+        /// <summary>
+        /// Skill of the Hero
+        /// </summary>
+        ISkillAction skill { get; }
+
+        /// <summary>
+        /// Ultimate of the Hero
+        /// </summary>
+        IUltimateAction ultimate { get; }
+    }
+}
