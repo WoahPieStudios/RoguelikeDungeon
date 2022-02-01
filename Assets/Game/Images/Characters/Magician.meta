@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Game/Images/Characters/Magician.meta
 guid: 4bea5818950821c4d814b251fcde4e1a
+=======
+guid: 3b9cb8357bc71cc4fb82e646bca42b3a
+>>>>>>> 70f557e4b042a8b5468df599f818ae06e3d604a5:Assets/Game/Prefabs.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

@@ -1,5 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 7747741e9d842c04d8c5a3ce3d495b3c
+=======
+<<<<<<< HEAD:Assets/Game/Materials/Characters/Magician.meta
+guid: 517d654166c3519498578d6f2be705dd
+=======
+guid: 7747741e9d842c04d8c5a3ce3d495b3c
+>>>>>>> 70f557e4b042a8b5468df599f818ae06e3d604a5:Assets/Game/Scripts/Actions.meta
+>>>>>>> 70f557e4b042a8b5468df599f818ae06e3d604a5
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

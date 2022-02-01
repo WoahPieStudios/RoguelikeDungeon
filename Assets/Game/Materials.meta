@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD:Assets/Game/Materials.meta
 guid: e9cc7a61c410ced449afb4ba89bfdbdd
+=======
+guid: 4ae0567c230ad5d478c98fdd9e011d89
+>>>>>>> 70f557e4b042a8b5468df599f818ae06e3d604a5:Assets/Game/Prefabs/Characters/Effects.meta
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
