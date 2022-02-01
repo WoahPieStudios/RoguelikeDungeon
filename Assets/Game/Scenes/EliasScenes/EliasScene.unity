@@ -238,6 +238,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efb0275bb8547c7459316a429252d263, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _Health:
+    _MaxHealth: 0
+    _CurrentHealth: 0
 --- !u!212 &537499623
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -870,6 +873,57 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &1720660375
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1720660377}
+  - component: {fileID: 1720660376}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1720660376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720660375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a2a139e45f551074f97ab47d151d17ed, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _Health:
+    _MaxHealth: 0
+    _CurrentHealth: 0
+  _Mana:
+    _MaxMana: 0
+    _CurrentMana: 0
+  _PassiveEffects: []
+  _InputLerpTime: 0
+--- !u!4 &1720660377
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1720660375}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -14.208892, y: -1.5650276, z: -4.907878}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1992920149
 GameObject:
   m_ObjectHideFlags: 0
