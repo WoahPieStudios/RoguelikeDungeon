@@ -1,35 +1,38 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-using Game.Characters.Interfaces;
+using Game.Characters.Actions;
 
 namespace Game.Characters.Animations
 {
-    public class TestAnimationUltimate : Ultimate, IOnAssignEvent
+    public class TestAnimationUltimate : Ultimate
     {
         [SerializeField]
         AnimationClip _AnimationClip;
 
         Coroutine _TickCoroutine;
 
-        protected IEnumerator Tick()
-        {
-            yield return new WaitForSeconds(2);
+        AnimationController animationController;
 
-            End();
+        protected override void Awake() 
+        {
+            base.Awake();
+            
+            animationController = GetComponent<AnimationController>();
+
+            animationController.AddAnimation("Ultimate", _AnimationClip);
         }
 
-        public override void Activate(Hero hero)
+        public override bool Use()
         {
-            base.Activate(hero);
+            bool canUse = base.Use();
 
-            hero.Play("Ultimate");
-        }
+            if(canUse)
+                animationController.Play("Ultimate");
 
-        public void OnAssign(CharacterBase character)
-        {
-            character.AddAnimation("Ultimate", _AnimationClip);
+            return canUse;
         }
     }
 }

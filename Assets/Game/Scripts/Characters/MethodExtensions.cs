@@ -11,17 +11,17 @@ namespace Game.Characters
         /// <summary>
         /// Orients the Character towards the nearest Character.
         /// </summary>
-        /// <param name="characterBase">Character to be ignored when finding the nearest character</param>
+        /// <param name="character">Character to be ignored when finding the nearest character</param>
         /// <param name="radius">Radius around the character</param>
         /// <param name="characterLayer">Layer Mask for where the Characters are</param>
         /// <typeparam name="T">Generic For what class the Character is derived from. (Hero, Enemy, or CharacterBase)</typeparam>
         /// <returns>Returns the Nearest T Character</returns>
-        public static T FaceNearestCharacter<T>(this CharacterBase characterBase, float radius) where T : CharacterBase
+        public static T FaceNearestCharacter<T>(this Character character, float radius) where T : Character
         {
-            T nearestCharacter = Utilities.GetNearestCharacter<T>(characterBase.transform.position, radius, characterBase);
+            T nearestCharacter = Utilities.GetNearestCharacter<T>(character.transform.position, radius, character);
 
             if(nearestCharacter)
-                FaceNearestCharacter(characterBase, nearestCharacter);
+                FaceNearestCharacter(character, nearestCharacter);
 
             return nearestCharacter;
         }
@@ -29,19 +29,19 @@ namespace Game.Characters
         /// <summary>
         /// Orients the Character towards the nearest Character.
         /// </summary>
-        /// <param name="characterBase">Character to be ignored when finding the nearest character</param>
+        /// <param name="character">Character to be ignored when finding the nearest character</param>
         /// <param name="radius">Radius around the character</param>
         /// <param name="characterLayer">Layer Mask for where the Characters are</param>
         /// <typeparam name="T">Generic For what class the Character is derived from. (Hero, Enemy, or CharacterBase)</typeparam>
         /// <returns>Returns the Nearest T Character</returns>
-        public static void FaceNearestCharacter(this CharacterBase characterBase, CharacterBase target)
+        public static void FaceNearestCharacter(this Character character, Character target)
         {
             if(!target)
                 return;
 
-            Vector2 direction = target.transform.position - characterBase.transform.position;
+            Vector2 direction = target.transform.position - character.transform.position;
 
-            characterBase.FaceDirection(Vector2Int.RoundToInt(direction.normalized));
+            character.orientation.Orientate(Vector2Int.RoundToInt(direction.normalized));
         }
 
         /// <summary>
@@ -51,9 +51,9 @@ namespace Game.Characters
         /// <param name="radius">Radius around the character</param>
         /// <param name="characterLayer">Layer Mask for where the Characters are</param>
         /// <returns>Returns the Nearest Character</returns>
-        public static CharacterBase FaceNearestCharacter(this CharacterBase characterBase, float radius)
+        public static Character FaceNearestCharacter(this Character characterBase, float radius)
         {
-            return FaceNearestCharacter<CharacterBase>(characterBase, radius);
+            return FaceNearestCharacter<Character>(characterBase, radius);
         }
         
         /// <summary>

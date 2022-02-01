@@ -1,37 +1,52 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-using Game.Characters.Interfaces;
+using Game.Actions;
+using Game.Characters.Actions;
 
 namespace Game.Characters.Animations
 {
-    public class TestAnimationAttack : Attack, IOnAssignEvent
+    public class TestAnimationAttack : Attack
     {
         [SerializeField]
         AnimationClip _AnimationClip;
 
-        CharacterBase _NearestCharacter;
+        Character _NearestCharacter;
 
-        public override bool CanUse(CharacterBase attacker)
+        AnimationController _AnimationController;
+
+        IActor _Owner;
+
+        protected override void Awake() 
         {
-            _NearestCharacter = Utilities.GetNearestCharacter<CharacterBase>(attacker.transform.position, range, attacker);
+            base.Awake();
 
-            return base.CanUse(attacker) && _NearestCharacter;
+            _AnimationController = GetComponent<AnimationController>();
+
+            _AnimationController.AddAnimation("Attack", _AnimationClip, End);
         }
 
-        public override void Use(CharacterBase attacker)
+        public override bool CanUse()
         {
-            base.Use(attacker);
-            
-            target.FaceNearestCharacter(_NearestCharacter);
+            _NearestCharacter = Utilities.GetNearestCharacter<Character>(transform.position, range, owner as Character);
 
-            target.Play("Attack");
+            return base.CanUse() && _NearestCharacter;
         }
 
-        public void OnAssign(CharacterBase character)
+        public override bool Use()
         {
-            character.AddAnimation("Attack", _AnimationClip, End);
+            bool canUse = base.Use();
+
+            if(canUse)
+            {
+                (owner as Character).FaceNearestCharacter(_NearestCharacter);
+
+                _AnimationController.Play("Attack");
+            }
+
+            return canUse;
         }
     }
 }

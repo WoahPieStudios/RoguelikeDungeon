@@ -19,13 +19,13 @@ namespace Game.CharactersEditor
 
         static Type[] GetCreatableAssetTypes()
         {
-            return Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().Where(t => t.GetCustomAttribute<CreatableAssetAttribute>() != null && !t.IsAbstract && t.IsSubclassOf(typeof(ScriptableObject))).ToArray();
+            return Assembly.GetAssembly(typeof(Character)).GetTypes().Where(t => t.GetCustomAttribute<CreatableAssetAttribute>() != null && !t.IsAbstract && t.IsSubclassOf(typeof(ScriptableObject))).ToArray();
         }
         static string[] GetCategoryNames()
         {
             List<string> categoryNames = new List<string>();
 
-            foreach(CreatableAssetAttribute c in Assembly.GetAssembly(typeof(Characters.Action)).GetTypes().
+            foreach(CreatableAssetAttribute c in Assembly.GetAssembly(typeof(Character)).GetTypes().
                 Select(t => t.GetCustomAttribute<CreatableAssetAttribute>()))
             {
                 if(c?.categories == null)

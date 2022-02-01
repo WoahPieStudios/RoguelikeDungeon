@@ -7,27 +7,26 @@ using Game.Characters.Effects;
 
 namespace Game.Characters.Test
 {
-    public class TestActiveEffect : ActiveEffect, IStackableEffect
+    public class TestPassiveEffect : PassiveEffect, IStackableEffect
     {
-        int _StackCount = 0;
+        [SerializeField]
+        ActiveEffect _ActiveEffect;
 
         Coroutine _TickCoroutine;
 
         IEnumerator Tick()
         {
-            Debug.Log("Active Effect");
-            yield return new WaitForSeconds(5);
-            Debug.Log("End Active Effect");
+            Debug.Log("Passive");
+
+            sender.AddEffects(sender, _ActiveEffect);
+            yield return new WaitForSeconds(3);
 
             End();
         }
 
         public void Stack(params IEffect[] effects)
         {
-            _StackCount += effects.Length;
-
-            if(_StackCount > 3)
-                Debug.LogWarning("test active stacked!");
+            Debug.Log("passive stacked");
         }
 
         public override void StartEffect(IEffectable sender, IEffectable receiver)
@@ -43,6 +42,11 @@ namespace Game.Characters.Test
 
             if(_TickCoroutine != null)
                 StopCoroutine(_TickCoroutine);
+        }
+
+        public override bool CanUse(Hero hero)
+        {
+            return true;
         }
     }
 }

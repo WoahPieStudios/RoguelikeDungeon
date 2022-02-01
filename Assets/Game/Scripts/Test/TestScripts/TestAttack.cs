@@ -3,38 +3,43 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Characters;
+using Game.Characters.Actions;
 
-public class TestAttack : Attack
+namespace Game.Characters.Test
 {
-    Coroutine _TickCoroutine;
-
-    IEnumerator Tick()
+    public class TestAttack : Attack
     {
-        target.FaceNearestCharacter(range);
-        // target.FaceNearestCharacter<CharacterBase>(range, _CharacterLayer);
+        Coroutine _TickCoroutine;
 
-        // Utilities.GetCharacters(Vector3.zero, 5, _CharacterLayer);
-        // Utilities.GetCharacters<CharacterBase>(Vector3.zero, 5, _CharacterLayer);
-        // Utilities.GetNearestCharacter<CharacterBase>(Vector3.zero, 5, _CharacterLayer);
-        
-        yield return null;
+        IEnumerator Tick()
+        {
+            (owner as Character).FaceNearestCharacter(range);
+            // target.FaceNearestCharacter<CharacterBase>(range, _CharacterLayer);
 
-        End();
-    }
+            // Utilities.GetCharacters(Vector3.zero, 5, _CharacterLayer);
+            // Utilities.GetCharacters<CharacterBase>(Vector3.zero, 5, _CharacterLayer);
+            // Utilities.GetNearestCharacter<CharacterBase>(Vector3.zero, 5, _CharacterLayer);
+            
+            yield return null;
 
-    public override void Use(CharacterBase attacker)
-    {
-        base.Use(attacker);
+            End();
+        }
 
-        _TickCoroutine = target.StartCoroutine(Tick());
-    }
+        public override bool Use()
+        {
+            bool canUse = base.Use();
 
-    public override void End()
-    {
-        base.End();
+            _TickCoroutine = StartCoroutine(Tick());
 
-        if(_TickCoroutine != null)
-            target.StopCoroutine(_TickCoroutine);
+            return canUse;
+        }
+
+        public override void End()
+        {
+            base.End();
+
+            if(_TickCoroutine != null)
+                StopCoroutine(_TickCoroutine);
+        }
     }
 }

@@ -1,8 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-namespace Game.Characters
+using Game.Characters.Actions;
+
+namespace Game.Characters.Test
 {
     public class TestSkill : Skill
     {
@@ -15,11 +18,14 @@ namespace Game.Characters
             End();
         }
 
-        public override void Use(Hero hero)
+        public override bool Use()
         {
-            base.Use(hero);
+            bool canUse = base.Use();
 
-            _TickCoroutine = target.StartCoroutine(Tick());
+            if(canUse)
+                _TickCoroutine = StartCoroutine(Tick());
+
+            return canUse;
         }
 
         public override void End()
@@ -27,7 +33,7 @@ namespace Game.Characters
             base.End();
 
             if(_TickCoroutine != null)
-                target.StopCoroutine(_TickCoroutine);
+                StopCoroutine(_TickCoroutine);
         }
     }
 }
