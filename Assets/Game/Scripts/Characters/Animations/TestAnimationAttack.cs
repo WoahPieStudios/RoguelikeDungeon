@@ -28,16 +28,11 @@ namespace Game.Characters.Animations
             _AnimationController.AddAnimation("Attack", _AnimationClip, End);
         }
 
-        public override bool CanUse()
+        public override bool Use()
         {
             _NearestCharacter = Utilities.GetNearestCharacter<Character>(transform.position, range, owner as Character);
 
-            return base.CanUse() && _NearestCharacter;
-        }
-
-        public override bool Use()
-        {
-            bool canUse = base.Use();
+            bool canUse = base.Use() && _NearestCharacter;
 
             if(canUse)
             {

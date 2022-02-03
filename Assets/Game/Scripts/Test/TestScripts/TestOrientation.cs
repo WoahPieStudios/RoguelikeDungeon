@@ -19,7 +19,7 @@ namespace Game.Characters.Actions
         {
             base.Awake();
 
-            ToggleAction(true);
+            Use();
             
             _SpriteRenderer = GetComponent<SpriteRenderer>();
         }

@@ -39,5 +39,12 @@ namespace Game.Characters.Actions
             else
                 End();
         }
+
+        public virtual bool Use()
+        {
+            Begin();
+
+            return isActive;
+        }
     }
 }

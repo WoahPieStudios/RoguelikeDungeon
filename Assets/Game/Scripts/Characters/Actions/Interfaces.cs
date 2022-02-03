@@ -53,14 +53,15 @@ namespace Game.Characters.Actions
         void RemoveTrackable(params ITrackableAction[] trackableActions);
     }
 
-    public interface IMovementAction : IActorAction, IToggleAction, IRestrictableAction
+    public interface IMovementAction : IActorAction, IUseAction, IRestrictableAction
     {
+        float speed { get; }
         Vector2 velocity { get; }
 
         bool Move(Vector2 direction);
     }
 
-    public interface IOrientationAction : IActorAction, IToggleAction, IRestrictableAction
+    public interface IOrientationAction : IActorAction, IUseAction, IRestrictableAction
     {
         Vector2Int currentOrientation { get; }
 
@@ -72,22 +73,12 @@ namespace Game.Characters.Actions
         bool Orientate(Vector2Int orientation);
     }
 
-    public interface IToggleAction : IActorAction
-    {
-        void ToggleAction(bool isActive);
-    }
-
-    public interface ICanUseAction : IActorAction
-    {
-        bool CanUse();
-    }
-
     public interface IUseAction : IActorAction
     {
         bool Use();
     }
 
-    public interface IAttackAction : ICoolDownAction, IUseAction, ICanUseAction
+    public interface IAttackAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
     {
         int damage { get; }
 
@@ -100,14 +91,16 @@ namespace Game.Characters.Actions
         /// Speed of the Attack. Honestly have no idea where this would fit.
         /// </summary>
         float speed { get; }
+
+        int manaGainOnHit { get; }
     }
 
-    public interface ISkillAction : ICoolDownAction, IUseAction, ICanUseAction
+    public interface ISkillAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
     {
 
     }
 
-    public interface IUltimateAction : ICoolDownAction, IUseAction, ICanUseAction
+    public interface IUltimateAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
     {
         int manaCost { get; }
     }

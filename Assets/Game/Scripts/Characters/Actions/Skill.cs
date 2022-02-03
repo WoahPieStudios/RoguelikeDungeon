@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Skill : CoolDownAction, ISkillAction, ITrackableAction, IRestrictableAction
+    public abstract class Skill : CoolDownAction, ISkillAction
     {
         bool _IsRestricted = false;
 
@@ -32,25 +32,14 @@ namespace Game.Characters.Actions
         /// <param name="hero">The Hero who will use the Skill</param>
         public virtual bool Use()
         {
-            bool canUse = CanUse();
+            bool canUse = !isActive && !isCoolingDown && !isRestricted;
 
             if(canUse)
                 Begin();
 
             return canUse;
         }
-
-        // To check if it can be used. VERY IMPORTANT. Actually everything is important. 
-        /// <summary>
-        /// Checks if the Skill can be used.
-        /// </summary>
-        /// <param name="hero">The Hero who will use the Skill</param>
-        /// <returns></returns>
-        public virtual bool CanUse()
-        {
-            return !isActive && !isCoolingDown && !isRestricted;
-        }
-
+        
         public void OnRestrict(RestrictActionType restrictActions)
         {
             _IsRestricted = restrictActions.HasFlag(RestrictActionType.Skill);

@@ -8,15 +8,15 @@ using Game.Characters.Properties;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Ultimate : CoolDownAction, IUltimateAction, ITrackableAction, IRestrictableAction
+    public abstract class Ultimate : CoolDownAction, IUltimateAction
     {
         [SerializeField]
         int _ManaCost;
-
+        
         bool _IsRestricted = false;
 
         /// <summary>
-        /// Mana cost of the Ultimate
+        /// Mana cost of the Ultimatex
         /// </summary>
         public int manaCost => _ManaCost;
 
@@ -35,7 +35,7 @@ namespace Game.Characters.Actions
 
             Mana mana = owner.GetProperty<Mana>();
 
-            mana.UseMana(_ManaCost);
+            mana.UseMana(manaCost);
 
             OnActionEvent(TrackActionType.Ultimate);
         }
@@ -46,25 +46,14 @@ namespace Game.Characters.Actions
         /// <param name="hero">The Hero who will use the Ultimate</param>
         public virtual bool Use()
         {
-            bool canUse = CanUse();
+            Mana mana = owner.GetProperty<Mana>();
+
+            bool canUse = !isRestricted && !isActive && mana.currentMana >= manaCost && !isCoolingDown;
 
             if(canUse)
                 Begin();
 
             return canUse;
-        }
-
-        // To check if it can be used. VERY IMPORTANT. Actually everything is important. 
-        /// <summary>
-        /// Checks if the ultimate can be used.
-        /// </summary>
-        /// <param name="hero">The Hero who will use the Ultimate</param>
-        /// <returns></returns>
-        public virtual bool CanUse()
-        {
-            Mana mana = owner.GetProperty<Mana>();
-
-            return !isRestricted && !isActive && mana.currentMana >= _ManaCost && !isCoolingDown;
         }
 
         public void OnRestrict(RestrictActionType restrictActions)
