@@ -14,8 +14,8 @@ namespace Game.Characters
     {
         IHealth health { get; }
 
-        public IMovementAction movement { get; }
-        public IOrientationAction orientation { get; }
+        IMovementAction movement { get; }
+        IOrientationAction orientation { get; }
     }
 
     public interface IHeroActor : ICharacterActor, ITrackableActionsHandler

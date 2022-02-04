@@ -21,8 +21,8 @@ namespace Game.Characters.Effects
         /// <summary>
         /// The one who sent the Effect.
         /// </summary>
-        public IEffectable sender { get; }
-        public IEffectable receiver { get; }
+        IEffectable sender { get; }
+        IEffectable receiver { get; }
 
         void StartEffect(IEffectable sender, IEffectable receiver);
         void End();
@@ -32,6 +32,7 @@ namespace Game.Characters.Effects
     {
         bool CanUse(Hero hero);
     }
+    
     public interface IActiveEffect : IEffect, IActionRestricter
     {
 

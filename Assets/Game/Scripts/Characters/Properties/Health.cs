@@ -27,11 +27,6 @@ namespace Game.Characters.Properties
         public bool isAlive => _CurrentHealth > 0;
 
         public IActor owner { get; set; }
-
-        public Health()
-        {
-            _CurrentHealth = _MaxHealth;
-        }
         
         /// <summary>
         /// Adds to the Health of the Character

@@ -2,7 +2,6 @@
 *May or may not reflect on the current set up of the Character System
 
 
-
 # Hero's Journey
 Don't be a Hero, create the hero. Doesn't make sense but after this... you still won't understand it. If you heard of this then you've heard the 3Cs.
 - Chance
@@ -64,7 +63,7 @@ public abstract class ActorAction : MonoBehaviour, IActorAction
     // Owner of the Action
     public virtual IActor owner { get; }
 
-    // Finds the owner in the game object.
+    // Finds the owner during the call of the Awake function in the game object.
     protected virtual void Awake();
 
     // Activates Action internally
@@ -78,46 +77,433 @@ public abstract class ActorAction : MonoBehaviour, IActorAction
 Admittedly he is empty, a mere skeleton to what he can be however with a solid foundation he can be something great. So to spice up his story, we add to him his Character. Nameless it he may be but it is a start to his story.
 
 ## Character
-As a Character, he can move around, look at any direction, and, of course, has health to add some drama. 
+As a Character, he can move around, look at any direction, and, of course, has health to add some drama. He is also affected by effects.
+
+``` c#
+public class Character : Actor, ICharacterActor
+{
+    public IHealth health { get; }
+
+    public IMovementAction movement { get; }
+
+    public IOrientationAction orientation { get; }
+
+    public RestrictActionType restrictedActions { get; }
+
+    public IEffect[] effects { get; }
+    public event Action<IEffect[]> onAddEffectsEvent;
+    public event Action<IEffect[]> onRemoveEffectsEvent;
+
+    public static Character[] characters { get; }
+    
+    // Adds the Health, Movement, Orientation to his properties, lists down the restrictable Actions and subscribes on Add/Remove effects
+    protected override void Awake();
+
+    public void AddEffects(IEffectable sender, params IEffect[] effects);
+
+    public void RemoveEffects(params IEffect[] effects);
+
+    public void AddRestrictable(params IRestrictableAction[] restrictableActions);
+
+    public void RemoveRestrictable(params IRestrictableAction[] restrictableActions);
+}
+```
 
 ### Actions
-He is given actions that give him simple actions that make him interesting ever so slightly however that little bit of detail will take him wonders, to experience the world and interact with it.
+He is given actions that give him simple actions that make him interesting ever so slightly however that little bit of detail will go a long way, to experience the world and interact with it.
 
-Restrictable Action
+To answer the question of how the Actor, as a Character, could use his Actions, here is the answer.
+
+``` c#
+public interface IUseAction : IActorAction
+{
+    bool Use();
+}
+``` 
+
+He now can simply `Use` it but there's a condition to it as some actions can be used in that moment and some can't for reasons that are yet to be defined.
+
+### Restrictable Action
+Actions are not all powerful. These actions can be restricted and stop the Actor from using it.
+
+``` c#
+ public interface IRestrictableAction : IActorAction
+{
+    bool isRestricted { get; }
+    void OnRestrict(RestrictActionType restrictActions);
+}
+```
+
+Being the character, the Actor will have to be the one that keeps track of it. It may not be fun for him however it makes him interesting and develops features that turn him into something more.
+
+``` c#
+public interface IRestrictableActionsHandler
+{
+    RestrictActionType restrictedActions { get; }
+    void AddRestrictable(params IRestrictableAction[] restrictableActions);
+    void RemoveRestrictable(params IRestrictableAction[] restrictableActions);
+}
+```
+
+The action could be stopped by effects or other things that may or may not be made onto the stage.
+
+``` c#
+public interface IActionRestricter
+{
+    RestrictActionType restrictAction { get; }
+}
+```
 
 #### Movement
+The Movement of the Character yet to be define as we are all unique and therefore many things could be done in different ways.
+
+``` c#
+public interface IMovementAction : IActorAction, IUseAction, IRestrictableAction
+{
+    float speed { get; }
+    Vector2 velocity { get; }
+
+    bool Move(Vector2 direction);
+}
+
+public abstract class Movement : ActorAction, IMovementAction
+{
+    public float speed { get; }
+
+    public abstract Vector2 velocity { get; }
+
+    public bool isRestricted { get; }
+
+    public virtual bool Move(Vector2 direction);
+
+    public virtual void OnRestrict(RestrictActionType restrictActions);
+
+    public virtual bool Use();
+}
+```
 
 #### Orientation
+Orientation is where the Actor will look, and how.
+
+``` c#
+public interface IOrientationAction : IActorAction, IUseAction, IRestrictableAction
+{
+    Vector2Int currentOrientation { get; }
+
+    bool Orientate(Vector2Int orientation);
+}
+
+
+public abstract class Orientation : ActorAction, IOrientationAction
+{
+    public bool isRestricted => _IsRestricted;
+
+    public abstract Vector2Int currentOrientation { get; }
+
+    public virtual bool Orientate(Vector2Int orientation);
+
+    public virtual void OnRestrict(RestrictActionType restrictActions);
+
+    public virtual bool Use();
+}
+```
 
 ### Property
+Now here we add the drama of it all, well sometimes.
 
 #### Health
+The Health is what makes the Actor, as the character, by definition alive. Without this, he is merely a walking corpse.
+
+``` c#
+public interface IHealth
+{
+    int maxHealth { get; }
+    int currentHealth { get; }
+    bool isAlive { get; }
+
+    event Action<IHealth, int> onAddHealthEvent;
+    event Action<IHealth, int> onDamageEvent;
+    event Action onKillEvent;
+    event Action onResetHealthEvent;
+
+    void AddHealth(int addHealth);
+
+    void Damage(int damage);
+    void Kill();
+    void ResetHealth();
+}
+
+public class Health : IHealth, IActorProperty
+{
+    public event Action<IHealth, int> onAddHealthEvent;
+    public event Action<IHealth, int> onDamageEvent;
+    public event Action onKillEvent;
+    public event Action onResetHealthEvent;
+
+    public int maxHealth { get; }
+    public int currentHealth { get; }
+    public bool isAlive { get; }
+    public IActor owner { get; set; }
+    
+    public void AddHealth(int addHealth);
+    public void Damage(int damage);
+    public void Kill();
+    public void ResetHealth();
+}
+```
 
 ### Effectable
 This world is not so kind. He also has to be careful he is also susceptible to effects that may come his way. There are effects that may empower him or restrain him to other Characters in this story.
 
+``` c#
+public interface IEffectable
+{
+    IEffect[] effects { get; }
+    event Action<IEffect[]> onAddEffectsEvent;
+    event Action<IEffect[]> onRemoveEffectsEvent;
+    void AddEffects(IEffectable sender, params IEffect[] effects);
+    void RemoveEffects(params IEffect[] effects);
+}
+```
+
+### Effects
+The things the Actor has too think of too are the effects. They may come from actions or things around them but are yet be known.
+
+The effects are first and foremost can be copied from each other. They can multiply and clone from each other but are all one and the same by their instance.
+
+``` c#
+public interface ICloneable
+{
+    int instanceId { get; }
+    bool isClone { get; }
+    T CreateClone<T>() where T : ICloneable;
+}
+```
+
+The effects that are constant with each other, besides them being clones, are that there's always a sender, who/what sent that effect and the receiver, who/what receives that effect. It can also start their start and end by the time it receives to their receivers. 
+
+``` c#
+public interface IEffect : ICloneable
+{
+    IEffectable sender { get; }
+    IEffectable receiver { get; }
+
+    void StartEffect(IEffectable sender, IEffectable receiver);
+    void End();
+}
+
+public abstract class Effect : MonoBehaviour, IEffect
+{s
+    public IEffectable sender => _Sender;
+    public IEffectable receiver => _Receiver;
+    public bool isClone => _IsClone;
+    public int instanceId => _InstanceId;
+
+    public virtual void StartEffect(IEffectable sender, IEffectable receiver);
+
+    public abstract void End();
+
+    public T CreateClone<T>() where T : ICloneable;
+}
+```
+
+In this world, there are 2 kind of effects. The Active Effect and Passive Effect.
+
+### Active Effects
+Active effects are for all the Characters in this world, or until another being shows into the stage. They can restrict you but some may not. It can be used for evil purposes while others for good. It is a mere tool, and as such be defined by whoever or whatever uses them.
+
+``` c#
+public interface IActionRestricter
+{
+    RestrictActionType restrictAction { get; }
+}
+
+public interface IActiveEffect : IEffect, IActionRestricter
+{
+
+}
+
+public abstract class ActiveEffect : Effect, IActiveEffect
+{
+    public RestrictActionType restrictAction { get; }
+
+    public override void End();
+}
+```
+
+### Passive Effects
+The passive effects are for the Heroes of this stage. They have eyes that track their actions and do according to their will.
+
+``` c#
+public interface IActionTracker
+{
+    TrackActionType trackAction { get; }
+}
+
+public interface IPassiveEffect : IEffect, IActionTracker
+{
+    bool CanUse(Hero hero);
+}
+
+public abstract class PassiveEffect : Effect, IPassiveEffect
+{
+    public TrackActionType trackAction { get; }
+
+    public abstract bool CanUse(Hero hero);
+    
+    public override void End();
+}
+```
 
 ## Hero
-- In this current world, there are only Heroes and enemies. There are 
-- A hero is a Character that has Mana, Skill, Ultimate and Passive Effects. 
-- Create a game object
-- add the hero class (you can use the test hero class for inputs)
+In this current world, there are only Heroes and enemies. Heroes that stand up against the enemies. The enemies are unkown as this stage has only begun. A hero is a Character that has Mana, Attack, Skill, Ultimate and Passive Effects. 
 
-### Action
+### Cool Down Action
+Actions such as  Attack, Skill, Ultimate may be too powerful for the stage as such requires a bit of time before being used. 
+
+``` c#
+public interface ICoolDownAction : IActorAction
+{
+    float coolDownTime { get; }
+    float currentCoolDownTime { get; }
+    bool isCoolingDown { get; }
+
+    void StartCoolDown();
+    void StopCoolDown();
+}
+
+public abstract class CoolDownAction : ActorAction, ICoolDownAction
+{
+    public float coolDownTime { get; }
+    
+    public float currentCoolDownTime { get; }
+
+    public bool isCoolingDown { get; }
+
+    protected virtual IEnumerator CoolDown();
+
+    public override void End();
+
+    public virtual void StartCoolDown();
+
+    public virtual void StopCoolDown();
+}
+```
+
+### Trackable Action
+Before talking about the exciting actions the Hero has, we must talk about why it is also tracked. Surprised? I'm guessing you're not but let my bravado fly. The actions are tracked so the Hero's passive effects will move according to their will. They are what helps these effects tell that they are doing something and tells them that its interesting. Enticing them.
+
+``` c#
+public interface ITrackableAction : IActorAction
+{
+    event System.Action<TrackActionType> onActionEvent;
+}
+```
 
 #### Attack
-public interface IAttackAction : ICoolDownAction, IUseAction, ICanUseAction
+The attack of a Hero is powerful however it is a blank slate as like the skill and ultimate. It has the damage, the range, the speed, the Mana gain on hit (that I have no idea where to put) but all are mere floating items in a vaccum of space. Until the spark can expand the its features until it is someting to marvel at.
+
+``` c#
+public interface IAttackAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
 {
     int damage { get; }
     float range { get; }
     float speed { get; }
+    int manaGainOnHit { get; }
 }
 
-#### Skill
-#### Ultimate
+public abstract class Attack : CoolDownAction, IAttackAction
+{
+    public int damage => _Damage;
+    public float range => _Range;
+    public float speed => _Speed;
+    public int manaGainOnHit => _ManaGainOnHit;
+    public bool isRestricted => _IsRestricted;
 
+    public event Action<TrackActionType> onActionEvent;
+
+    protected virtual void OnActionEvent(TrackActionType trackAction);
+    protected override void Begin();
+
+    public virtual bool Use();
+    public void OnRestrict(RestrictActionType restrictActions);
+}
+```
+
+#### Skill
+The skill helps the Actor a bit more through the journey he has to face. The attack is powerful but it has its limits. The skill helps bridge the gap between it and the last action the Actor, as a hero, in its arsenal.
+
+``` c#
+public interface ISkillAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
+{
+
+}
+
+public abstract class Skill : CoolDownAction, ISkillAction
+{
+    bool _IsRestricted = false;
+
+    public bool isRestricted => _IsRestricted;
+
+    public event Action<TrackActionType> onActionEvent;
+
+    protected virtual void OnActionEvent(TrackActionType trackAction);
+    protected override void Begin();
+
+    public virtual bool Use();
+    public void OnRestrict(RestrictActionType restrictActions);
+}
+```
+
+#### Ultimate
+The Ultimate, in the arsenal of actions the Hero has, is the most powerful of all but it wouldn't be interesting if there were no drawbacks. The cost of using this action is `Mana`. The mana is the source of power in this stage but has only limited uses. One of it is the Ultimate.
+
+``` c#
+public interface IUltimateAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
+{
+    int manaCost { get; }
+}
+```
 ### Property
+Lastly, to add to the property that makes the Hero attractive to the actor to play as is Mana.
+
 #### Mana
+The power of Mana, in the palm of his hand or so a quote tells. 
+
+``` c#
+public interface IMana
+{ 
+    int maxMana { get; }
+    int currentMana { get; }
+
+    event Action<IMana, int> onUseManaEvent;
+    event Action<IMana, int> onAddManaEvent;
+    event Action onDrainManaEvent;
+    event Action onResetManaEvent;
+
+    void AddMana(int mana);
+    void UseMana(int mana);
+    void ResetMana();
+    void DrainMana();
+}
+
+public class Mana : IMana, IActorProperty
+{
+    public event Action<IMana, int> onUseManaEvent;
+    public event Action<IMana, int> onAddManaEvent;
+    public event Action onDrainManaEvent;
+    public event Action onResetManaEvent;
+
+    public int maxMana => _MaxMana;
+    public int currentMana => _CurrentMana;
+    public IActor owner { get; set; }
+
+    public void AddMana(int mana);
+    public void UseMana(int mana);
+    public void ResetMana();
+    public void DrainMana();
+}
+```
 
 # Gearing Up
 The question remains who the hero is that the Actor is going to play as. We don't know and neither does he. The Hero is made not born. As such he will change throughout this story.
@@ -139,9 +525,9 @@ Of course, set up the Max Health and Mana. The Current Health/Mana are just for 
 Passive Effects are automatically tracking actions and are processed so you only have to reference, at least, 1 in the list but don't leave it as empty. 
 
 ## Action
-These are the classic Actions of any character. These actions are UseActions and RestrictableAction. 
+These are the classic Actions of any character. These actions are `IUseActions` and `IRestrictableAction`. 
 
-The Use part usually should be called in the awake function, unless there’s it's going be called remotely, to activate them though do call the base.Awake() function. 
+The Use part usually should be called in the awake function, unless it's going be called remotely, so invoke them in the `base.Awake()` function. 
 
 ``` c#
 protected override void Awake()
@@ -152,10 +538,11 @@ protected override void Awake()
 }
 ```
 
-The Restrictable part is already being handled so you don’t have to worry about it. 
+The Restrictable part is already being handled so you don’t have to worry about it. Just check if it is restricted or not using the `isRestricted` property
+
 
 ## Movement
-The Movement Class requires 2 properties that need to be defined. The moveSpeed and velocity.
+The Movement Class requires 1 properties that need to be defined and its the `velocity`.
 
 ``` c#
 public class test : Movement
@@ -164,7 +551,7 @@ public class test : Movement
 }
 ```
 
-I left it like that to be customizable to your needs. Where do I use it? I don’t know either XD But I know we’ll need it somewhere soon and Juwan said it so yeah.
+I left it like that to be customizable to your needs. Where do I use it? I don’t know either XD 
 
 Now, of course, how do we determine where we want to go and how fast we are going?
 
@@ -182,7 +569,7 @@ public class Movement : ...
 }
 ```
 
-For the Direction, you need to override the Move Function however you need to keep track of “isActive” and “isRestricted” as the movement inherits from the ActorAction and IRestrainableAction.
+For the Direction, you need to override the Move Function however you need to keep track of `isActive` and `isRestricted` as the movement inherits from the `ActorAction` and `IRestrainableAction`.
 
 ``` c#
 public override bool Move(Vector2 direction)
@@ -196,7 +583,7 @@ public override bool Move(Vector2 direction)
 }
 ```
 
-Those are the 2 things you need to get the velocity. Now you can create a Fixed Update function and put everything in there. 
+Those are the 2 things you need to get the velocity. Now you can create a `FixedUpdate` function and put everything in there. 
 
 ``` c#
 public class Test : Movement
@@ -236,16 +623,17 @@ public class Test : Movement
 ```
 
 ## Orientation
-Like the Movement Action, the process is similar. So first you’ll need to define the currentOrientation.
+Like the Movement Action, the process is similar. So first you’ll need to define the `currentOrientation`.
 
 ``` c#
 public class Test : Orientation
 {
-    public override Vector2Int currentOrientation => throw new System.NotImplementedException();
+    Vector2Int _CurrentOrientation;
+    public override Vector2Int currentOrientation => _CurrentOrientation;
 }
 ```
 
-Afterwards, override the Orientate function to get the orientation the player wants.
+Afterwards, override the `Orientate` function to get the orientation the player wants.
 
 ``` c#
 public override bool Orientate(Vector2Int orientation)
@@ -258,7 +646,7 @@ public override bool Orientate(Vector2Int orientation)
     return canOrientate;
 }
 ```
-Of course since our game is a 2D Game and turning is instantaneous (so far) as we just flip the sprite, we need to reference the Sprite Renderer. In our Orientate(...) function, we can do our flipping there.
+Of course since our game is a 2D Game and turning is instantaneous (so far) as we just flip the sprite, we need to reference the `Sprite Renderer`. In our `Orientate(...)` function, we can do our flipping there.
 
 ``` c#
 [RequireComponent(typeof(SpriteRenderer))]
@@ -296,7 +684,7 @@ public class Test : Orientation
 ```
 
 ## Cool Down Action
-We now deal with the weird ones. Now these actions have cooldowns so by default (my setup) the cooldown starts automatically whenever the End() function is called. As the "Cool Down Action" you need to input the time for cooldown.
+We now deal with the weird ones. Now these actions have cooldowns so by default (my setup) the cooldown starts automatically whenever the `End()` function is called. As the "Cool Down Action" you need to input the time for cooldown.
 
 ![picture 5](Images/7b3c95f106c76ae278c983dd7e22bf35c052cd91af44f7336c3764b973eadb1c.png)  
 
@@ -324,7 +712,7 @@ public static class MethodExtensions
 }
 ```
 
-Lastly, you have to access these actions’ character. If you inherited from my scripts as well as the Hero and don’t forget to add the component into the same game object as the Hero script. You can simply call “owner” to get the reference of your character though you will have to cast him.
+Lastly, you have to access these actions’ character. If you inherited from my scripts as well as the Hero and don’t forget to add the component into the same game object as the Hero script. You can simply call `owner` to get the reference of your character though you will have to cast him.
 
 ``` c#
 Hero _Hero;
@@ -338,13 +726,13 @@ protected override void Awake()
 ```
 
 ## Attack
-Firstly, of course, inherit from the Attack class. The attack's damage, range, speed and manaGainOnHit(?) is already laid out and can be accessed through the prepared properties
+Firstly, of course, inherit from the Attack class. The attack's `damage`, `range`, `speed` and `manaGainOnHit`(?) is already laid out and can be accessed through the prepared properties
 
 ![picture 7](Images/fa4334dbc0d9a7de63857b7dadd6fcc53f835d0ee08f63ca20edb698d51f0793.png)  
 
 >Note: You have to use them for it be of use.
 
-Afterwards, we’re going to use the Base.Use() function to get the result opposite of isActive and isRestricted as well as active the action if ever it returns true. 
+Afterwards, we’re going to use the `Base.Use()` function to get the result opposite of `isActive` and `isRestricted` as well as active the action if ever it returns true. 
 
 Now use the result and reference it in a bool variable. Check if it is true and now you can add your code. In this example I’m going to start a coroutine.
 
@@ -379,7 +767,7 @@ public class Test : Attack
 }
 ```
 
-If you’ll notice, I called the end function. You will have to call when the attack ends as normally nothing can remotely end an action unless in certain situations. So you have to consider those situations.
+If you’ll notice, I called the `End` function. You will have to call when the attack ends as normally nothing can remotely end an action unless in certain situations. So you have to consider those situations.
 
 ``` c#
 public class Test : Attack
@@ -425,7 +813,7 @@ public class Test : Attack
 ## Skill
 The process of setting up the skill script is also similar to the attack script. Actually all 3 of them are similar.
 
-So yeah, set up the Use function, where your Skill ends and you’ve done it!
+So yeah, set up the `Use` function, where your Skill ends and you’ve done it!
 
 ``` c#
 public class Test : Skill
@@ -550,8 +938,12 @@ IEnumerator Tick()
 
     enemy.health.Damage(damage); // Based on Attack but I hope you get the point of it. 
 
+    _Hero.mana.AddMana(manaGainOnHit);
+
     End();
 }
 ```
+
+## Passive Effects
 
 Obviously, this is super simple and may not be of any use but its the concept that matters. Afterall, I have no idea what abilities/sequences/etc are going to be made so this is mostly a framework if you will. A relatively large framework. So yeah, cheers and do ask me if you have any questions (I know there will be afterall I suck at explaining and btw this document took a week to be made and I'm not even done writing this [at the time of writing])
