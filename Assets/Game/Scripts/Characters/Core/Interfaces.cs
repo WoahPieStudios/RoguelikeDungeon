@@ -10,7 +10,7 @@ using Game.Characters.Properties;
 
 namespace Game.Characters
 {
-    public interface ICharacterActor : IActor, IEffectable, IRestrictableActionsHandler
+    public interface ICharacterActor : IActor, IEffectable, IRestrictableActionsHandler, IPriorityActionsHandler
     {
         IHealth health { get; }
 

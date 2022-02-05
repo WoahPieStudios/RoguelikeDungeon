@@ -23,7 +23,10 @@ namespace Game.Characters
         IMovementAction _Movement;
         IOrientationAction _Orientation;
 
+        IPriorityAction _CurrentPriorityAction;
+
         List<IRestrictableAction> _RestrictableActionsList = new List<IRestrictableAction>();
+        List<IPriorityAction> _PriorityActionList = new List<IPriorityAction>();
 
         public IHealth health => _Health;
 
@@ -32,6 +35,9 @@ namespace Game.Characters
 
         public RestrictActionType restrictedActions => _RestrictedActions;
         public IEffect[] effects => _EffectsHandler.effects;
+
+        public IPriorityAction currentPriorityAction => _CurrentPriorityAction;
+        public IPriorityAction[] priorityActions => _PriorityActionList.ToArray();
 
         public event Action<IEffect[]> onAddEffectsEvent;
         public event Action<IEffect[]> onRemoveEffectsEvent;
@@ -54,7 +60,7 @@ namespace Game.Characters
 
             AddProperty(_Health);
 
-            AddRestrictable(GetProperties<IRestrictableAction>());
+            AddRestrictableAction(GetProperties<IRestrictableAction>());
 
             _EffectsHandler.onAddEffectsEvent += OnAddEffects;
             _EffectsHandler.onRemoveEffectsEvent += OnRemoveEffects;
@@ -63,6 +69,14 @@ namespace Game.Characters
         protected virtual void OnDestroy() 
         {
             _CharacterList.Remove(this);
+        }
+
+        void OnUsePriorityAction(IPriorityAction priorityAction)
+        {
+            if(currentPriorityAction != null)
+                currentPriorityAction.End();
+
+            _CurrentPriorityAction = priorityAction;
         }
 
         void GetRestrainedActions(IEffect[] effects)
@@ -105,6 +119,36 @@ namespace Game.Characters
                 restrictable.OnRestrict(restrictedActions);
         }
 
+        protected void AddPriorityAction(params IPriorityAction[] priorityActions)
+        {
+            foreach(IPriorityAction priorityAction in priorityActions.Where(p => !_PriorityActionList.Contains(p)))
+            {
+                priorityAction.onUseAction += OnUsePriorityAction;
+
+                _PriorityActionList.Add(priorityAction);
+            }
+        }
+
+        protected void RemovePriorityAction(params IPriorityAction[] priorityActions)
+        {
+            foreach(IPriorityAction priorityAction in priorityActions.Where(p => _PriorityActionList.Contains(p)))
+            {
+                priorityAction.onUseAction -= OnUsePriorityAction;
+
+                _PriorityActionList.Remove(priorityAction);
+            }
+        }
+
+        protected void AddRestrictableAction(params IRestrictableAction[] restrictableActions)
+        {
+            _RestrictableActionsList.AddRange(restrictableActions.Where(a => !_RestrictableActionsList.Contains(a)));
+        }
+
+        protected void RemoveRestrictableAction(params IRestrictableAction[] restrictableActions)
+        {
+            _RestrictableActionsList.RemoveAll(r => restrictableActions.Contains(r));
+        }
+
         public void AddEffects(IEffectable sender, params IEffect[] effects)
         {
             _EffectsHandler.AddEffects(sender, this, effects);
@@ -113,16 +157,6 @@ namespace Game.Characters
         public void RemoveEffects(params IEffect[] effects)
         {
             _EffectsHandler.RemoveEffects(effects);
-        }
-
-        public void AddRestrictable(params IRestrictableAction[] restrictableActions)
-        {
-            _RestrictableActionsList.AddRange(restrictableActions.Where(a => !_RestrictableActionsList.Contains(a)));
-        }
-
-        public void RemoveRestrictable(params IRestrictableAction[] restrictableActions)
-        {
-            _RestrictableActionsList.RemoveAll(a => restrictableActions.Contains(a));
         }
     }
 }

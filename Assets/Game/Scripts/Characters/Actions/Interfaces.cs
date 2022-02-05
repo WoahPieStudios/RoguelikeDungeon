@@ -35,22 +35,18 @@ namespace Game.Characters.Actions
 
     public interface ITrackableAction : IActorAction
     {
-        event System.Action<TrackActionType> onActionEvent;
+        event System.Action<TrackActionType> onUseTrackableAction;
     }
 
     public interface IRestrictableActionsHandler
     {
         RestrictActionType restrictedActions { get; }
-        void AddRestrictable(params IRestrictableAction[] restrictableActions);
-        void RemoveRestrictable(params IRestrictableAction[] restrictableActions);
     }
 
     public interface ITrackableActionsHandler
     {
         TrackActionType trackedActions { get; }
         ITrackableAction[] trackableActions { get; }
-        void AddTrackable(params ITrackableAction[] trackableActions);
-        void RemoveTrackable(params ITrackableAction[] trackableActions);
     }
 
     public interface IMovementAction : IActorAction, IUseAction, IRestrictableAction
@@ -78,7 +74,18 @@ namespace Game.Characters.Actions
         bool Use();
     }
 
-    public interface IAttackAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
+    public interface IPriorityActionsHandler
+    {
+        IPriorityAction currentPriorityAction { get; }
+        IPriorityAction[] priorityActions { get; }
+    }
+
+    public interface IPriorityAction : IActorAction
+    {
+        event System.Action<IPriorityAction> onUsePriorityAction;
+    }
+
+    public interface IAttackAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction, IPriorityAction
     {
         int damage { get; }
 
@@ -95,12 +102,12 @@ namespace Game.Characters.Actions
         int manaGainOnHit { get; }
     }
 
-    public interface ISkillAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
+    public interface ISkillAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction, IPriorityAction
     {
 
     }
 
-    public interface IUltimateAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
+    public interface IUltimateAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction, IPriorityAction
     {
         int manaCost { get; }
     }

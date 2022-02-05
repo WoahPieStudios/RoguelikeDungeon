@@ -22,12 +22,8 @@ namespace Game.Characters.Actions
 
         public bool isRestricted => _IsRestricted;
 
-        public event Action<TrackActionType> onActionEvent;
-
-        protected virtual void OnActionEvent(TrackActionType trackAction)
-        {
-            onActionEvent?.Invoke(trackAction);
-        }
+        public event Action<TrackActionType> onUseTrackableAction;
+        public event Action<IPriorityAction> onUsePriorityAction;
 
         protected override void Begin()
         {
@@ -37,7 +33,9 @@ namespace Game.Characters.Actions
 
             mana.UseMana(manaCost);
 
-            OnActionEvent(TrackActionType.Ultimate);
+            onUseTrackableAction?.Invoke(TrackActionType.Ultimate);
+
+            onUsePriorityAction?.Invoke(this);
         }
 
         /// <summary>

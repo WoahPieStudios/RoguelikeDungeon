@@ -12,18 +12,21 @@ namespace Game.Characters.Actions
 
         public bool isRestricted => _IsRestricted;
 
-        public event Action<TrackActionType> onActionEvent;
+        public event Action<TrackActionType> onUseTrackableAction;
+        public event Action<IPriorityAction> onUsePriorityAction;
 
         protected virtual void OnActionEvent(TrackActionType trackAction)
         {
-            onActionEvent?.Invoke(trackAction);
+            onUseTrackableAction?.Invoke(trackAction);
         }
 
         protected override void Begin()
         {
             base.Begin();
+            
+            onUseTrackableAction?.Invoke(TrackActionType.Skill);
 
-            OnActionEvent(TrackActionType.Skill);
+            onUsePriorityAction?.Invoke(this);
         }
 
         /// <summary>

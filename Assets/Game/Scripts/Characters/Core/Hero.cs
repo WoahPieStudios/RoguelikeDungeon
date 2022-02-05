@@ -62,6 +62,26 @@ namespace Game.Characters
 
             AddTrackable(GetProperties<ITrackableAction>());
         }
+
+        void AddTrackable(params ITrackableAction[] trackables)
+        {
+            foreach(ITrackableAction trackable in trackables.Where(t => !_TrackableActionList.Contains(t)))
+            {
+                trackable.onActionEvent += OnActionTracked;
+
+                _TrackableActionList.Add(trackable);
+            }
+        }
+
+        void RemoveTrackable(params ITrackableAction[] trackables)
+        {
+            foreach(ITrackableAction trackable in trackables.Where(t => _TrackableActionList.Contains(t)))
+            {
+                trackable.onActionEvent -= OnActionTracked;
+
+                _TrackableActionList.Remove(trackable);
+            }
+        }
     
         void SegregatePassiveEffects(IEnumerable<PassiveEffect> passiveEffects)
         {
@@ -93,26 +113,6 @@ namespace Game.Characters
 
                     return;
                 }
-            }
-        }
-
-        public void AddTrackable(params ITrackableAction[] trackables)
-        {
-            foreach(ITrackableAction trackable in trackables.Where(t => !_TrackableActionList.Contains(t)))
-            {
-                trackable.onActionEvent += OnActionTracked;
-
-                _TrackableActionList.Add(trackable);
-            }
-        }
-
-        public void RemoveTrackable(params ITrackableAction[] trackables)
-        {
-            foreach(ITrackableAction trackable in trackables.Where(t => _TrackableActionList.Contains(t)))
-            {
-                trackable.onActionEvent -= OnActionTracked;
-
-                _TrackableActionList.Remove(trackable);
             }
         }
     }
