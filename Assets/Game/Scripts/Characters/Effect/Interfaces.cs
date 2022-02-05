@@ -30,7 +30,7 @@ namespace Game.Characters.Effects
 
     public interface IPassiveEffect : IEffect, IActionTracker
     {
-        bool CanUse(Hero hero);
+        
     }
     
     public interface IActiveEffect : IEffect, IActionRestricter

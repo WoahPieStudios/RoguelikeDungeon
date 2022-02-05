@@ -307,6 +307,15 @@ public abstract class Effect : MonoBehaviour, IEffect
 }
 ```
 
+As Effects can be clones, there is also the option of stacking them.
+
+``` c#
+public interface IStackableEffect : IEffect
+{
+    void Stack(params IEffect[] effects);
+}
+```
+
 In this world, there are 2 kind of effects. The Active Effect and Passive Effect.
 
 ### Active Effects
@@ -732,7 +741,7 @@ Firstly, of course, inherit from the Attack class. The attack's `damage`, `range
 
 >Note: You have to use them for it be of use.
 
-Afterwards, we’re going to use the `Base.Use()` function to get the result opposite of `isActive` and `isRestricted` as well as active the action if ever it returns true. 
+Afterwards, we’re going to use the `Base.Use()` function to activate the behind the scenes stuff like the tracking of the action.
 
 Now use the result and reference it in a bool variable. Check if it is true and now you can add your code. In this example I’m going to start a coroutine.
 
@@ -757,7 +766,7 @@ public class Test : Attack
 
     public override bool Use()
     {
-        bool canUse = base.Use(); // This time do use it since I also active the attack behind the scenes;
+        bool canUse = base.Use();
 
         if(canUse)
             StartCoroutine(End());
@@ -861,12 +870,12 @@ Now the Ultimate... Dun dun dun... Well still the same honestly except you have 
 
 ![picture 8](Images/ea5850a6b7d2e02fa2b84eea33dbbd2ebaec2ecaea7ba808ed7ff40f920f5c78.png)  
 
-With that, I literally copy the skill script, just like I copy pasted the attack script, edit a little bit and done BUT WAIT, we have to adjust the Use function to check if the hero has enough mana and to use it if he has!
+With that, I literally copy the skill script, just like I copy pasted the attack script, edit a little bit and done. You might be asking if we should add if the Hero has Mana and you would be right. Do not worry as it is already set.
 
 ``` c#
 public override bool Use()
 {
-    bool canUse = _Hero.mana.currentMana >= manaCost && base.Use(); // I check first if he has enough mana since if it returns false, the base.Use() won't be called
+    bool canUse = base.Use(); // I check first if he has enough mana since if it returns false, the base.Use() won't be called
 
     if(canUse)
     {
@@ -902,7 +911,7 @@ public class Test : Ultimate
 
     public override bool Use()
     {
-        bool canUse = _Hero.mana.currentMana >= manaCost && base.Use(); // I check first if he has enough mana since if it returns false, the base.Use() won't be called
+        bool canUse = base.Use();
 
         if(canUse)
         {
@@ -944,6 +953,63 @@ IEnumerator Tick()
 }
 ```
 
-## Passive Effects
-
 Obviously, this is super simple and may not be of any use but its the concept that matters. Afterall, I have no idea what abilities/sequences/etc are going to be made so this is mostly a framework if you will. A relatively large framework. So yeah, cheers and do ask me if you have any questions (I know there will be afterall I suck at explaining and btw this document took a week to be made and I'm not even done writing this [at the time of writing])
+
+## Effects
+Fuck I forgot to write this part. Anyways The effects are designed to be things that affect the other characters without it being in direct reference to it. This time they are now prefabs instead of Scriptable Objects.
+
+![](Images/6fc92d26629de42b839a5d0fcc4fc80e4844d948daea7aba262875fa85f6396e.gif)  
+
+### Active Effects
+To create an Active Effect, simply first inherit it and... nothing. There is nothing currently to define so that's good~
+
+``` c#
+public class Test : ActiveEffect
+{
+    
+}
+```
+
+Of course, we have functions to tell when the effect has started and has ended.
+
+``` c#
+public override void StartEffect(IEffectable sender, IEffectable receiver)
+{
+    base.StartEffect(sender, receiver);
+}
+
+public override void End()
+{
+    base.End();
+}
+```
+
+It is important that you keep the `base` functions. The start effect base function sets up the sender and receiver properties while the end is already set up to remove itself from the receiver. 
+
+The `IEffectable` interface variables in the StartEffect function is currently the characters so you can cast them as such to access them.  
+
+## Passive Effects
+Passive effects are for the Heroes. The difference from the Active Effect from this one is that it tracks the actions of the Hero (Attack, Skill, and Ultimate). But its now(and I mean literally I just changed something) just the same as the Active Effect.
+
+``` c#
+public class Test : PassiveEffect
+{
+    public override void StartEffect(IEffectable sender, IEffectable receiver)
+    {
+        base.StartEffect(sender, receiver);
+    }
+
+    public override void End()
+    {
+        base.End();
+    }
+}
+```
+
+The difference visually is how it shows in the inspector.
+
+![picture 2](Images/0bd71f7a94cc6b519461ed4a0c927fbd6f7039c77813e8fa57aaeb17cfadf506.png)  
+
+![picture 3](Images/84bb9de2552ec9eab739afa2aca6401e725fde3824b59630a078e4b697bafa91.png)  
+
+>Note: Ignore the Active Effect field.

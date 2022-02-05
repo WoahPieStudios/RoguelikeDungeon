@@ -16,11 +16,6 @@ namespace Game.Characters.Effects
         /// Flags the Actions of the Hero to be tracked.
         /// </summary>
         public TrackActionType trackAction => _TrackAction;
-
-        /// <summary>
-        /// Checks if the passive effect can be used.
-        /// </summary>
-        public abstract bool CanUse(Hero hero);
         
         /// <summary>
         /// Ends Passive Effect.
