@@ -89,7 +89,7 @@ namespace Game.Characters
                     PassiveEffect[] passiveEffects = _TrackActionPassiveEffects[trackAction];
 
                     if(passiveEffects.Any())
-                        AddEffects(this, passiveEffects.Where(p => p.CanUse(this)).ToArray());
+                        AddEffects(this, passiveEffects);
 
                     return;
                 }
