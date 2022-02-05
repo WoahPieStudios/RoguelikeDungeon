@@ -56,17 +56,11 @@ namespace Game.Heroes.Magician
             End();
         }
 
-        public override bool CanUse()
-        {
-
-            _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, _FindingRange);
-
-            return base.CanUse() && _ClosestEnemy;
-        }
-
         public override bool Use()
         {
-            bool canUse = base.Use();
+            _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, _FindingRange);
+
+            bool canUse = !isActive && !isRestricted && (owner as Hero).mana.currentMana >= manaCost && _ClosestEnemy;
 
             if(canUse)
             {

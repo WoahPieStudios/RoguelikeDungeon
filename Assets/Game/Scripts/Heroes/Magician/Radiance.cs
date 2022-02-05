@@ -65,16 +65,11 @@ namespace Game.Heroes.Magician
             End();
         }
 
-        public override bool CanUse()
+        public override bool Use()
         {
             _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, _FindingRange);
 
-            return base.CanUse() && _ClosestEnemy;
-        }
-
-        public override bool Use()
-        {
-            bool canUse = base.Use();
+            bool canUse = !isActive && !isRestricted && _ClosestEnemy;
 
             if(canUse)
             {

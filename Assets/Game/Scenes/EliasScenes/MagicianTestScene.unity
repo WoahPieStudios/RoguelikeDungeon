@@ -1043,6 +1043,7 @@ MonoBehaviour:
   _Damage: 0
   _Range: 10
   _Speed: 0
+  _ManaGainOnHit: 0
   _Knockback: {fileID: 2129709150088808372, guid: 0be26bb9c5ff1784f9a6f5b8a20ea2d2, type: 3}
   _LightRay: {fileID: 2067724370}
   _FadeInTime: 0.001
@@ -1071,7 +1072,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd966a68144f354f9c4c1a94343f4fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _MoveSpeed: 5
+  _Speed: 5
   _LerpTime: 0.5
 --- !u!114 &1739015356
 MonoBehaviour:
