@@ -526,7 +526,7 @@ First Create a Gameobject and then add your Hero Class.
 
 The Hero Class is already set up with the systems created for it so you can plug it in unless you want some features for your specific Hero (But you have to read the Hero’s Journey to understand what their foundations are). I recommend adding the Test Hero Class because it already has inputs already made into it (WASD, U, I, O).
 
-![](./Images/569ce6a2c73a5064183445a8a8ee9665fa0b2f61c9725ebe34e2738038af4002.png)  
+![](../Images/569ce6a2c73a5064183445a8a8ee9665fa0b2f61c9725ebe34e2738038af4002.png)  
 
 
 Of course, set up the Max Health and Mana. The Current Health/Mana are just for debugging purposes. They are set to max health on Awake.
@@ -566,7 +566,7 @@ Now, of course, how do we determine where we want to go and how fast we are goin
 
 For the speed, you can use the speed property I already set. It is serialized in the base class.
 
-![picture 6](./Images/1e03b6f4309204630c3bdde0c590e1c253dd72f422897f2627d0a523be554edd.png)  
+![picture 6](../Images/1e03b6f4309204630c3bdde0c590e1c253dd72f422897f2627d0a523be554edd.png)  
 
 ``` c#
 public class Movement : ...
@@ -695,7 +695,7 @@ public class Test : Orientation
 ## Cool Down Action
 We now deal with the weird ones. Now these actions have cooldowns so by default (my setup) the cooldown starts automatically whenever the `End()` function is called. As the "Cool Down Action" you need to input the time for cooldown.
 
-![picture 5](./Images/7b3c95f106c76ae278c983dd7e22bf35c052cd91af44f7336c3764b973eadb1c.png)  
+![picture 5](../Images/7b3c95f106c76ae278c983dd7e22bf35c052cd91af44f7336c3764b973eadb1c.png)  
 
 Of course, we use these actions to affect other Characters so I made some utilities and method extensions to help you with getting the characters (assuming everything was inheriting from my scripts).
 
@@ -737,7 +737,7 @@ protected override void Awake()
 ## Attack
 Firstly, of course, inherit from the Attack class. The attack's `damage`, `range`, `speed` and `manaGainOnHit`(?) is already laid out and can be accessed through the prepared properties
 
-![picture 7](./Images/fa4334dbc0d9a7de63857b7dadd6fcc53f835d0ee08f63ca20edb698d51f0793.png)  
+![picture 7](../Images/fa4334dbc0d9a7de63857b7dadd6fcc53f835d0ee08f63ca20edb698d51f0793.png)  
 
 >Note: You have to use them for it be of use.
 
@@ -868,7 +868,7 @@ public class Test : Skill
 ## Ultimate
 Now the Ultimate... Dun dun dun... Well still the same honestly except you have to input the Mana cost.
 
-![picture 8](./Images/ea5850a6b7d2e02fa2b84eea33dbbd2ebaec2ecaea7ba808ed7ff40f920f5c78.png)  
+![picture 8](../Images/ea5850a6b7d2e02fa2b84eea33dbbd2ebaec2ecaea7ba808ed7ff40f920f5c78.png)  
 
 With that, I literally copy the skill script, just like I copy pasted the attack script, edit a little bit and done. You might be asking if we should add if the Hero has Mana and you would be right. Do not worry as it is already set.
 
@@ -958,7 +958,7 @@ Obviously, this is super simple and may not be of any use but its the concept th
 ## Effects
 Fuck I forgot to write this part. Anyways The effects are designed to be things that affect the other characters without it being in direct reference to it. This time they are now prefabs instead of Scriptable Objects.
 
-![](./Images/6fc92d26629de42b839a5d0fcc4fc80e4844d948daea7aba262875fa85f6396e.gif)  
+![](../Images/6fc92d26629de42b839a5d0fcc4fc80e4844d948daea7aba262875fa85f6396e.gif)  
 
 ### Active Effects
 To create an Active Effect, simply first inherit it and... nothing. There is nothing currently to define so that's good~
@@ -1008,8 +1008,8 @@ public class Test : PassiveEffect
 
 The difference visually is how it shows in the inspector.
 
-![picture 2](./Images/0bd71f7a94cc6b519461ed4a0c927fbd6f7039c77813e8fa57aaeb17cfadf506.png)  
+![picture 2](../Images/0bd71f7a94cc6b519461ed4a0c927fbd6f7039c77813e8fa57aaeb17cfadf506.png)  
 
-![picture 3](./Images/84bb9de2552ec9eab739afa2aca6401e725fde3824b59630a078e4b697bafa91.png)  
+![picture 3](../Images/84bb9de2552ec9eab739afa2aca6401e725fde3824b59630a078e4b697bafa91.png)  
 
 >Note: Ignore the Active Effect field.
