@@ -52,10 +52,5 @@ namespace Game.Heroes.Magician
             if(_TickCoroutine != null)
                 StopCoroutine(_TickCoroutine);
         }
-
-        public override bool CanUse(Hero hero)
-        {
-            return true;
-        }
     }
 }
