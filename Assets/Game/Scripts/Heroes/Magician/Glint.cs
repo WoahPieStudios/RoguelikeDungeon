@@ -14,14 +14,30 @@ namespace Game.Heroes.Magician
         [SerializeField]
         int _BonusDamage;
 
+        Coroutine _TickCoroutine;
+
+        IEnumerator Tick()
+        {
+            yield return null;
+
+            End();
+        }
+
+        int OnUseBonusDamge()
+        {
+            _TickCoroutine = StartCoroutine(Tick());
+
+            return _BonusDamage;
+        }
+
         public override void StartEffect(IEffectable sender, IEffectable receiver)
         {
             base.StartEffect(sender, receiver);
 
             Hero hero = receiver as Hero;
 
-            if (hero.attack is IBonusDamage)
-                (hero.attack as IBonusDamage).bonusDamge = _BonusDamage;
+            if (hero.attack is IGlintBonusDamage)
+                (hero.attack as IGlintBonusDamage).onUseBonusDamageEvent += OnUseBonusDamge;
         }
 
         public override void End()
@@ -30,8 +46,11 @@ namespace Game.Heroes.Magician
 
             Hero hero = receiver as Hero;
 
-            if (hero.attack is IBonusDamage)
-                (hero.attack as IBonusDamage).bonusDamge = 0;
+            if (hero.attack is IGlintBonusDamage)
+                (hero.attack as IGlintBonusDamage).onUseBonusDamageEvent -= OnUseBonusDamge;
+
+            if(_TickCoroutine != null)
+                StopCoroutine(_TickCoroutine);
         }
 
         public override bool CanUse(Hero hero)

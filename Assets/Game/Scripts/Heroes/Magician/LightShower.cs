@@ -11,20 +11,23 @@ namespace Game.Heroes.Magician
     public class LightShower : Ultimate
     {
         [SerializeField]
+        int _Damage;
+        [SerializeField]
+        float _Radius;
+        [SerializeField]
+        float _FieldTime;
+        [SerializeField]
+        int _DamageInterval;
+
+        [Header("Targetting")]
+        [SerializeField]
         float _FindingRange;
 
+        [Header("VFX")]
         [SerializeField]
         ParticleSystem _LightShowerParticles;
         [SerializeField]
         Vector3 _Offset;
-        [SerializeField]
-        float _Time;
-        [SerializeField]
-        int _Damage;
-        [SerializeField]
-        int _DamageInterval;
-        [SerializeField]
-        float _Radius;
 
         Enemy _ClosestEnemy;
 
@@ -36,9 +39,9 @@ namespace Game.Heroes.Magician
 
             float currentTime = 0;
             float currentInterval = 0;
-            float timePerInterval = _Time / (_DamageInterval + 2);
+            float timePerInterval = _FieldTime / (_DamageInterval + 2);
 
-            while(currentTime < _Time)
+            while(currentTime < _FieldTime)
             {
                 currentTime += Time.deltaTime;
 
@@ -60,7 +63,7 @@ namespace Game.Heroes.Magician
         {
             _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, _FindingRange);
 
-            bool canUse = !isActive && !isRestricted && (owner as Hero).mana.currentMana >= manaCost && _ClosestEnemy;
+            bool canUse = base.Use() && _ClosestEnemy;
 
             if(canUse)
             {

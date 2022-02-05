@@ -4,8 +4,8 @@ using UnityEngine;
 
 namespace Game.Heroes
 {
-    public interface IBonusDamage
+    public interface IGlintBonusDamage
     {
-        int bonusDamge { get; set; }
+        event System.Func<int> onUseBonusDamageEvent;
     }
 }

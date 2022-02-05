@@ -627,7 +627,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Text: {fileID: 1334233415}
-  _Character: {fileID: 537499622}
+  _Character: {fileID: 1739015348}
 --- !u!114 &1334233415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -929,7 +929,8 @@ MonoBehaviour:
   _Mana:
     _MaxMana: 10
     _CurrentMana: 0
-  _PassiveEffects: []
+  _PassiveEffects:
+  - {fileID: 6412805904277832684, guid: 2b32bfad1321f3447a24b7bdfef567b4, type: 3}
   _InputLerpTime: 0.5
 --- !u!212 &1739015349
 SpriteRenderer:
@@ -1043,7 +1044,7 @@ MonoBehaviour:
   _Damage: 0
   _Range: 10
   _Speed: 0
-  _ManaGainOnHit: 0
+  _ManaGainOnHit: 1
   _Knockback: {fileID: 2129709150088808372, guid: 0be26bb9c5ff1784f9a6f5b8a20ea2d2, type: 3}
   _LightRay: {fileID: 2067724370}
   _FadeInTime: 0.001
@@ -1090,6 +1091,7 @@ MonoBehaviour:
   _FindingRange: 5
   _AoeRange: 5
   _Damage: 1
+  _ManaGainOnHit: 0
   _SunRay: {fileID: 1194665697}
   _FadeGradient:
     serializedVersion: 2
@@ -1142,7 +1144,7 @@ MonoBehaviour:
   _FindingRange: 5
   _LightShowerParticles: {fileID: 600448393}
   _Offset: {x: 0, y: 4, z: 0}
-  _Time: 5
+  _FieldTime: 5
   _Damage: 1
   _DamageInterval: 5
   _Radius: 5

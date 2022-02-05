@@ -10,13 +10,16 @@ namespace Game.Heroes.Magician
 {
     public class Radiance : Skill
     {
-        [Header("Targetting")]
-        [SerializeField]
-        float _FindingRange;
         [SerializeField]
         float _AoeRange;
         [SerializeField]
         int _Damage;
+        [SerializeField]
+        int _ManaGainOnHit;
+
+        [Header("Targetting")]
+        [SerializeField]
+        float _FindingRange;
 
         [Header("Sun Ray")]
         [SerializeField]
@@ -53,8 +56,15 @@ namespace Game.Heroes.Magician
                 
             yield return new WaitForSeconds(_FadeInTime);
 
-            foreach(Enemy enemy in Utilities.GetCharacters<Enemy>(_ClosestEnemy.transform.position, _AoeRange, owner as Character))
-                enemy.health.Damage(_Damage);
+            Enemy[] enemies = Utilities.GetCharacters<Enemy>(_ClosestEnemy.transform.position, _AoeRange, owner as Character);
+
+            if(enemies.Length > 0)
+            {
+                (owner as Hero).mana.AddMana(_ManaGainOnHit);
+
+                foreach(Enemy enemy in enemies)
+                    enemy.health.Damage(_Damage);
+            }
                 
             yield return new WaitForSeconds(_FadeOutTime);
             
@@ -69,7 +79,7 @@ namespace Game.Heroes.Magician
         {
             _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, _FindingRange);
 
-            bool canUse = !isActive && !isRestricted && _ClosestEnemy;
+            bool canUse = base.Use() && _ClosestEnemy;
 
             if(canUse)
             {
