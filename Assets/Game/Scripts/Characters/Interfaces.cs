@@ -8,13 +8,6 @@ using Game.Actions;
 
 namespace Game.Characters
 {
-    public interface ICloneable
-    {
-        int instanceId { get; }
-        bool isClone { get; }
-        T CreateClone<T>() where T : ICloneable;
-    }
-    
     public interface IIcon
     {
         Sprite icon { get; }

@@ -31,13 +31,11 @@ namespace Game.Characters.Actions
             _IsRestricted = restrictActions.HasFlag(RestrictActionType.Orientation);
         }
 
-        public virtual void ToggleAction(bool isActive)
+        public virtual bool Use()
         {
-            if(isActive)
-                Begin();
+            Begin();
 
-            else
-                End();
+            return isActive;
         }
     }
 }

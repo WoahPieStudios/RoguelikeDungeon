@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Characters.Effects
 {
-    public abstract class Effect : MonoBehaviour, IEffect, ICloneable
+    public abstract class Effect : MonoBehaviour, IEffect
     {
         IEffectable _Sender;
         IEffectable _Receiver;

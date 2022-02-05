@@ -6,8 +6,8 @@ namespace Game.Actions
 {
     public interface IActor
     {
-        public T GetProperty<T>() where T : IActorProperty;
-        public T[] GetProperties<T>() where T : IActorProperty;
+        T GetProperty<T>() where T : IActorProperty;
+        T[] GetProperties<T>() where T : IActorProperty;
     }
 
     public interface IActorProperty

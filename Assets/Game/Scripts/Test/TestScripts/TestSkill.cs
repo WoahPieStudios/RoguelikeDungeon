@@ -18,14 +18,11 @@ namespace Game.Characters.Test
             End();
         }
 
-        public override bool Use()
+        protected override void Begin()
         {
-            bool canUse = base.Use();
+            base.Begin();
 
-            if(canUse)
-                _TickCoroutine = StartCoroutine(Tick());
-
-            return canUse;
+            _TickCoroutine = StartCoroutine(Tick());
         }
 
         public override void End()

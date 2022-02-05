@@ -11,7 +11,7 @@ namespace Game.Characters.Actions
     {
         [SerializeField]
         float _CoolDownTime;
-
+        
         float _CurrentCoolDownTime;
 
         bool _IsCoolingDown = false;
@@ -22,7 +22,6 @@ namespace Game.Characters.Actions
         /// Cool Down Time after ending the Action.
         /// </summary>
         public float coolDownTime => _CoolDownTime;
-
         /// <summary>
         /// Current Time of the cooldown;
         /// </summary>
@@ -39,7 +38,7 @@ namespace Game.Characters.Actions
         /// <returns></returns>
         protected virtual IEnumerator CoolDown()
         {
-            _CurrentCoolDownTime  = _CoolDownTime;
+            _CurrentCoolDownTime  = coolDownTime;
 
             _IsCoolingDown = true;
 

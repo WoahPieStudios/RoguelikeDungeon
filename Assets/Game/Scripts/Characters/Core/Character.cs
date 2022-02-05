@@ -13,7 +13,7 @@ using Game.Characters.Properties;
 
 namespace Game.Characters
 {
-    public class Character : Actor, IEffectable, IRestrictableActionsHandler
+    public class Character : Actor, ICharacterActor
     {
         [SerializeField]
         Health _Health;
@@ -25,8 +25,7 @@ namespace Game.Characters
 
         List<IRestrictableAction> _RestrictableActionsList = new List<IRestrictableAction>();
 
-
-        public Health health => _Health;
+        public IHealth health => _Health;
 
         public IMovementAction movement => _Movement;
         public IOrientationAction orientation => _Orientation;

@@ -12,10 +12,10 @@ namespace Game.Characters.Properties
         int currentHealth { get; }
         bool isAlive { get; }
 
-        public event Action<IHealth, int> onAddHealthEvent;
-        public event Action<IHealth, int> onDamageEvent;
-        public event Action onKillEvent;
-        public event Action onResetHealthEvent;
+        event Action<IHealth, int> onAddHealthEvent;
+        event Action<IHealth, int> onDamageEvent;
+        event Action onKillEvent;
+        event Action onResetHealthEvent;
         
         /// <summary>
         /// Adds to the Health of the Character
@@ -42,9 +42,9 @@ namespace Game.Characters.Properties
         event Action onDrainManaEvent;
         event Action onResetManaEvent;
 
-        public void AddMana(int mana);
-        public void UseMana(int mana);
-        public void ResetMana();
-        public void DrainMana();
+        void AddMana(int mana);
+        void UseMana(int mana);
+        void ResetMana();
+        void DrainMana();
     }
 }

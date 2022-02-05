@@ -8,15 +8,16 @@ using Game.Characters.Effects;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Attack : CoolDownAction, IAttackAction, ITrackableAction, IRestrictableAction
+    public abstract class Attack : CoolDownAction, IAttackAction
     {
         [SerializeField]
-        int _Damage = 0;
+        int _Damage;
         [SerializeField]
-        float _Range = 0;
+        float _Range;
         [SerializeField]
-        float _Speed = 0;
-
+        float _Speed;
+        [SerializeField]
+        int _ManaGainOnHit;
         bool _IsRestricted = false;
 
         /// <summary>
@@ -33,6 +34,8 @@ namespace Game.Characters.Actions
         /// Speed of the Attack. Honestly have no idea where this would fit.
         /// </summary>
         public float speed => _Speed;
+
+        public int manaGainOnHit => _ManaGainOnHit;
 
         public bool isRestricted => _IsRestricted;
 
@@ -51,22 +54,12 @@ namespace Game.Characters.Actions
         }
 
         /// <summary>
-        /// Checks if the Attack can be used.
-        /// </summary>
-        /// <param name="attacker"></param>
-        /// <returns></returns>
-        public virtual bool CanUse()
-        {
-            return !isActive && !isRestricted;
-        }
-
-        /// <summary>
         /// Starts Attack.
         /// </summary>
         /// <param name="attacker"></param>
         public virtual bool Use()
         {
-            bool canUse = CanUse();
+            bool canUse = !isActive && !isRestricted;
 
             if(canUse)
                 Begin();

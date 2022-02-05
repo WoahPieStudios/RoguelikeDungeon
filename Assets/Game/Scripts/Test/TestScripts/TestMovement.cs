@@ -11,8 +11,6 @@ namespace Game.Characters.Test
     public class TestMovement : Movement
     {
         [SerializeField]
-        float _MoveSpeed;
-        [SerializeField]
         float _LerpTime;
 
         Vector2 _Velocity;
@@ -24,14 +22,14 @@ namespace Game.Characters.Test
         {
             base.Awake();
 
-            ToggleAction(true);
+            Use();
         }
 
         void FixedUpdate() 
         {
             if(isActive && !isRestricted)
             {
-                _Velocity = Vector2.Lerp(velocity, _Direction * _MoveSpeed * Time.fixedDeltaTime, _LerpTime);
+                _Velocity = Vector2.Lerp(velocity, _Direction * speed * Time.fixedDeltaTime, _LerpTime);
 
                 transform.position += (Vector3)_Velocity;
             }

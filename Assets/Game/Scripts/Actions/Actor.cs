@@ -14,6 +14,7 @@ namespace Game.Actions
         {
             AddProperty(GetComponentsInChildren<IActorProperty>());
         }
+        
         protected void AddProperty(params IActorProperty[] actorProperties)
         {
             _ActorPropertyList.AddRange(actorProperties.Where(a => !_ActorPropertyList.Contains(a)));

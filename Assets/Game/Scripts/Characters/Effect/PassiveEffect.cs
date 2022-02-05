@@ -7,7 +7,7 @@ using Game.Characters.Actions;
 
 namespace Game.Characters.Effects
 {
-    public abstract class PassiveEffect : Effect, IActionTracker
+    public abstract class PassiveEffect : Effect, IPassiveEffect
     {
         [SerializeField]
         TrackActionType _TrackAction;

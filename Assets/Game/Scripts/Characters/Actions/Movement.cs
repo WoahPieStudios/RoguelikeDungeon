@@ -10,7 +10,12 @@ namespace Game.Characters.Actions
 {
     public abstract class Movement : ActorAction, IMovementAction
     {
+        [SerializeField]
+        float _Speed;
+        
         bool _IsRestricted = false;
+
+        public float speed => _Speed;
 
         public abstract Vector2 velocity { get; }
 
@@ -28,13 +33,11 @@ namespace Game.Characters.Actions
             Debug.Log(_IsRestricted);
         }
 
-        public virtual void ToggleAction(bool isActive)
+        public virtual bool Use()
         {
-            if(isActive)
-                Begin();
+            Begin();
 
-            else
-                End();
+            return isActive;
         }
     }
 }
