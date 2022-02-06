@@ -10,15 +10,15 @@ using Game.Actions;
 namespace Game.Characters.Properties
 {
     [Serializable]
-    public class Mana : IMana, IActorProperty
+    public class Mana : IManaProperty
     {
         [SerializeField]
         int _MaxMana = 0;
         [SerializeField]
         int _CurrentMana = 0;
 
-        public event Action<IMana, int> onUseManaEvent;
-        public event Action<IMana, int> onAddManaEvent;
+        public event Action<IManaProperty, int> onUseManaEvent;
+        public event Action<IManaProperty, int> onAddManaEvent;
         public event Action onDrainManaEvent;
         public event Action onResetManaEvent;
 

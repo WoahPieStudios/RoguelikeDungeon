@@ -20,18 +20,16 @@ namespace Game.Characters.Test
             // Utilities.GetCharacters<CharacterBase>(Vector3.zero, 5, _CharacterLayer);
             // Utilities.GetNearestCharacter<CharacterBase>(Vector3.zero, 5, _CharacterLayer);
             
-            yield return null;
+            yield return new WaitForSeconds(5);
 
             End();
         }
 
-        public override bool Use()
+        protected override void Begin()
         {
-            bool canUse = base.Use();
+            base.Begin();
 
             _TickCoroutine = StartCoroutine(Tick());
-
-            return canUse;
         }
 
         public override void End()

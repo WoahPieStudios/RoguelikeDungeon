@@ -46,7 +46,6 @@ namespace Game.Characters.Actions
     public interface ITrackableActionsHandler
     {
         TrackActionType trackedActions { get; }
-        ITrackableAction[] trackableActions { get; }
     }
 
     public interface IMovementAction : IActorAction, IUseAction, IRestrictableAction
@@ -74,18 +73,7 @@ namespace Game.Characters.Actions
         bool Use();
     }
 
-    public interface IPriorityActionsHandler
-    {
-        IPriorityAction currentPriorityAction { get; }
-        IPriorityAction[] priorityActions { get; }
-    }
-
-    public interface IPriorityAction : IActorAction
-    {
-        event System.Action<IPriorityAction> onUsePriorityAction;
-    }
-
-    public interface IAttackAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction, IPriorityAction
+    public interface IAttackAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
     {
         int damage { get; }
 
@@ -102,12 +90,12 @@ namespace Game.Characters.Actions
         int manaGainOnHit { get; }
     }
 
-    public interface ISkillAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction, IPriorityAction
+    public interface ISkillAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
     {
 
     }
 
-    public interface IUltimateAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction, IPriorityAction
+    public interface IUltimateAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
     {
         int manaCost { get; }
     }

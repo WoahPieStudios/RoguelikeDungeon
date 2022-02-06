@@ -9,15 +9,15 @@ using Game.Actions;
 namespace Game.Characters.Properties
 {
     [Serializable]
-    public class Health : IHealth, IActorProperty
+    public class Health : IHealthProperty
     {
         [SerializeField]
         int _MaxHealth = 0;
         [SerializeField]
         int _CurrentHealth = 0;
 
-        public event Action<IHealth, int> onAddHealthEvent;
-        public event Action<IHealth, int> onDamageEvent;
+        public event Action<IHealthProperty, int> onAddHealthEvent;
+        public event Action<IHealthProperty, int> onDamageEvent;
         public event Action onKillEvent;
         public event Action onResetHealthEvent;
 

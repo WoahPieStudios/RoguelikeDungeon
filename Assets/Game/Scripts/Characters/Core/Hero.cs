@@ -27,7 +27,7 @@ namespace Game.Characters
         ISkillAction _Skill;
         IUltimateAction _Ultimate;
 
-        public IMana mana => _Mana;
+        public IManaProperty mana => _Mana;
 
         public IAttackAction attack => _Attack;
         
@@ -40,8 +40,6 @@ namespace Game.Characters
         /// Ultimate of the Hero
         /// </summary>
         public IUltimateAction ultimate => _Ultimate;
-
-        public ITrackableAction[] trackableActions => _TrackableActionList.ToArray();
 
         public TrackActionType trackedActions => _TrackAction;
 
@@ -67,7 +65,7 @@ namespace Game.Characters
         {
             foreach(ITrackableAction trackable in trackables.Where(t => !_TrackableActionList.Contains(t)))
             {
-                trackable.onActionEvent += OnActionTracked;
+                trackable.onUseTrackableAction += OnActionTracked;
 
                 _TrackableActionList.Add(trackable);
             }
@@ -77,7 +75,7 @@ namespace Game.Characters
         {
             foreach(ITrackableAction trackable in trackables.Where(t => _TrackableActionList.Contains(t)))
             {
-                trackable.onActionEvent -= OnActionTracked;
+                trackable.onUseTrackableAction -= OnActionTracked;
 
                 _TrackableActionList.Remove(trackable);
             }

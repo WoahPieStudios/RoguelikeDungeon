@@ -23,7 +23,6 @@ namespace Game.Characters.Actions
         public bool isRestricted => _IsRestricted;
 
         public event Action<TrackActionType> onUseTrackableAction;
-        public event Action<IPriorityAction> onUsePriorityAction;
 
         protected override void Begin()
         {
@@ -34,8 +33,6 @@ namespace Game.Characters.Actions
             mana.UseMana(manaCost);
 
             onUseTrackableAction?.Invoke(TrackActionType.Ultimate);
-
-            onUsePriorityAction?.Invoke(this);
         }
 
         /// <summary>
@@ -46,7 +43,7 @@ namespace Game.Characters.Actions
         {
             Mana mana = owner.GetProperty<Mana>();
 
-            bool canUse = !isRestricted && !isActive && mana.currentMana >= manaCost && !isCoolingDown;
+            bool canUse = !isActive && !isRestricted && !isCoolingDown && mana.currentMana >= manaCost;
 
             if(canUse)
                 Begin();

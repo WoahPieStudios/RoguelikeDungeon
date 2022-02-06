@@ -10,9 +10,9 @@ using Game.Characters.Properties;
 
 namespace Game.Characters
 {
-    public interface ICharacterActor : IActor, IEffectable, IRestrictableActionsHandler, IPriorityActionsHandler
+    public interface ICharacterActor : IActor, IEffectable, IRestrictableActionsHandler
     {
-        IHealth health { get; }
+        IHealthProperty health { get; }
 
         IMovementAction movement { get; }
         IOrientationAction orientation { get; }
@@ -20,7 +20,7 @@ namespace Game.Characters
 
     public interface IHeroActor : ICharacterActor, ITrackableActionsHandler
     {
-        IMana mana{ get; }
+        IManaProperty mana{ get; }
 
         IAttackAction attack { get; }
         
