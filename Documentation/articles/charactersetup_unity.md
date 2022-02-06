@@ -741,9 +741,7 @@ Firstly, of course, inherit from the Attack class. The attack's `damage`, `range
 
 >Note: You have to use them for it be of use.
 
-Afterwards, we’re going to use the `Base.Use()` function to activate the behind the scenes stuff like the tracking of the action.
-
-Now use the result and reference it in a bool variable. Check if it is true and now you can add your code. In this example I’m going to start a coroutine.
+Afterwards, we’re going to override the Begin function so that we won't need to touch the behind the scenes stuff. In this example I’m going to start a coroutine.
 
 ``` c#
 public class Test : Attack
@@ -764,14 +762,11 @@ public class Test : Attack
         End();
     }
 
-    public override bool Use()
+    protected override void Begin()
     {
-        bool canUse = base.Use();
+        base.Begin();
 
-        if(canUse)
-            StartCoroutine(End());
-
-        return canUse;
+        _TickCoroutine = StartCoroutine(Tick());
     }
 }
 ```
@@ -799,14 +794,11 @@ public class Test : Attack
         End();
     }
 
-    public override bool Use()
+    protected override void Begin()
     {
-        bool canUse = base.Use(); // This time do use it since I also active the attack behind the scenes;
+        base.Begin();
 
-        if(canUse)
-            _TickCoroutine = StartCoroutine(End());
-
-        return canUse;
+        _TickCoroutine = StartCoroutine(Tick());
     }
 
     public override void End()
@@ -822,7 +814,7 @@ public class Test : Attack
 ## Skill
 The process of setting up the skill script is also similar to the attack script. Actually all 3 of them are similar.
 
-So yeah, set up the `Use` function, where your Skill ends and you’ve done it!
+So yeah, set up the `Begin` function, where your Skill ends and you’ve done it!
 
 ``` c#
 public class Test : Skill
@@ -845,14 +837,11 @@ public class Test : Skill
         End();
     }
 
-    public override bool Use()
+    protected override void Begin()
     {
-        bool canUse = base.Use();
+        base.Begin();
 
-        if(canUse)
-            _TickCoroutine = StartCoroutine(Tick());
-
-        return canUse;
+        _TickCoroutine = StartCoroutine(Tick());
     }
 
     public override void End()
@@ -873,18 +862,13 @@ Now the Ultimate... Dun dun dun... Well still the same honestly except you have 
 With that, I literally copy the skill script, just like I copy pasted the attack script, edit a little bit and done. You might be asking if we should add if the Hero has Mana and you would be right. Do not worry as it is already set.
 
 ``` c#
-public override bool Use()
+protected override void Begin()
 {
-    bool canUse = base.Use(); // I check first if he has enough mana since if it returns false, the base.Use() won't be called
+    base.Begin();
 
-    if(canUse)
-    {
-        _Hero.UseMana(manaCost);
+    _Hero.UseMana(manaCost);
 
-        _TickCoroutine = StartCoroutine(Tick());
-    }
-
-    return canUse;
+    _TickCoroutine = StartCoroutine(Tick());
 }
 ```
 
@@ -909,18 +893,13 @@ public class Test : Ultimate
         End();
     }
 
-    public override bool Use()
+    protected override void Begin()
     {
-        bool canUse = base.Use();
+        base.Begin();
 
-        if(canUse)
-        {
-            _Hero.UseMana(manaCost);
+        _Hero.UseMana(manaCost);
 
-            _TickCoroutine = StartCoroutine(Tick());
-        }
-
-        return canUse;
+        _TickCoroutine = StartCoroutine(Tick());
     }
 
     public override void End()
@@ -936,22 +915,59 @@ public class Test : Ultimate
 ## In Action
 Of course, those are dandy on how they are setup but what about their use case?
 
-well here it is. I'll only show the Tick Coroutine. 
+well I'm definitely not going to write them all but here's an example of the ultimate
 
 ``` c#
-IEnumerator Tick()
+public class Test : Ultimate
 {
-    Enemy enemy = _Hero.FaceNearestCharacter<Enemy>(range);
+    Coroutine _TickCoroutine;
+    
+    Hero _Hero;
 
-    yield return new WaitForSeconds(0.1f);
+    protected override void Awake()
+    {
+        base.Awake();
 
-    enemy.health.Damage(damage); // Based on Attack but I hope you get the point of it. 
+        _Hero = owner as Hero;
+    }
 
-    _Hero.mana.AddMana(manaGainOnHit);
+    IEnumerator Tick()
+    {
+        yield return new WaitForSeconds(2);
 
-    End();
+        End();
+    }
+
+    protected override void Begin()
+    {
+        base.Begin();
+
+        if(_Hero.attack.isActive)
+            _Hero.attack.End();
+
+        _Hero.UseMana(manaCost);
+
+        _TickCoroutine = StartCoroutine(Tick());
+    }
+
+    public override void Use()
+    {
+        return !_Hero.skill.isActive && base.Use();
+    }
+
+    public override void End()
+    {
+        base.End();
+
+        if(_TickCoroutine != null)
+            StopCoroutine(_TickCoroutine);
+    }
 }
 ```
+
+I added a condition if the skill is not active since we can't have the Skill and Ultimate be used at the same time. I added it to the front since C# don't continue the next condition in a AND operation if the first condition is false. At least, I think it doesn't XD
+
+Then I added a condition for the Attack in the Begin function. I stopped it since the Ultimate has a higher use priority. Speaking of Priority, I removed the stuff I was doing for Priority Action since it might make it harder to make custom conditions for these kinds of things, like stopping actions, etc, so yeah XD
 
 Obviously, this is super simple and may not be of any use but its the concept that matters. Afterall, I have no idea what abilities/sequences/etc are going to be made so this is mostly a framework if you will. A relatively large framework. So yeah, cheers and do ask me if you have any questions (I know there will be afterall I suck at explaining and btw this document took a week to be made and I'm not even done writing this [at the time of writing])
 
