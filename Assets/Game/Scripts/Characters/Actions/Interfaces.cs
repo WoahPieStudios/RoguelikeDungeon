@@ -35,22 +35,17 @@ namespace Game.Characters.Actions
 
     public interface ITrackableAction : IActorAction
     {
-        event System.Action<TrackActionType> onActionEvent;
+        event System.Action<TrackActionType> onUseTrackableAction;
     }
 
     public interface IRestrictableActionsHandler
     {
         RestrictActionType restrictedActions { get; }
-        void AddRestrictable(params IRestrictableAction[] restrictableActions);
-        void RemoveRestrictable(params IRestrictableAction[] restrictableActions);
     }
 
     public interface ITrackableActionsHandler
     {
         TrackActionType trackedActions { get; }
-        ITrackableAction[] trackableActions { get; }
-        void AddTrackable(params ITrackableAction[] trackableActions);
-        void RemoveTrackable(params ITrackableAction[] trackableActions);
     }
 
     public interface IMovementAction : IActorAction, IUseAction, IRestrictableAction

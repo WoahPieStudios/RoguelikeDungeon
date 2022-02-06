@@ -27,7 +27,7 @@ namespace Game.Characters
         ISkillAction _Skill;
         IUltimateAction _Ultimate;
 
-        public IMana mana => _Mana;
+        public IManaProperty mana => _Mana;
 
         public IAttackAction attack => _Attack;
         
@@ -40,8 +40,6 @@ namespace Game.Characters
         /// Ultimate of the Hero
         /// </summary>
         public IUltimateAction ultimate => _Ultimate;
-
-        public ITrackableAction[] trackableActions => _TrackableActionList.ToArray();
 
         public TrackActionType trackedActions => _TrackAction;
 
@@ -61,6 +59,26 @@ namespace Game.Characters
             AddProperty(_Mana);
 
             AddTrackable(GetProperties<ITrackableAction>());
+        }
+
+        void AddTrackable(params ITrackableAction[] trackables)
+        {
+            foreach(ITrackableAction trackable in trackables.Where(t => !_TrackableActionList.Contains(t)))
+            {
+                trackable.onUseTrackableAction += OnActionTracked;
+
+                _TrackableActionList.Add(trackable);
+            }
+        }
+
+        void RemoveTrackable(params ITrackableAction[] trackables)
+        {
+            foreach(ITrackableAction trackable in trackables.Where(t => _TrackableActionList.Contains(t)))
+            {
+                trackable.onUseTrackableAction -= OnActionTracked;
+
+                _TrackableActionList.Remove(trackable);
+            }
         }
     
         void SegregatePassiveEffects(IEnumerable<PassiveEffect> passiveEffects)
@@ -93,26 +111,6 @@ namespace Game.Characters
 
                     return;
                 }
-            }
-        }
-
-        public void AddTrackable(params ITrackableAction[] trackables)
-        {
-            foreach(ITrackableAction trackable in trackables.Where(t => !_TrackableActionList.Contains(t)))
-            {
-                trackable.onActionEvent += OnActionTracked;
-
-                _TrackableActionList.Add(trackable);
-            }
-        }
-
-        public void RemoveTrackable(params ITrackableAction[] trackables)
-        {
-            foreach(ITrackableAction trackable in trackables.Where(t => _TrackableActionList.Contains(t)))
-            {
-                trackable.onActionEvent -= OnActionTracked;
-
-                _TrackableActionList.Remove(trackable);
             }
         }
     }

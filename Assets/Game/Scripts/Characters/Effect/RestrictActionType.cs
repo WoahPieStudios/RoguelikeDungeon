@@ -16,6 +16,6 @@ namespace Game.Characters
         Passive = 1 << 3,
         Skill = 1 << 4,
         Ultimate = 1 << 5,
-        Orientation = 1 << 5
+        Orientation = 1 << 6
     }
 }

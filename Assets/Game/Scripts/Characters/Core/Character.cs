@@ -18,20 +18,22 @@ namespace Game.Characters
         [SerializeField]
         Health _Health;
 
-        RestrictActionType _RestrictedActions;
         EffectsHandler _EffectsHandler = new EffectsHandler();
         IMovementAction _Movement;
         IOrientationAction _Orientation;
 
-        List<IRestrictableAction> _RestrictableActionsList = new List<IRestrictableAction>();
+        RestrictableActionsHandler _RestrictableActionsHandler = new RestrictableActionsHandler();
+        
+        protected RestrictableActionsHandler restrictableActionsHandler => _RestrictableActionsHandler;
 
-        public IHealth health => _Health;
+        public IHealthProperty health => _Health;
 
         public IMovementAction movement => _Movement;
         public IOrientationAction orientation => _Orientation;
 
-        public RestrictActionType restrictedActions => _RestrictedActions;
         public IEffect[] effects => _EffectsHandler.effects;
+
+        public RestrictActionType restrictedActions => _RestrictableActionsHandler.restrictedActions;
 
         public event Action<IEffect[]> onAddEffectsEvent;
         public event Action<IEffect[]> onRemoveEffectsEvent;
@@ -39,6 +41,7 @@ namespace Game.Characters
         static List<Character> _CharacterList = new List<Character>();
 
         public static Character[] characters => _CharacterList.ToArray();
+
 
         protected override void Awake()
         {
@@ -49,12 +52,12 @@ namespace Game.Characters
             _Health.owner = this;
             _Health.ResetHealth();
 
-            _Movement = GetProperty<Movement>();
-            _Orientation = GetProperty<Orientation>();
+            _Movement = GetProperty<IMovementAction>();
+            _Orientation = GetProperty<IOrientationAction>();
 
             AddProperty(_Health);
 
-            AddRestrictable(GetProperties<IRestrictableAction>());
+            restrictableActionsHandler.AddRestrictableAction(GetProperties<IRestrictableAction>());
 
             _EffectsHandler.onAddEffectsEvent += OnAddEffects;
             _EffectsHandler.onRemoveEffectsEvent += OnRemoveEffects;
@@ -64,45 +67,30 @@ namespace Game.Characters
         {
             _CharacterList.Remove(this);
         }
-
-        void GetRestrainedActions(IEffect[] effects)
-        {
-            RestrictActionType restrainedActions = default;
-
-            // Adds Restrict Actions to RestrainedActions
-            foreach(RestrictActionType r in effects.Where(effect => effect is IActionRestricter).Select(effect => (effect as IActionRestricter).restrictAction))
-                restrainedActions |= r;
-
-            _RestrictedActions = restrainedActions;
-        }
         
         void OnAddEffects(IEffect[] addedEffects)
         {
-            GetRestrainedActions(effects);
-
             foreach(MonoBehaviour m in addedEffects.Where(e => e is MonoBehaviour).Cast<MonoBehaviour>())
             {
                 m.transform.SetParent(transform, false);
                 m.transform.localPosition = Vector3.zero;
             }
             
-            foreach(IRestrictableAction restrictable in GetProperties<IRestrictableAction>())
-                restrictable.OnRestrict(restrictedActions);
+            _RestrictableActionsHandler.GetRestrainedActions(effects.Where(e => e is IActionRestricter).Cast<IActionRestricter>());
+            _RestrictableActionsHandler.SendRestrictionsToActions();
 
             onAddEffectsEvent?.Invoke(addedEffects);
         }
 
         void OnRemoveEffects(IEffect[] removedEffects)
         {
-            GetRestrainedActions(effects);
+            _RestrictableActionsHandler.GetRestrainedActions(effects.Where(e => e is IActionRestricter).Cast<IActionRestricter>());
+            _RestrictableActionsHandler.SendRestrictionsToActions();
             
             onRemoveEffectsEvent?.Invoke(removedEffects);
             
             foreach(MonoBehaviour monobehaviour in removedEffects.Where(e => e is MonoBehaviour).Cast<MonoBehaviour>())
                 Destroy(monobehaviour.gameObject);
-                
-            foreach(IRestrictableAction restrictable in GetProperties<IRestrictableAction>())
-                restrictable.OnRestrict(restrictedActions);
         }
 
         public void AddEffects(IEffectable sender, params IEffect[] effects)
@@ -113,16 +101,6 @@ namespace Game.Characters
         public void RemoveEffects(params IEffect[] effects)
         {
             _EffectsHandler.RemoveEffects(effects);
-        }
-
-        public void AddRestrictable(params IRestrictableAction[] restrictableActions)
-        {
-            _RestrictableActionsList.AddRange(restrictableActions.Where(a => !_RestrictableActionsList.Contains(a)));
-        }
-
-        public void RemoveRestrictable(params IRestrictableAction[] restrictableActions)
-        {
-            _RestrictableActionsList.RemoveAll(a => restrictableActions.Contains(a));
         }
     }
 }

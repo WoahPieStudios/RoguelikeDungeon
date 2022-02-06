@@ -39,18 +39,13 @@ namespace Game.Characters.Actions
 
         public bool isRestricted => _IsRestricted;
 
-        public event Action<TrackActionType> onActionEvent;
-
-        protected virtual void OnActionEvent(TrackActionType trackAction)
-        {
-            onActionEvent?.Invoke(trackAction);
-        }
+        public event Action<TrackActionType> onUseTrackableAction;
 
         protected override void Begin()
         {
             base.Begin();
 
-            OnActionEvent(TrackActionType.Attack);
+            onUseTrackableAction?.Invoke(TrackActionType.Attack);
         }
 
         /// <summary>

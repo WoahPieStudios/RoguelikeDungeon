@@ -13,7 +13,7 @@ namespace Game.Characters.Test
 
         IEnumerator Tick()
         {
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(5);
 
             End();
         }

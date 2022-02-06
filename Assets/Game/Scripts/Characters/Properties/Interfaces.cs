@@ -4,16 +4,18 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Game.Actions;
+
 namespace Game.Characters.Properties
 {
-    public interface IHealth
+    public interface IHealthProperty : IActorProperty
     {
         int maxHealth { get; }
         int currentHealth { get; }
         bool isAlive { get; }
 
-        event Action<IHealth, int> onAddHealthEvent;
-        event Action<IHealth, int> onDamageEvent;
+        event Action<IHealthProperty, int> onAddHealthEvent;
+        event Action<IHealthProperty, int> onDamageEvent;
         event Action onKillEvent;
         event Action onResetHealthEvent;
         
@@ -32,13 +34,13 @@ namespace Game.Characters.Properties
         void ResetHealth();
     }
 
-    public interface IMana
+    public interface IManaProperty : IActorProperty
     { 
         int maxMana { get; }
         int currentMana { get; }
 
-        event Action<IMana, int> onUseManaEvent;
-        event Action<IMana, int> onAddManaEvent;
+        event Action<IManaProperty, int> onUseManaEvent;
+        event Action<IManaProperty, int> onAddManaEvent;
         event Action onDrainManaEvent;
         event Action onResetManaEvent;
 
