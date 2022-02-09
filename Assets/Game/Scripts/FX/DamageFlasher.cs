@@ -35,7 +35,7 @@ namespace Game.FX
             health.onDamageEvent -= OnDamage;
         }
 
-        void OnDamage(IHealth health, int damage)
+        void OnDamage(IHealthProperty health, int damage)
         {
             if(_DamageFlashCoroutine != null)
                 StopCoroutine(_DamageFlashCoroutine);
