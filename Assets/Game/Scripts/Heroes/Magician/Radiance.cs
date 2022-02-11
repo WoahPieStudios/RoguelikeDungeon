@@ -43,6 +43,15 @@ namespace Game.Heroes.Magician
 
         Coroutine _TickCoroutine;
 
+        Hero _Hero;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            _Hero = owner as Hero;
+        }
+
         void SunRayFade(float value)
         {
             _SunRay.color = _FadeGradient.Evaluate(value);
@@ -75,22 +84,28 @@ namespace Game.Heroes.Magician
             End();
         }
 
+        protected override void Begin()
+        {
+            base.Begin();
+
+            _LightRay.transform.SetParent(null, false);
+            _LightRay.transform.position = _ClosestEnemy.transform.position;
+
+            _TickCoroutine = StartCoroutine(Tick());
+
+            _SunRay.transform.SetParent(null, false);
+            _SunRay.transform.position = _ClosestEnemy.transform.position;
+
+        }
+
         public override bool Use()
         {
             _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, _FindingRange);
 
-            bool canUse = base.Use() && _ClosestEnemy;
+            bool canUse = _ClosestEnemy  && !_Hero.ultimate.isActive && base.Use();
 
-            if(canUse)
-            {
-                _LightRay.transform.SetParent(null, false);
-                _LightRay.transform.position = _ClosestEnemy.transform.position;
-
-                _TickCoroutine = StartCoroutine(Tick());
-
-                _SunRay.transform.SetParent(null, false);
-                _SunRay.transform.position = _ClosestEnemy.transform.position;
-            }
+            if(canUse && _Hero.attack.isActive)
+                _Hero.attack.End();
 
             return canUse;
         }

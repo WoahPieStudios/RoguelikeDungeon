@@ -33,6 +33,15 @@ namespace Game.Heroes.Magician
 
         Coroutine _TickCoroutine;
 
+        Hero _Hero;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            _Hero = owner as Hero;
+        }
+
         IEnumerator Tick()
         {
             Vector3 aoePosition = _ClosestEnemy.transform.position;
@@ -59,20 +68,25 @@ namespace Game.Heroes.Magician
             End();
         }
 
+        protected override void Begin()
+        {
+            base.Begin();
+
+            _TickCoroutine = StartCoroutine(Tick());
+
+            _LightShowerParticles.transform.SetParent(null, false);
+            _LightShowerParticles.transform.position = _ClosestEnemy.transform.position + _Offset;
+            _LightShowerParticles.Play();
+        }
+
         public override bool Use()
         {
             _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, _FindingRange);
 
-            bool canUse = base.Use() && _ClosestEnemy;
+            bool canUse = _ClosestEnemy && !_Hero.skill.isActive && base.Use();
 
-            if(canUse)
-            {
-                _TickCoroutine = StartCoroutine(Tick());
-
-                _LightShowerParticles.transform.SetParent(null, false);
-                _LightShowerParticles.transform.position = _ClosestEnemy.transform.position + _Offset;
-                _LightShowerParticles.Play();
-            }
+            if(canUse && _Hero.attack.isActive)
+                _Hero.attack.End();
 
             return canUse;
         }

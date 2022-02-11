@@ -50,7 +50,7 @@ namespace Game.Heroes.Magician
 
             _AnimationController = GetComponent<AnimationController>();
 
-            _AnimationController.AddAnimation("Sparkles", _AnimationClip, SetupLightRay);
+            _AnimationController.AddAnimation("Sparkles", _AnimationClip, SetupLightRay, End);
         }
 
         void SetupLightRay()
@@ -69,8 +69,6 @@ namespace Game.Heroes.Magician
             _ClosestEnemy.AddEffects(owner as Character, _Knockback);
 
             _Hero.mana.AddMana(manaGainOnHit);
-
-            End();
         }
 
         // GOT FROM : https://forum.unity.com/threads/quaternion-lookrotation-in-2d.292572/
@@ -99,9 +97,14 @@ namespace Game.Heroes.Magician
         {
             _ClosestEnemy = Utilities.GetNearestCharacter<Enemy>(transform.position, range);
 
-            bool canUse = _ClosestEnemy && base.Use();
+            return _ClosestEnemy && !_Hero.skill.isActive && !_Hero.ultimate.isActive && base.Use();
+        }
 
-            return canUse;
+        public override void End()
+        {
+            base.End();
+
+            _AnimationController.Stop("Sparkles");
         }
     }
 }

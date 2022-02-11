@@ -20,6 +20,8 @@ namespace Game.Heroes.Magician
         public Vector3 position { get => transform.position; set => transform.position = value; }
         public Quaternion rotation { get => transform.rotation; set => transform.rotation = value; }
 
+        public Transform parent { get; set; }
+
         Coroutine _FadeCoroutine;
 
         void Awake() 
@@ -29,7 +31,7 @@ namespace Game.Heroes.Magician
             _SpriteRenderer.color = _Gradient.Evaluate(0);
         }
 
-        void LaserFadeOut(float value)
+        void LaserFade(float value)
         {
             _SpriteRenderer.color = _Gradient.Evaluate(value);
         }
@@ -39,7 +41,7 @@ namespace Game.Heroes.Magician
             if(_FadeCoroutine != null)
                 StopCoroutine(_FadeCoroutine);
 
-            _FadeCoroutine = StartCoroutine(FXUtilities.FadeIn(fadeTime, LaserFadeOut));
+            _FadeCoroutine = StartCoroutine(FXUtilities.FadeIn(fadeTime, LaserFade));
         }
 
         public void FadeOutLightRay(float fadeTime)
@@ -47,7 +49,7 @@ namespace Game.Heroes.Magician
             if(_FadeCoroutine != null)
                 StopCoroutine(_FadeCoroutine);
 
-            _FadeCoroutine = StartCoroutine(FXUtilities.FadeOut(fadeTime, LaserFadeOut));
+            _FadeCoroutine = StartCoroutine(FXUtilities.FadeOut(fadeTime, LaserFade));
         }
 
         public void FadeInOutLightRay(float fadeIn, float fadeOut)
@@ -55,7 +57,9 @@ namespace Game.Heroes.Magician
             if(_FadeCoroutine != null)
                 StopCoroutine(_FadeCoroutine);
 
-            _FadeCoroutine = StartCoroutine(FXUtilities.FadeTransition(fadeIn, fadeOut, LaserFadeOut));
+            transform.SetParent(null);
+
+            _FadeCoroutine = StartCoroutine(FXUtilities.FadeTransition(fadeIn, fadeOut, LaserFade, LaserFade, null, () => transform.SetParent(parent, false)));
         }
     }
 }
