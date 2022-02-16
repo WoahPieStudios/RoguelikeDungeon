@@ -323,7 +323,6 @@ GameObject:
   - component: {fileID: 537499622}
   - component: {fileID: 537499625}
   - component: {fileID: 537499627}
-  - component: {fileID: 537499626}
   - component: {fileID: 537499628}
   - component: {fileID: 537499629}
   m_Layer: 3
@@ -440,18 +439,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.86, y: 1.1}
   m_EdgeRadius: 0
---- !u!114 &537499626
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 537499621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8b9e53aae4a9a249a2c23f47ce6cc00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!111 &537499627
 Animation:
   m_ObjectHideFlags: 0
@@ -1055,7 +1042,6 @@ GameObject:
   - component: {fileID: 1739015348}
   - component: {fileID: 1739015355}
   - component: {fileID: 1739015354}
-  - component: {fileID: 1739015351}
   - component: {fileID: 1739015347}
   - component: {fileID: 1739015352}
   - component: {fileID: 1739015353}
@@ -1185,18 +1171,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1739015351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1739015346}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c8b9e53aae4a9a249a2c23f47ce6cc00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!111 &1739015352
 Animation:
   m_ObjectHideFlags: 0

@@ -7,7 +7,7 @@ using UnityEngine;
 using Game.Characters;
 using Game.Characters.Actions;
 using Game.Characters.Effects;
-using Game.Characters.Animations;
+using Game.Animations;
 using System;
 
 namespace Game.Heroes.Magician
@@ -38,7 +38,7 @@ namespace Game.Heroes.Magician
 
         Hero _Hero;
 
-        AnimationController _AnimationController;
+        AnimationHandler _AnimationHandler;
 
         public event Func<int> onUseBonusDamageEvent;
 
@@ -48,9 +48,9 @@ namespace Game.Heroes.Magician
 
             _Hero = owner as Hero;
 
-            _AnimationController = GetComponent<AnimationController>();
+            _AnimationHandler = new AnimationHandler(GetComponent<Animation>());
 
-            _AnimationController.AddAnimation("Sparkles", _AnimationClip, SetupLightRay, End);
+            _AnimationHandler.AddAnimation("Sparkles", _AnimationClip, SetupLightRay, End);
         }
 
         void SetupLightRay()
@@ -88,7 +88,7 @@ namespace Game.Heroes.Magician
 
             _Hero.FaceNearestCharacter(_ClosestEnemy);
 
-            _AnimationController.Play("Sparkles");
+            _AnimationHandler.Play("Sparkles");
 
             _Origin.rotation = LookAt(_ClosestEnemy.transform.position);
         }
@@ -104,7 +104,7 @@ namespace Game.Heroes.Magician
         {
             base.End();
 
-            _AnimationController.Stop("Sparkles");
+            _AnimationHandler.Stop("Sparkles");
         }
     }
 }
