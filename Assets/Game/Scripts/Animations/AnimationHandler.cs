@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Game.Animations
 {
-    public class AnimationHandler
+    [DisallowMultipleComponent]
+    public class AnimationHandler : MonoBehaviour
     {
         private System.Action[] _CurrentAnimationEvents;
         private Animation _Animation;
@@ -22,10 +23,10 @@ namespace Game.Animations
                 this.animationEvents = animationEvents;
             }
         }
-
-        public AnimationHandler(Animation animation)
+        
+        void Awake() 
         {
-            _Animation = animation;
+            _Animation = GetComponent<Animation>();    
         }
 
         public AnimationState[] GetAnimationStates()
