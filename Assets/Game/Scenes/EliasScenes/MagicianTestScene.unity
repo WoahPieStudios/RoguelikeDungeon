@@ -1047,6 +1047,7 @@ GameObject:
   - component: {fileID: 1739015353}
   - component: {fileID: 1739015356}
   - component: {fileID: 1739015357}
+  - component: {fileID: 1739015351}
   m_Layer: 3
   m_Name: Magician
   m_TagString: Untagged
@@ -1171,6 +1172,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1739015351
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1739015346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f827d236fe740ff4e9d11975c0586ce1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!111 &1739015352
 Animation:
   m_ObjectHideFlags: 0

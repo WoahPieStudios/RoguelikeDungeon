@@ -48,7 +48,7 @@ namespace Game.Heroes.Magician
 
             _Hero = owner as Hero;
 
-            _AnimationHandler = new AnimationHandler(GetComponent<Animation>());
+            _AnimationHandler = GetComponent<AnimationHandler>();
 
             _AnimationHandler.AddAnimation("Sparkles", _AnimationClip, SetupLightRay, End);
         }
