@@ -27,13 +27,12 @@ namespace Game.Animations
 
         private void Awake() 
         {
-            _AnimationHandler = new AnimationHandler(GetComponent<Animation>());
-            // _AnimationHandler = GetComponent<AnimationController>();
+            _AnimationHandler = GetComponent<AnimationHandler>();
         }
 
         private void Start() 
         {
-            _AnimationHandler.AddAnimation(_SpinAnimation, _Spin, 2);
+            _AnimationHandler.AddAnimation(_SpinAnimation, _Spin, 2, test);
             _AnimationHandler.AddAnimation(_OrbitAnimation, _Orbit, 1);
             _AnimationHandler.AddAnimation(_CounterOrbitAnimation, _CounterOrbit, 1);
             _AnimationHandler.AddAnimation(_SpinAndOrbitAnimation, _SpinAndOrbit, 0);
@@ -60,6 +59,11 @@ namespace Game.Animations
 
             if(Input.GetKeyDown(KeyCode.Semicolon))
                 _AnimationHandler.SyncAnimations(_SpinAnimation, _OrbitAnimation);
+        }
+
+        private void test()
+        {
+            Debug.Log("tset");
         }
     }
 }
