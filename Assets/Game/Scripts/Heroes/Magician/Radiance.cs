@@ -5,6 +5,7 @@ using UnityEngine;
 
 using Game.Characters;
 using Game.Characters.Actions;
+using Game.Characters.Properties;
 
 namespace Game.Heroes.Magician
 {
@@ -16,6 +17,8 @@ namespace Game.Heroes.Magician
         int _Damage;
         [SerializeField]
         int _ManaGainOnHit;
+        [SerializeField]
+        float _CastingTime;
 
         [Header("Targetting")]
         [SerializeField]
@@ -39,6 +42,8 @@ namespace Game.Heroes.Magician
         [SerializeField]
         float _FadeOutTime;
 
+        bool _IsCasting = false;
+
         Enemy _ClosestEnemy;
 
         Coroutine _TickCoroutine;
@@ -50,6 +55,14 @@ namespace Game.Heroes.Magician
             base.Awake();
 
             _Hero = owner as Hero;
+
+            _Hero.health.onDamageEvent += OnDamage;
+        }
+
+        void OnDamage(IHealthProperty health, int damage)
+        {
+            if(isActive && _IsCasting)
+                End();
         }
 
         void SunRayFade(float value)
@@ -59,6 +72,12 @@ namespace Game.Heroes.Magician
 
         IEnumerator Tick()
         {
+            _IsCasting = true;
+            
+            yield return new WaitForSeconds(_CastingTime);
+
+            _IsCasting = false;
+
             yield return FX.FXUtilities.FadeIn(_SunRayFadeInTime, SunRayFade);
 
             _LightRay.FadeInLightRay(_FadeInTime);
@@ -116,6 +135,8 @@ namespace Game.Heroes.Magician
 
             if(_TickCoroutine != null)
                 StopCoroutine(_TickCoroutine);
+
+            _IsCasting = false;
 
             _SunRay.color = _FadeGradient.Evaluate(0);
             _SunRay.transform.SetParent(transform, false);

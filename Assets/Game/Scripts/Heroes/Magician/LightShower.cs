@@ -5,6 +5,7 @@ using UnityEngine;
 
 using Game.Characters;
 using Game.Characters.Actions;
+using Game.Characters.Properties;
 
 namespace Game.Heroes.Magician
 {
@@ -18,6 +19,8 @@ namespace Game.Heroes.Magician
         float _FieldTime;
         [SerializeField]
         int _DamageInterval;
+        [SerializeField]
+        float _CastingTime;
 
         [Header("Targetting")]
         [SerializeField]
@@ -28,6 +31,8 @@ namespace Game.Heroes.Magician
         ParticleSystem _LightShowerParticles;
         [SerializeField]
         Vector3 _Offset;
+
+        bool _IsCasting = false;
 
         Enemy _ClosestEnemy;
 
@@ -40,6 +45,14 @@ namespace Game.Heroes.Magician
             base.Awake();
 
             _Hero = owner as Hero;
+
+            _Hero.health.onDamageEvent += OnDamage;
+        }
+
+        void OnDamage(IHealthProperty health, int damage)
+        {
+            if(isActive && _IsCasting)
+                End();
         }
 
         IEnumerator Tick()
@@ -49,6 +62,14 @@ namespace Game.Heroes.Magician
             float currentTime = 0;
             float currentInterval = 0;
             float timePerInterval = _FieldTime / (_DamageInterval + 2);
+
+            _IsCasting = true;
+
+            yield return new WaitForSeconds(_CastingTime);
+
+            _IsCasting = false;
+            
+            _LightShowerParticles.Play();
 
             while(currentTime < _FieldTime)
             {
@@ -76,7 +97,6 @@ namespace Game.Heroes.Magician
 
             _LightShowerParticles.transform.SetParent(null, false);
             _LightShowerParticles.transform.position = _ClosestEnemy.transform.position + _Offset;
-            _LightShowerParticles.Play();
         }
 
         public override bool Use()
@@ -97,6 +117,8 @@ namespace Game.Heroes.Magician
 
             if(_TickCoroutine != null)
                 StopCoroutine(_TickCoroutine);
+
+            _IsCasting = false;
 
             _LightShowerParticles.Stop();
             _LightShowerParticles.transform.SetParent(transform, false);
