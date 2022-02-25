@@ -19,6 +19,22 @@ namespace Game.Multiplayer
         private Server _Server = new Server();
 
         public Server server => _Server;
+
+        private void OnClientConnect(object sender, ServerClientConnectedEventArgs args)
+        {
+            
+        }
+        
+        private void OnClientDisconnect(object sender, ClientDisconnectedEventArgs args)
+        {
+            
+        }
+
+        public void Initialize()
+        {
+            server.ClientConnected += OnClientConnect;
+            server.ClientDisconnected += OnClientDisconnect;
+        }
         
 
         public void StartServer()

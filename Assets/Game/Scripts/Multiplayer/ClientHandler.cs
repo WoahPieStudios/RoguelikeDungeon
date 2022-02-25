@@ -24,6 +24,7 @@ namespace Game.Multiplayer
         {
             
         }
+
         private void OnClientDisconnect(object sender, ClientDisconnectedEventArgs args)
         {
 
@@ -33,10 +34,6 @@ namespace Game.Multiplayer
         {
             client.ClientConnected += OnClientConnect;
             client.ClientDisconnected += OnClientDisconnect;
-        }
-
-        public void Tick()
-        {
         }
 
         public void Connect()
