@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,11 +12,6 @@ namespace Game.Multiplayer
     [System.Serializable]
     public class ClientHandler
     {
-        [SerializeField]
-        private string _Ip;
-        [SerializeField]
-        private ushort _Port;
-
         private Client _Client = new Client();
 
         public Client client => _Client;
@@ -30,15 +26,16 @@ namespace Game.Multiplayer
 
         }
 
+        private void OnConnectionFailed(object sender, EventArgs e)
+        {
+            Debug.Log("BALH");
+        }
+
         public void Initialize()
         {
             client.ClientConnected += OnClientConnect;
             client.ClientDisconnected += OnClientDisconnect;
-        }
-
-        public void Connect()
-        {
-            client.Connect($"{_Ip}:{_Port}");
+            client.ConnectionFailed += OnConnectionFailed;
         }
     }
 }

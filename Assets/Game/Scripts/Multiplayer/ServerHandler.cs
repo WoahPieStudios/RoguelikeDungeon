@@ -11,11 +11,6 @@ namespace Game.Multiplayer
     [System.Serializable]
     public class ServerHandler
     {
-        [SerializeField]
-        private ushort _Port;
-        [SerializeField]
-        private ushort _MaxClientCount;
-
         private Server _Server = new Server();
 
         public Server server => _Server;
@@ -34,12 +29,6 @@ namespace Game.Multiplayer
         {
             server.ClientConnected += OnClientConnect;
             server.ClientDisconnected += OnClientDisconnect;
-        }
-        
-
-        public void StartServer()
-        {
-            server.Start(_Port, _MaxClientCount);
         }
     }
 }

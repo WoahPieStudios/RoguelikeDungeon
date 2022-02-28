@@ -1,6 +1,9 @@
+using System.Net;
+using System.Net.Sockets;
+using System.Net.NetworkInformation;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Net;
 
 using UnityEngine;
 
@@ -11,29 +14,40 @@ namespace Game.Multiplayer
 {
     public class NetworkManager : MonoBehaviour
     {
-        [SerializeField]
-        ServerHandler _ServerHandler;
-        [SerializeField]
-        ClientHandler _ClientHandler;
+        ServerHandler _ServerHandler = new ServerHandler();
+        ClientHandler _ClientHandler = new ClientHandler();
 
         private static NetworkManager _Instance;
 
         public static NetworkManager instance => _Instance;
-        public static ServerHandler serverHandler => instance._ServerHandler;
-        public static ClientHandler clientHandler => instance._ClientHandler;
+        public static Server server => instance?._ServerHandler.server;
+        public static Client client => instance?._ClientHandler.client;
 
-        public static string GetPublicIpAddress()
+        // Source: https://stackoverflow.com/questions/3253701/get-public-external-ip-address
+        public static string GetPublicIPAddress()
         {
-            string externalIpString = new WebClient().DownloadString("http://icanhazip.com").Replace("\\r\\n", "").Replace("\\n", "").Trim();
-            
-            IPAddress externalIp = IPAddress.Parse(externalIpString);
+            return new WebClient().DownloadString("http://icanhazip.com").Replace("\\r\\n", "").Replace("\\n", "").Trim();
+        }
 
-            return externalIpString.ToString();
+        // Source: https://stackoverflow.com/questions/6803073/get-local-ip-address
+        public static string GetLocalIPAddress()
+        {
+            if (!NetworkInterface.GetIsNetworkAvailable())
+                return null;
+
+            IPHostEntry host = Dns.GetHostEntry(Dns.GetHostName());
+
+            return host
+                .AddressList
+                .FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork)?.ToString();
         }
 
         private void Awake()
         {
             _Instance = this;
+
+            _ClientHandler.Initialize();
+            _ServerHandler.Initialize();
 
             RiptideLogger.Initialize(Debug.Log, Debug.Log, Debug.LogWarning, Debug.LogError, false);
         }
@@ -47,20 +61,20 @@ namespace Game.Multiplayer
 
         private void FixedUpdate() 
         {
-            if(serverHandler.server.IsRunning)
-                serverHandler.server.Tick();
+            if(server.IsRunning)
+                server.Tick();
 
-            if(clientHandler.client.IsConnected)
-                clientHandler.client.Tick();
+            if(client.IsConnected)
+                client.Tick();
         }
 
         private void OnApplicationQuit() 
         {
-            if(serverHandler.server.IsRunning)
-                serverHandler.server.Stop();    
+            if(server.IsRunning)
+                server.Stop();    
 
-            if(clientHandler.client.IsConnected)
-                clientHandler.client.Disconnect();
+            if(client.IsConnected)
+                client.Disconnect();
         }
     }
 }
