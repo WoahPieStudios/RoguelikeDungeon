@@ -108,6 +108,7 @@ namespace Game.Animations
             if(!Contains(name))
                 return;
 
+            _CurrentAnimationEvents = _AnimationDatas[name].animationEvents;
             _Animation.CrossFade(name, fadeTime, playMode);
         }
 
@@ -147,7 +148,7 @@ namespace Game.Animations
 
         public void InvokeEvent(int index)
         {
-            if(index > _CurrentAnimationEvents.Length || index < 0)
+            if(index >= _CurrentAnimationEvents.Length || index < 0)
             {
                 Debug.LogError("Invoke Event index is out of bounds!");
 
