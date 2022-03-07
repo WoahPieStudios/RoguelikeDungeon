@@ -8,108 +8,143 @@ namespace Game.Animations
     [DisallowMultipleComponent]
     public class AnimationHandler : MonoBehaviour
     {
-        private System.Action[] _CurrentAnimationEvents;
         private Animation _Animation;
-        private Dictionary<string, AnimationData> _AnimationDatas = new Dictionary<string, AnimationData>();
+        private List<AnimationPlayData> _AnimationPlayDatas = new List<AnimationPlayData>();
 
-        private struct AnimationData
+        private class AnimationPlayData
         {
-            public AnimationClip animationClip;
+            public AnimationData animationData;
             public System.Action[] animationEvents;
+            public Coroutine coroutine;
+            public bool isPlaying;
 
-            public AnimationData(AnimationClip animationClip, System.Action[] animationEvents)
+            public AnimationPlayData(AnimationData animationData, System.Action[] animationEvents)
             {
-                this.animationClip = animationClip;
+                this.animationData = animationData;
                 this.animationEvents = animationEvents;
+                this.coroutine = null;
+                this.isPlaying = false;
             }
         }
-        
-        void Awake() 
+
+        private void Awake() 
         {
             _Animation = GetComponent<Animation>();    
         }
 
-        public AnimationState[] GetAnimationStates()
+        private void Stop(AnimationPlayData playData)
         {
-            return _AnimationDatas.Select(a => _Animation[a.Key]).ToArray();
+            if(playData.coroutine != null)
+                StopCoroutine(playData.coroutine);
+
+            playData.isPlaying = false;
+
+            _Animation.Stop(playData.animationData.name);
         }
 
-        public AnimationState GetAnimationState(string name)
+        private IEnumerator AnimationPlayTick(AnimationPlayData playData)
         {
-            if(!Contains(name))
-                return null;
+            float currentTime = 0;
 
-            return _Animation[name];
-        }
+            AnimationData animationData = playData.animationData;
 
-        public bool Contains(string name)
-        {
-            return _AnimationDatas.ContainsKey(name);
-        }
+            playData.isPlaying = true;
 
-        public bool AddAnimation(string name, AnimationClip animationClip, params System.Action[] animationEvents)
-        {
-            if(Contains(name))
-                return false;
+            for(int i = 0; i < animationData.eventTimeStamps.Length; )
+            {
+                EventTimeStamp timeStamp = animationData.eventTimeStamps[i];
 
-            _AnimationDatas.Add(name, new AnimationData(animationClip, animationEvents));
+                float eventTime = animationData.animationClip.length * timeStamp.timeValue;
 
-            _Animation.AddClip(animationClip, name);
-            
-            return true;
-        }
+                if(currentTime >= eventTime)
+                {
+                    if(timeStamp.eventIndex >= 0 && timeStamp.eventIndex < playData.animationEvents.Length)
+                        playData.animationEvents[timeStamp.eventIndex]?.Invoke();
 
-        public bool AddAnimation(string name, AnimationClip animationClip, int layer, params System.Action[] animationEvents)
-        {
-            if(!AddAnimation(name, animationClip, animationEvents))
-                return false;
+                    i++;
+                }
 
-            _Animation[name].layer = layer;
+                else
+                {
+                    yield return null;
 
-            return true;
-        }
-
-        public void RemoveAnimation(string name)
-        {
-            if(!Contains(name))
-                return;
-
-            AnimationClip animationClip = _AnimationDatas[name].animationClip;
-
-            _Animation.RemoveClip(animationClip);
-            _AnimationDatas.Remove(name);
-        }
-
-        public void Play(string name, PlayMode playMode)
-        {
-            if(!Contains(name))
-                return;
+                    currentTime += Time.deltaTime;
+                }
+            }
                 
-            _CurrentAnimationEvents = _AnimationDatas[name].animationEvents;
-            _Animation.Play(name, playMode);
+            playData.isPlaying = false;
         }
 
-        public void Play(string name)
+        private AnimationPlayData GetAnimationPlayData(AnimationData animationData)
         {
-            if(!Contains(name))
+            return _AnimationPlayDatas.FirstOrDefault(a => a.animationData = animationData);
+        }
+
+        public bool Contains(AnimationData animationData)
+        {
+            return _AnimationPlayDatas.Any(a => a.animationData == animationData);
+        }
+
+        public void AddAnimationData(AnimationData animationData, params System.Action[] animationEvents)
+        {
+            if(Contains(animationData))
                 return;
 
-            _CurrentAnimationEvents = _AnimationDatas[name].animationEvents;
-            _Animation.Play(name);
+            _AnimationPlayDatas.Add(new AnimationPlayData(animationData, animationEvents));
+
+            _Animation.AddClip(animationData.animationClip, animationData.name);
+
+            _Animation[animationData.name].layer = animationData.layer;
         }
 
-        public void CrossFadePlay(string name, float fadeTime)
+        public void RemoveAnimation(AnimationData animationData)
         {
-            CrossFadePlay(name, fadeTime, PlayMode.StopSameLayer);
-        }
-
-        public void CrossFadePlay(string name, float fadeTime, PlayMode playMode)
-        {
-            if(!Contains(name))
+            if(!Contains(animationData))
                 return;
 
-            _CurrentAnimationEvents = _AnimationDatas[name].animationEvents;
-            _Animation.CrossFade(name, fadeTime, playMode);
+            _Animation.RemoveClip(animationData.animationClip);
+
+            _AnimationPlayDatas.Remove(GetAnimationPlayData(animationData));
+        }
+
+        public void Play(AnimationData animationData)
+        {
+            Play(animationData, PlayMode.StopSameLayer);
+        }
+
+        public void Play(AnimationData animationData, PlayMode playMode)
+        {
+            if(!Contains(animationData))
+                return;
+
+            AnimationPlayData playData = GetAnimationPlayData(animationData);
+
+            if(playData.isPlaying)
+                Stop(playData);
+
+            _Animation.Play(animationData.name, playMode);
+
+            playData.coroutine = StartCoroutine(AnimationPlayTick(playData));
+        }
+
+        public void CrossFadePlay(AnimationData animationData, float fadeTime)
+        {
+            CrossFadePlay(animationData, fadeTime, PlayMode.StopSameLayer);
+        }
+
+        public void CrossFadePlay(AnimationData animationData, float fadeTime, PlayMode playMode)
+        {
+            if(!Contains(animationData))
+                return;
+
+            AnimationPlayData playData = GetAnimationPlayData(animationData);
+
+            if(playData.isPlaying)
+                Stop(playData);
+
+            _Animation.CrossFade(animationData.name, fadeTime, playMode);
+
+            playData.coroutine = StartCoroutine(AnimationPlayTick(playData));
         }
 
         /// <summary>
@@ -117,19 +152,19 @@ namespace Game.Animations
         /// </summary>
         /// <param name="baseName"></param>
         /// <param name="names"></param>
-        public void SyncAnimations(string baseName, params string[] names)
+        public void SyncAnimations(AnimationData baseAnimationData, params AnimationData[] animationDatas)
         {
-            if(!Contains(baseName))
+            if(!Contains(baseAnimationData))
                 return;
 
-            float currentTime = _Animation[baseName].time;
+            float currentTime = _Animation[baseAnimationData.name].time;
 
-            foreach(string name in names)
+            foreach(AnimationData data in animationDatas)
             {
-                if(!Contains(name))
+                if(!Contains(data))
                     continue;
 
-                _Animation[name].time = currentTime;
+                _Animation[data.name].time = currentTime;
             }
         }
 
@@ -138,24 +173,12 @@ namespace Game.Animations
             _Animation.Stop();
         }
 
-        public void Stop(string name)
+        public void Stop(AnimationData animationData)
         {
-            if(!Contains(name))
+            if(!Contains(animationData))
                 return;
 
-            _Animation.Stop(name);
-        }
-
-        public void InvokeEvent(int index)
-        {
-            if(index >= _CurrentAnimationEvents.Length || index < 0)
-            {
-                Debug.LogError("Invoke Event index is out of bounds!");
-
-                return;
-            }
-
-            _CurrentAnimationEvents[index]?.Invoke();
+            Stop(GetAnimationPlayData(animationData));
         }
     }
 }
