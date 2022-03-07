@@ -13,9 +13,9 @@ namespace Game.Enemies.Skeleton
     {
         [Header("Animation Clips")]
         [SerializeField]
-        AnimationClip _IdleClip;
+        AnimationData _IdleData;
         [SerializeField]
-        AnimationClip _WalkClip;
+        AnimationData _WalkData;
 
         [SerializeField]
         float _LerpTime;
@@ -23,9 +23,6 @@ namespace Game.Enemies.Skeleton
         Vector2 _Direction;
 
         AnimationHandler _AnimationHandler;
-
-        const string _IdleAnimName = "Idle"; 
-        const string _WalkAnimName = "Walk"; 
 
         bool _IsMoving = false;
 
@@ -42,8 +39,8 @@ namespace Game.Enemies.Skeleton
 
         private void Start() 
         {
-            _AnimationHandler.AddAnimation(_IdleAnimName, _IdleClip, 0);
-            _AnimationHandler.AddAnimation(_WalkAnimName, _WalkClip, 0);    
+            _AnimationHandler.AddAnimationData(_IdleData);
+            _AnimationHandler.AddAnimationData(_WalkData);    
         }
 
         void FixedUpdate() 
@@ -59,14 +56,14 @@ namespace Game.Enemies.Skeleton
             {
                 _IsMoving = true;
 
-                _AnimationHandler.CrossFadePlay(_WalkAnimName, 0.05f);
+                _AnimationHandler.CrossFadePlay(_WalkData, 0.05f);
             }
 
             else if(_Velocity.magnitude <= 0.05f && _IsMoving)
             {
                 _IsMoving = false;
 
-                _AnimationHandler.CrossFadePlay(_IdleAnimName, 0.05f);
+                _AnimationHandler.CrossFadePlay(_WalkData, 0.05f);
             }
         }
 

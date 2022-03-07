@@ -9,11 +9,9 @@ using Game.Characters.Actions;
 public class SkeletonAttack : Attack
 {
     [SerializeField]
-    private AnimationClip _AttackClip;
+    private AnimationData _AttackData;
 
     private AnimationHandler _AnimationHandler;
-
-    private const string _AttackAnimName = "Attack";
 
     protected override void Awake()
     {
@@ -24,20 +22,27 @@ public class SkeletonAttack : Attack
 
     private void Start() 
     {
-        _AnimationHandler.AddAnimation(_AttackAnimName, _AttackClip, 1, End);
+        _AnimationHandler.AddAnimationData(_AttackData, Test);
     }
 
     protected override void Begin()
     {
         base.Begin();
 
-        _AnimationHandler.CrossFadePlay(_AttackAnimName, 0.1f);
+        _AnimationHandler.CrossFadePlay(_AttackData, 0.1f);
+    }
+
+    private void Test()
+    {
+        Debug.LogError("Blah");
+
     }
 
     public override void End()
     {
         base.End();
 
-        _AnimationHandler.Stop(_AttackAnimName);
+
+        // _AnimationHandler.Stop(_AttackData);
     }
 }
