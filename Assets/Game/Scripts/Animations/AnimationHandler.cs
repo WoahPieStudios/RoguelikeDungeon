@@ -77,7 +77,7 @@ namespace Game.Animations
 
         private AnimationPlayData GetAnimationPlayData(AnimationData animationData)
         {
-            return _AnimationPlayDatas.FirstOrDefault(a => a.animationData = animationData);
+            return _AnimationPlayDatas.FirstOrDefault(a => a.animationData == animationData);
         }
 
         public bool Contains(AnimationData animationData)
