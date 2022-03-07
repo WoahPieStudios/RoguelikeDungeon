@@ -10,18 +10,13 @@ namespace Game.Animations
     public class AnimationTester : MonoBehaviour
     {
         [SerializeField]
-        private AnimationClip _Spin;
+        private AnimationData _SpinData;
         [SerializeField]
-        private AnimationClip _Orbit;
+        private AnimationData _OrbitData;
         [SerializeField]
-        private AnimationClip _CounterOrbit;
+        private AnimationData _CounterOrbitData;
         [SerializeField]
-        private AnimationClip _SpinAndOrbit;
-
-        private static string _SpinAnimation = "Spin";
-        private static string _OrbitAnimation = "Orbit";
-        private static string _CounterOrbitAnimation = "CounterOrbit";
-        private static string _SpinAndOrbitAnimation = "SpinAndOrbit";
+        private AnimationData _SpinAndOrbitData;
 
         private AnimationHandler _AnimationHandler;
 
@@ -32,33 +27,28 @@ namespace Game.Animations
 
         private void Start() 
         {
-            _AnimationHandler.AddAnimation(_SpinAnimation, _Spin, 2, test);
-            _AnimationHandler.AddAnimation(_OrbitAnimation, _Orbit, 1);
-            _AnimationHandler.AddAnimation(_CounterOrbitAnimation, _CounterOrbit, 1);
-            _AnimationHandler.AddAnimation(_SpinAndOrbitAnimation, _SpinAndOrbit, 0);
-
-            foreach(AnimationState state in _AnimationHandler.GetAnimationStates())
-            {
-                Debug.Log(state.name + ": " + state.layer);
-            }
+            _AnimationHandler.AddAnimationData(_SpinData, test);
+            _AnimationHandler.AddAnimationData(_OrbitData);
+            _AnimationHandler.AddAnimationData(_CounterOrbitData, test, test);
+            _AnimationHandler.AddAnimationData(_SpinAndOrbitData);
         }
 
         private void Update() 
         {
             if(Input.GetKeyDown(KeyCode.J))
-                _AnimationHandler.Play(_SpinAnimation);
+                _AnimationHandler.Play(_SpinData);
 
             if(Input.GetKeyDown(KeyCode.K))
-                _AnimationHandler.Play(_OrbitAnimation);
+                _AnimationHandler.Play(_OrbitData);
 
             if(Input.GetKeyDown(KeyCode.L))
-                _AnimationHandler.CrossFadePlay(_CounterOrbitAnimation, .1f); 
+                _AnimationHandler.CrossFadePlay(_CounterOrbitData, .1f); 
 
             if(Input.GetKeyDown(KeyCode.N))
-                _AnimationHandler.Play(_SpinAndOrbitAnimation);
+                _AnimationHandler.Play(_SpinAndOrbitData);
 
             if(Input.GetKeyDown(KeyCode.Semicolon))
-                _AnimationHandler.SyncAnimations(_SpinAnimation, _OrbitAnimation);
+                _AnimationHandler.SyncAnimations(_SpinData, _OrbitData);
         }
 
         private void test()
