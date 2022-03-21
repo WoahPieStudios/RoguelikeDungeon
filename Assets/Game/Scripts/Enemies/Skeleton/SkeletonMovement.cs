@@ -41,9 +41,11 @@ namespace Game.Enemies.Skeleton
         {
             _AnimationHandler.AddAnimationData(_IdleData);
             _AnimationHandler.AddAnimationData(_WalkData);    
+
+            _AnimationHandler.Play(_IdleData);
         }
 
-        void FixedUpdate() 
+        private void FixedUpdate() 
         {
             if(isActive && !isRestricted)
             {
@@ -63,7 +65,7 @@ namespace Game.Enemies.Skeleton
             {
                 _IsMoving = false;
 
-                _AnimationHandler.CrossFadePlay(_WalkData, 0.05f);
+                _AnimationHandler.CrossFadePlay(_IdleData, 0.05f);
             }
         }
 

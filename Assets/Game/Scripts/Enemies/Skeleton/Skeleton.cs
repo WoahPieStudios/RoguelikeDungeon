@@ -32,10 +32,10 @@ namespace Game.Enemies.Skeleton
 
             movement.Move(_InputAxis);
 
+            // orientation.Orientate(Vector2Int.RoundToInt(inputAxis));
+
             if(Input.GetKeyDown(KeyCode.J))
                 _Attack.Use();
-
-            Debug.Log($"{_Attack.isActive} && !{_Attack.isRestricted}");
         }
     }
 }

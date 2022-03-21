@@ -10,8 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0278b322793173344b3fb5344a1baf45, type: 3}
-  m_Name: SkeletonWalk
+  m_Name: SkeletonAttack_Top
   m_EditorClassIdentifier: 
-  _AnimationClip: {fileID: 0}
-  _Layer: 0
-  _EventTimeStamps: []
+  _AnimationClip: {fileID: 7400000, guid: e70a74946bf71ac459319a89efb185e3, type: 2}
+  _Layer: 2
+  _EventTimeStamps:
+  - timeType: 0
+    timeValue: 1
+    eventIndex: 0

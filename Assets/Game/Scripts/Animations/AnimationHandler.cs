@@ -31,6 +31,71 @@ namespace Game.Animations
         {
             _Animation = GetComponent<Animation>();    
         }
+        
+        private AnimationPlayData GetAnimationPlayData(AnimationData animationData)
+        {
+            return _AnimationPlayDatas.FirstOrDefault(a => a.animationData == animationData);
+        }
+
+        private AnimationPlayData GetAnimationPlayData(int layer, bool isPlaying)
+        {
+            return _AnimationPlayDatas.FirstOrDefault(a => a.animationData.layer == layer && a.isPlaying && isPlaying);
+        }
+
+        private IEnumerator OnceTick(AnimationPlayData playData)
+        {
+            float currentTime = 0;
+
+            AnimationData animationData = playData.animationData;
+            AnimationClip animationClip = animationData.animationClip;
+            
+            while(currentTime <= animationClip.length)
+            {
+                InvokeAnimationEvents(animationData.eventTimeStamps, playData.animationEvents, animationClip.length, currentTime, Time.deltaTime);
+
+                currentTime += Time.deltaTime;
+
+                yield return null;
+            }
+        }
+
+        private IEnumerator LoopTick(AnimationPlayData playData)
+        {
+            float currentTime = 0;
+            
+            AnimationData animationData = playData.animationData;
+            AnimationClip animationClip = animationData.animationClip;
+
+            while(playData.isPlaying)
+            {
+                if(currentTime > animationClip.length)
+                    currentTime = 0;
+
+                InvokeAnimationEvents(animationData.eventTimeStamps, playData.animationEvents, animationClip.length, currentTime, Time.deltaTime);
+
+                currentTime += Time.deltaTime;
+
+                yield return null;
+            }
+        }
+
+        private IEnumerator AnimationPlayTick(AnimationPlayData playData)
+        {
+            playData.isPlaying = true;
+
+            switch(playData.animationData.animationClip.wrapMode)
+            {
+                case WrapMode.Once:
+                    yield return OnceTick(playData);
+                    break;
+                
+                case WrapMode.Loop:
+                    yield return LoopTick(playData);
+                    break;
+            }
+                
+            playData.isPlaying = false;
+        }
 
         private void Stop(AnimationPlayData playData)
         {
@@ -42,42 +107,30 @@ namespace Game.Animations
             _Animation.Stop(playData.animationData.name);
         }
 
-        private IEnumerator AnimationPlayTick(AnimationPlayData playData)
+        private void TryInvokeEvent(System.Action @event, float eventTime, float deltaTime)
         {
-            float currentTime = 0;
-
-            AnimationData animationData = playData.animationData;
-
-            playData.isPlaying = true;
-
-            for(int i = 0; i < animationData.eventTimeStamps.Length; )
-            {
-                EventTimeStamp timeStamp = animationData.eventTimeStamps[i];
-
-                float eventTime = animationData.animationClip.length * timeStamp.timeValue;
-
-                if(currentTime >= eventTime)
-                {
-                    if(timeStamp.eventIndex >= 0 && timeStamp.eventIndex < playData.animationEvents.Length)
-                        playData.animationEvents[timeStamp.eventIndex]?.Invoke();
-
-                    i++;
-                }
-
-                else
-                {
-                    yield return null;
-
-                    currentTime += Time.deltaTime;
-                }
-            }
-                
-            playData.isPlaying = false;
+            if(eventTime >= 0 && eventTime <= deltaTime)
+                @event?.Invoke();
         }
 
-        private AnimationPlayData GetAnimationPlayData(AnimationData animationData)
+        private void InvokeAnimationEvents(EventTimeStamp[] timeStamps, System.Action[] events, float animationLength, float currentTime, float deltaTime)
         {
-            return _AnimationPlayDatas.FirstOrDefault(a => a.animationData == animationData);
+            float sign = Mathf.Sign(deltaTime);
+
+            for(int i = 0; i < timeStamps.Length; i++)
+            {
+                if(i >= events.Length)
+                    return;
+
+                float eventTime = (timeStamps[i].timeValue * animationLength) - currentTime;
+
+                TryInvokeEvent(events[i], sign * eventTime, sign * deltaTime);
+            }
+        }
+
+        public bool IsAnimationPlaying(AnimationData animationData)
+        {
+            return Contains(animationData) && GetAnimationPlayData(animationData).isPlaying;
         }
 
         public bool Contains(AnimationData animationData)
@@ -137,10 +190,15 @@ namespace Game.Animations
             if(!Contains(animationData))
                 return;
 
+
+            AnimationPlayData previousPlayData = GetAnimationPlayData(animationData.layer, true);
             AnimationPlayData playData = GetAnimationPlayData(animationData);
 
             if(playData.isPlaying)
                 Stop(playData);
+
+            if(previousPlayData != null)
+                Stop(previousPlayData.animationData, fadeTime);
 
             _Animation.CrossFade(animationData.name, fadeTime, playMode);
 
@@ -179,6 +237,16 @@ namespace Game.Animations
                 return;
 
             Stop(GetAnimationPlayData(animationData));
+        }
+
+        public async void Stop(AnimationData animationData, float time)
+        {
+            if(!gameObject && !this)
+                return;
+
+            await System.Threading.Tasks.Task.Delay(Mathf.RoundToInt(time / 1000));
+
+            Stop(animationData);
         }
     }
 }

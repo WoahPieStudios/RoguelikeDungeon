@@ -6,43 +6,63 @@ using UnityEngine;
 using Game.Animations;
 using Game.Characters.Actions;
 
-public class SkeletonAttack : Attack
+namespace Game.Enemies.Skeleton
 {
-    [SerializeField]
-    private AnimationData _AttackData;
-
-    private AnimationHandler _AnimationHandler;
-
-    protected override void Awake()
+    public class SkeletonAttack : Attack
     {
-        base.Awake();
+        [SerializeField]
+        private AnimationData _AttackTopData;
+        [SerializeField]
+        private AnimationData _AttackBottomData;
 
-        _AnimationHandler = GetComponent<AnimationHandler>();
-    }
+        private AnimationHandler _AnimationHandler;
 
-    private void Start() 
-    {
-        _AnimationHandler.AddAnimationData(_AttackData, Test);
-    }
+        protected override void Awake()
+        {
+            base.Awake();
 
-    protected override void Begin()
-    {
-        base.Begin();
+            _AnimationHandler = GetComponent<AnimationHandler>();
+        }
 
-        _AnimationHandler.CrossFadePlay(_AttackData, 0.1f);
-    }
+        private void Start() 
+        {
+            _AnimationHandler.AddAnimationData(_AttackTopData, End);
+            _AnimationHandler.AddAnimationData(_AttackBottomData, End);
+        }
 
-    private void Test()
-    {
-        Debug.LogError("Blah");
+        private void Update() 
+        {
+            if(!isActive)
+                return;
+                
+            if((owner as Skeleton).movement.velocity.magnitude > 0.001f)
+            {
+                _AnimationHandler.Stop(_AttackBottomData);
+            }
 
-    }
+            else if(!_AnimationHandler.IsAnimationPlaying(_AttackBottomData))
+            {
+                _AnimationHandler.Play(_AttackBottomData);
+                _AnimationHandler.SyncAnimations(_AttackTopData, _AttackBottomData);
+            }
+        }
 
-    public override void End()
-    {
-        base.End();
+        protected override void Begin()
+        {
+            base.Begin();
 
+            _AnimationHandler.CrossFadePlay(_AttackTopData, 0.1f);
+            
+            if((owner as Skeleton).movement.velocity.magnitude <= 0.001f)
+                _AnimationHandler.CrossFadePlay(_AttackBottomData, 0.1f);
+        }
 
-        // _AnimationHandler.Stop(_AttackData);
+        public override void End()
+        {
+            base.End();
+            
+            _AnimationHandler.Stop(_AttackTopData);
+            _AnimationHandler.Stop(_AttackBottomData);
+        }
     }
 }

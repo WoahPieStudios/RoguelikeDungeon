@@ -200,7 +200,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6719449730229239534, guid: 185a3a98d10cd9c4bb6df92667723138, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -1.1760006
+      value: 26.882925
       objectReference: {fileID: 0}
     - target: {fileID: 6719449730360174734, guid: 185a3a98d10cd9c4bb6df92667723138, type: 3}
       propertyPath: m_LocalRotation.w
@@ -220,7 +220,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6719449730360174734, guid: 185a3a98d10cd9c4bb6df92667723138, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: -3.8609962
+      value: -34.129
       objectReference: {fileID: 0}
     - target: {fileID: 6719449730492462060, guid: 185a3a98d10cd9c4bb6df92667723138, type: 3}
       propertyPath: m_LocalPosition.y
@@ -252,7 +252,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6719449731423354417, guid: 185a3a98d10cd9c4bb6df92667723138, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0.2893475
+      value: 6.2359366
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6719449729872429085, guid: 185a3a98d10cd9c4bb6df92667723138, type: 3}
@@ -359,6 +359,9 @@ Animation:
   - {fileID: 7400000, guid: d8bb74163034bc14c8893ecefc5dcab2, type: 2}
   - {fileID: 7400000, guid: a2bbe6bfa1129f3478f0ba90c2672d31, type: 2}
   - {fileID: 7400000, guid: e70a74946bf71ac459319a89efb185e3, type: 2}
+  - {fileID: 7400000, guid: 09f0f1d0262884246b42f270e23e8f74, type: 2}
+  - {fileID: 7400000, guid: bdcf1f4cadcd642409962da997eccad5, type: 2}
+  - {fileID: 7400000, guid: b3df9b284d03d534aa22dfa01d9fc89a, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 0
   m_AnimatePhysics: 0
@@ -376,8 +379,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Speed: 5
-  _IdleClip: {fileID: 7400000, guid: d8bb74163034bc14c8893ecefc5dcab2, type: 2}
-  _WalkClip: {fileID: 7400000, guid: a2bbe6bfa1129f3478f0ba90c2672d31, type: 2}
+  _IdleData: {fileID: 11400000, guid: 22c2ff1e292b79d408db013458a99b6d, type: 2}
+  _WalkData: {fileID: 11400000, guid: 1c354f021c31a9641b290d0ae8b82850, type: 2}
   _LerpTime: 0.1
 --- !u!114 &1991741985
 MonoBehaviour:
@@ -424,4 +427,6 @@ MonoBehaviour:
   _Range: 0
   _Speed: 0
   _ManaGainOnHit: 0
-  _AttackClip: {fileID: 7400000, guid: e70a74946bf71ac459319a89efb185e3, type: 2}
+  _AttackData: {fileID: 11400000, guid: a9ab3b2d2fb97214b85a182d07934162, type: 2}
+  _AttackTopData: {fileID: 11400000, guid: e70ae4230236bfd4ea42783cc1c448b5, type: 2}
+  _AttackBottomData: {fileID: 11400000, guid: 5e8cf8c1d38a9b944873723875518bcf, type: 2}
