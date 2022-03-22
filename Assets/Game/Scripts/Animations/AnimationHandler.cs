@@ -241,12 +241,15 @@ namespace Game.Animations
 
         public async void Stop(AnimationData animationData, float time)
         {
-            if(!gameObject && !this)
+            if(!Contains(animationData))
                 return;
 
             await System.Threading.Tasks.Task.Delay(Mathf.RoundToInt(time / 1000));
 
-            Stop(animationData);
+            if(!gameObject && !this)
+                return;
+
+            Stop(GetAnimationPlayData(animationData));
         }
     }
 }
