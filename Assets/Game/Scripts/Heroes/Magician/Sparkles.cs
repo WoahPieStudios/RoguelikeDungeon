@@ -33,6 +33,8 @@ namespace Game.Heroes.Magician
         [Header("Animation")]
         [SerializeField]
         AnimationClip _AnimationClip;
+        [SerializeField]
+        AnimationData _AnimationData;
 
         Enemy _ClosestEnemy;
 
@@ -50,7 +52,7 @@ namespace Game.Heroes.Magician
 
             _AnimationHandler = GetComponent<AnimationHandler>();
 
-            _AnimationHandler.AddAnimation("Sparkles", _AnimationClip, SetupLightRay, End);
+            _AnimationHandler.AddAnimationData(_AnimationData, SetupLightRay, End);
         }
 
         void SetupLightRay()
@@ -88,7 +90,7 @@ namespace Game.Heroes.Magician
 
             _Hero.FaceNearestCharacter(_ClosestEnemy);
 
-            _AnimationHandler.Play("Sparkles");
+            _AnimationHandler.Play(_AnimationData);
 
             _Origin.rotation = LookAt(_ClosestEnemy.transform.position);
         }
@@ -104,7 +106,7 @@ namespace Game.Heroes.Magician
         {
             base.End();
 
-            _AnimationHandler.Stop("Sparkles");
+            _AnimationHandler.Stop(_AnimationData);
         }
     }
 }
