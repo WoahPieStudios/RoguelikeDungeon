@@ -1038,10 +1038,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d0f913db469503148abe2d4d5cfc6b36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   _Spin: {fileID: 7400000, guid: 6fa73c011044dbe48b5e7052ed1dd532, type: 2}
   _Orbit: {fileID: 7400000, guid: b10577aaaf5ac2547b2f947b9cc75563, type: 2}
   _CounterOrbit: {fileID: 7400000, guid: 882c34178b3f85d4e84176c8d8e885bd, type: 2}
   _SpinAndOrbit: {fileID: 7400000, guid: 3525dc1e16ac61a48a74c8c045fe5f8b, type: 2}
+=======
+  _SpinData: {fileID: 11400000, guid: 81e535411236eb542875b5cfccecbe37, type: 2}
+  _OrbitData: {fileID: 11400000, guid: b831a43e828ca634dadae3c67d677ed2, type: 2}
+  _CounterOrbitData: {fileID: 11400000, guid: c7eec1adedf91ec48a8b07e4e3f05a5a, type: 2}
+  _SpinAndOrbitData: {fileID: 11400000, guid: 063deb329d27b8c419edb1ef3a778ff3, type: 2}
+>>>>>>> 09fb12678fecd2e6fbca83e34d4f28b7971fb0ee
 --- !u!114 &1836226781
 MonoBehaviour:
   m_ObjectHideFlags: 0
