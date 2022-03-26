@@ -7,11 +7,9 @@ using Game.Characters.Actions;
 
 namespace Game.Heroes.Magician
 {
-    [RequireComponent(typeof(SpriteRenderer))]
     public class MagicianOrientation : Orientation
     {
         Vector2Int _CurrentOrientation;
-        SpriteRenderer _SpriteRenderer;
 
         public override Vector2Int currentOrientation => _CurrentOrientation;
 
@@ -20,8 +18,6 @@ namespace Game.Heroes.Magician
             base.Awake();
 
             Use();
-            
-            _SpriteRenderer = GetComponent<SpriteRenderer>();
         }
 
         public override bool Orientate(Vector2Int orientation)

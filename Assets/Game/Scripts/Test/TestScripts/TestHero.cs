@@ -22,6 +22,7 @@ namespace Game.Characters.Test
             // if(input != Vector2.zero)
             //     orientation.Orientate(Vector2Int.RoundToInt(input));
 
+            if(orientation != null && !attack.isActive)
             orientation.Orientate(Vector2Int.CeilToInt(input));
 
             _Input = Vector2.Lerp(_Input, input, _InputLerpTime);

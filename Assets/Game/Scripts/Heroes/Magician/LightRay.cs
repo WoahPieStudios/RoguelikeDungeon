@@ -15,6 +15,8 @@ namespace Game.Heroes.Magician
 
         SpriteRenderer _SpriteRenderer;
 
+        public SpriteRenderer spriteRenderer => _SpriteRenderer;
+
         public Vector2 size { get => _SpriteRenderer.size; set => _SpriteRenderer.size = value; }
 
         public Vector3 position { get => transform.position; set => transform.position = value; }

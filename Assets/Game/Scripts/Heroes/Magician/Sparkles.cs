@@ -32,8 +32,6 @@ namespace Game.Heroes.Magician
 
         [Header("Animation")]
         [SerializeField]
-        AnimationClip _AnimationClip;
-        [SerializeField]
         AnimationData _AnimationData;
 
         Enemy _ClosestEnemy;
@@ -51,7 +49,10 @@ namespace Game.Heroes.Magician
             _Hero = owner as Hero;
 
             _AnimationHandler = GetComponent<AnimationHandler>();
+        }
 
+        private void Start() 
+        {
             _AnimationHandler.AddAnimationData(_AnimationData, SetupLightRay, End);
         }
 
@@ -60,6 +61,8 @@ namespace Game.Heroes.Magician
             int bonusDamage = onUseBonusDamageEvent?.Invoke() ?? 0;
 
             Vector2 enemyDirection = _ClosestEnemy.transform.position - _LightRayOrigin.position;
+
+            Debug.Log(_LightRay.spriteRenderer);
 
             _LightRay.position = _LightRayOrigin.position + (Vector3)enemyDirection.normalized * (range / 2);
             _LightRay.rotation = Quaternion.LookRotation(Vector3.forward, enemyDirection);
@@ -107,6 +110,8 @@ namespace Game.Heroes.Magician
             base.End();
 
             _AnimationHandler.Stop(_AnimationData);
+
+            _Origin.rotation = Quaternion.identity;
         }
     }
 }
