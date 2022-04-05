@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Game.Characters.Effects
 {
-    public abstract class Effect : MonoBehaviour, IEffect
+    public abstract class Effect : MonoBehaviour, ICloneable<Effect>
     {
         IEffectable _Sender;
         IEffectable _Receiver;
@@ -53,16 +53,14 @@ namespace Game.Characters.Effects
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public T CreateClone<T>() where T : ICloneable
+        public Effect CreateClone()
         {
-            ICloneable clone = Instantiate(this);
-
-            Effect effect = clone as Effect;
+            Effect effect = Instantiate(this);
 
             effect._IsClone = true;
             effect._InstanceId = GetInstanceID();
 
-            return (T)clone;
+            return effect;
         }
     }
 }

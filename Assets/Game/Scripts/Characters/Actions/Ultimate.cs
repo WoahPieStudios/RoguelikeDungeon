@@ -8,7 +8,7 @@ using Game.Characters.Properties;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Ultimate : CoolDownAction, IUltimateAction
+    public abstract class Ultimate : CoolDownAction<Hero>
     {
         [SerializeField]
         int _ManaCost;
@@ -22,13 +22,13 @@ namespace Game.Characters.Actions
 
         public bool isRestricted => _IsRestricted;
 
-        public event Action<TrackActionType> onUseTrackableAction;
+        public event System.Action<TrackActionType> onUseTrackableAction;
 
         protected override void Begin()
         {
             base.Begin();
 
-            Mana mana = owner.GetProperty<Mana>();
+            Mana mana = owner.mana;
 
             mana.UseMana(manaCost);
 
@@ -41,9 +41,7 @@ namespace Game.Characters.Actions
         /// <param name="hero">The Hero who will use the Ultimate</param>
         public virtual bool Use()
         {
-            Mana mana = owner.GetProperty<Mana>();
-
-            bool canUse = !isActive && !isRestricted && !isCoolingDown && mana.currentMana >= manaCost;
+            bool canUse = !isActive && !isRestricted && !isCoolingDown && owner.mana.currentMana >= manaCost;
 
             if(canUse)
                 Begin();

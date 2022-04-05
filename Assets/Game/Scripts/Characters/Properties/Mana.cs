@@ -5,43 +5,61 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Actions;
-
 namespace Game.Characters.Properties
 {
     [Serializable]
-    public class Mana : IManaProperty
+    public class Mana
     {
         [SerializeField]
-        int _MaxMana = 0;
+        float _MaxMana = 0;
         [SerializeField]
-        int _CurrentMana = 0;
+        float _CurrentMana = 0;
 
-        public event Action<IManaProperty, int> onUseManaEvent;
-        public event Action<IManaProperty, int> onAddManaEvent;
-        public event Action onDrainManaEvent;
-        public event Action onResetManaEvent;
+        public event Action<Mana, float> onUseManaEvent;
+        public event Action<Mana, float> onAddManaEvent;
+        public event Action<Mana> onDrainManaEvent;
+        public event Action<Mana> onResetManaEvent;
+        public event Action<Mana> onNewMaxManaEvent;
 
-        public int maxMana => _MaxMana;
+        public float maxMana => _MaxMana;
 
-        public int currentMana => _CurrentMana;
+        public float currentMana => _CurrentMana;
 
-        public IActor owner { get; set; }
-
-        public void AddMana(int mana)
+        public void SetMaxManaWithoutEvent(float newMaxMana)
         {
-            int newMana = _CurrentMana + mana;
+            _MaxMana = newMaxMana > 0 ? newMaxMana : 0;
+        }
 
-            _CurrentMana = newMana > maxMana ? maxMana : newMana;
+        public void SetMaxMana(float newMaxMana)
+        {
+            SetMaxManaWithoutEvent(newMaxMana);
+
+            onNewMaxManaEvent?.Invoke(this);
+        }
+        
+
+        public void SetManaWithoutNotify(float newMana)
+        {
+            if(newMana < 0)
+                _CurrentMana = 0;
+
+            else if(newMana > maxMana)
+                _CurrentMana = maxMana;
+            
+            else
+                _CurrentMana = newMana;
+        }
+
+        public void AddMana(float mana)
+        {
+            SetManaWithoutNotify(_CurrentMana + mana);
 
             onAddManaEvent?.Invoke(this, mana);
         }
 
-        public void UseMana(int mana)
+        public void UseMana(float mana)
         {
-            int newMana = _CurrentMana - mana;
-
-            _CurrentMana = newMana > 0 ? newMana : 0;
+            SetManaWithoutNotify(_CurrentMana - mana);
 
             onUseManaEvent?.Invoke(this, mana);
         }
@@ -50,14 +68,14 @@ namespace Game.Characters.Properties
         {
             _CurrentMana = _MaxMana;
 
-            onResetManaEvent?.Invoke();
+            onResetManaEvent?.Invoke(this);
         }
 
         public void DrainMana()
         {
             _CurrentMana = 0;
 
-            onDrainManaEvent?.Invoke();
+            onDrainManaEvent?.Invoke(this);
         }
     }
 }

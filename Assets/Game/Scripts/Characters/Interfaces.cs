@@ -4,8 +4,6 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Actions;
-
 namespace Game.Characters
 {
     public interface IIcon

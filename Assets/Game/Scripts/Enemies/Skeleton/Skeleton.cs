@@ -8,20 +8,16 @@ using Game.Characters;
 
 namespace Game.Enemies.Skeleton
 {
-    public class Skeleton : Character
+    public class Skeleton : Enemy
     {
         [SerializeField]
         private float _InputLerpTime;
 
         private Vector2 _InputAxis;
 
-        private IAttackAction _Attack;
-
         protected override void Awake()
         {
             base.Awake();
-
-            _Attack = GetComponent<IAttackAction>();
         }
 
         private void Update() 
@@ -35,7 +31,7 @@ namespace Game.Enemies.Skeleton
             // orientation.Orientate(Vector2Int.RoundToInt(inputAxis));
 
             if(Input.GetKeyDown(KeyCode.J))
-                _Attack.Use();
+                attack.Use();
         }
     }
 }

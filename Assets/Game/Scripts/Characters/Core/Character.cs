@@ -5,7 +5,6 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Actions;
 using Game.Characters.Actions;
 using Game.Characters.Effects;
 using Game.Characters.Properties;
@@ -13,51 +12,45 @@ using Game.Characters.Properties;
 
 namespace Game.Characters
 {
-    public class Character : Actor, ICharacterActor
+    public class Character : MonoBehaviour, IEffectable, IRestrictableActionsHandler
     {
         [SerializeField]
         Health _Health;
 
         EffectsHandler _EffectsHandler = new EffectsHandler();
-        IMovementAction _Movement;
-        IOrientationAction _Orientation;
+        Movement _Movement;
+        Orientation _Orientation;
 
         RestrictableActionsHandler _RestrictableActionsHandler = new RestrictableActionsHandler();
         
         protected RestrictableActionsHandler restrictableActionsHandler => _RestrictableActionsHandler;
 
-        public IHealthProperty health => _Health;
+        public Health health => _Health;
 
-        public IMovementAction movement => _Movement;
-        public IOrientationAction orientation => _Orientation;
+        public Movement movement => _Movement;
+        public Orientation orientation => _Orientation;
 
-        public IEffect[] effects => _EffectsHandler.effects;
+        public Effect[] effects => _EffectsHandler.effects;
 
         public RestrictActionType restrictedActions => _RestrictableActionsHandler.restrictedActions;
 
-        public event Action<IEffect[]> onAddEffectsEvent;
-        public event Action<IEffect[]> onRemoveEffectsEvent;
+        public event System.Action<Effect[]> onAddEffectsEvent;
+        public event System.Action<Effect[]> onRemoveEffectsEvent;
 
         static List<Character> _CharacterList = new List<Character>();
 
         public static Character[] characters => _CharacterList.ToArray();
 
-
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
-
             _CharacterList.Add(this);
 
-            _Health.owner = this;
-            _Health.ResetHealth();
+            _Health.SetCurrentHealthWithoutEvent(_Health.maxHealth);
 
-            _Movement = GetProperty<IMovementAction>();
-            _Orientation = GetProperty<IOrientationAction>();
+            _Movement = GetComponent<Movement>();
+            _Orientation = GetComponent<Orientation>();
 
-            AddProperty(_Health);
-
-            restrictableActionsHandler.AddRestrictableAction(GetProperties<IRestrictableAction>());
+            restrictableActionsHandler.AddRestrictableAction(GetComponents<IRestrictableAction>());
 
             _EffectsHandler.onAddEffectsEvent += OnAddEffects;
             _EffectsHandler.onRemoveEffectsEvent += OnRemoveEffects;
@@ -68,7 +61,7 @@ namespace Game.Characters
             _CharacterList.Remove(this);
         }
         
-        void OnAddEffects(IEffect[] addedEffects)
+        void OnAddEffects(Effect[] addedEffects)
         {
             foreach(MonoBehaviour m in addedEffects.Where(e => e is MonoBehaviour).Cast<MonoBehaviour>())
             {
@@ -82,7 +75,7 @@ namespace Game.Characters
             onAddEffectsEvent?.Invoke(addedEffects);
         }
 
-        void OnRemoveEffects(IEffect[] removedEffects)
+        void OnRemoveEffects(Effect[] removedEffects)
         {
             _RestrictableActionsHandler.GetRestrainedActions(effects.Where(e => e is IActionRestricter).Cast<IActionRestricter>());
             _RestrictableActionsHandler.SendRestrictionsToActions();
@@ -93,12 +86,12 @@ namespace Game.Characters
                 Destroy(monobehaviour.gameObject);
         }
 
-        public void AddEffects(IEffectable sender, params IEffect[] effects)
+        public void AddEffects(IEffectable sender, params Effect[] effects)
         {
             _EffectsHandler.AddEffects(sender, this, effects);
         }
 
-        public void RemoveEffects(params IEffect[] effects)
+        public void RemoveEffects(params Effect[] effects)
         {
             _EffectsHandler.RemoveEffects(effects);
         }

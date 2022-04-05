@@ -9,46 +9,24 @@ using Game.Characters.Actions;
 
 namespace Game.Characters.Effects
 {
-    public interface ICloneable
+    public interface ICloneable<T> where T : MonoBehaviour
     {
         int instanceId { get; }
         bool isClone { get; }
-        T CreateClone<T>() where T : ICloneable;
+        T CreateClone();
     }
 
-    public interface IEffect : ICloneable
+    public interface IStackableEffect
     {
-        /// <summary>
-        /// The one who sent the Effect.
-        /// </summary>
-        IEffectable sender { get; }
-        IEffectable receiver { get; }
-
-        void StartEffect(IEffectable sender, IEffectable receiver);
-        void End();
-    }
-
-    public interface IPassiveEffect : IEffect, IActionTracker
-    {
-        
-    }
-    
-    public interface IActiveEffect : IEffect, IActionRestricter
-    {
-
-    }
-
-    public interface IStackableEffect : IEffect
-    {
-        void Stack(params IEffect[] effects);
+        void Stack(params Effect[] effects);
     }
 
     public interface IEffectable
     {
-        IEffect[] effects { get; }
-        event Action<IEffect[]> onAddEffectsEvent;
-        event Action<IEffect[]> onRemoveEffectsEvent;
-        void AddEffects(IEffectable sender, params IEffect[] effects);
-        void RemoveEffects(params IEffect[] effects);
+        Effect[] effects { get; }
+        event System.Action<Effect[]> onAddEffectsEvent;
+        event System.Action<Effect[]> onRemoveEffectsEvent;
+        void AddEffects(IEffectable sender, params Effect[] effects);
+        void RemoveEffects(params Effect[] effects);
     }
 }

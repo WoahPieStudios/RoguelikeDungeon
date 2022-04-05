@@ -22,7 +22,7 @@ namespace Game.Characters.Test
             End();
         }
 
-        public void Stack(params IEffect[] effects)
+        public void Stack(params Effect[] effects)
         {
             _StackCount += effects.Length;
 

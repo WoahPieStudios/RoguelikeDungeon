@@ -11,7 +11,7 @@ using Game.Characters.Properties;
 
 namespace Game.Characters
 {
-    public class Hero : Character, IHeroActor
+    public class Hero : Character, ITrackableActionsHandler
     {
         [SerializeField]
         Mana _Mana;
@@ -23,23 +23,23 @@ namespace Game.Characters
 
         Dictionary<TrackActionType, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackActionType, PassiveEffect[]>();
 
-        IAttackAction _Attack;
-        ISkillAction _Skill;
-        IUltimateAction _Ultimate;
+        HeroAttack _Attack;
+        Skill _Skill;
+        Ultimate _Ultimate;
 
-        public IManaProperty mana => _Mana;
+        public Mana mana => _Mana;
 
-        public IAttackAction attack => _Attack;
+        public HeroAttack attack => _Attack;
         
         /// <summary>
         /// Skill of the Hero
         /// </summary>
-        public ISkillAction skill => _Skill;
+        public Skill skill => _Skill;
 
         /// <summary>
         /// Ultimate of the Hero
         /// </summary>
-        public IUltimateAction ultimate => _Ultimate;
+        public Ultimate ultimate => _Ultimate;
 
         public TrackActionType trackedActions => _TrackAction;
 
@@ -47,18 +47,15 @@ namespace Game.Characters
         {
             base.Awake();
 
-            _Mana.owner = this;
             _Mana.ResetMana();
 
-            _Attack = GetProperty<IAttackAction>();
-            _Skill = GetProperty<ISkillAction>();
-            _Ultimate = GetProperty<IUltimateAction>();
+            _Attack = GetComponent<HeroAttack>();
+            _Skill = GetComponent<Skill>();
+            _Ultimate = GetComponent<Ultimate>();
 
             SegregatePassiveEffects(_PassiveEffects);
 
-            AddProperty(_Mana);
-
-            AddTrackable(GetProperties<ITrackableAction>());
+            AddTrackable(GetComponents<ITrackableAction>());
         }
 
         void AddTrackable(params ITrackableAction[] trackables)

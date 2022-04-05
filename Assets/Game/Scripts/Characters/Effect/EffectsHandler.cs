@@ -8,39 +8,39 @@ namespace Game.Characters.Effects
 {
     public class EffectsHandler
     {
-        List<IEffect> _EffectList = new List<IEffect>();
+        List<Effect> _EffectList = new List<Effect>();
 
         /// <summary>
         /// Effects casted upon the Character.
         /// </summary>
         /// <returns></returns>
-        public IEffect[] effects => _EffectList.ToArray();
+        public Effect[] effects => _EffectList.ToArray();
 
-        public event System.Action<IEffect[]> onAddEffectsEvent;
-        public event System.Action<IEffect[]> onRemoveEffectsEvent;
+        public event System.Action<Effect[]> onAddEffectsEvent;
+        public event System.Action<Effect[]> onRemoveEffectsEvent;
 
-        void ProcessStackableEffect(IStackableEffect effect, IEnumerable<IEffect> effects)
+        void ProcessStackableEffect(IStackableEffect effect, IEnumerable<Effect> effects)
         {
             if(effects.Any()) // If there is already a copy in the list, expected there is always 1 or none in the least.
                 effect.Stack(effects.ToArray());
         }
 
-        void ProcessOtherEffect(IEnumerable<IEffect> effects)
+        void ProcessOtherEffect(IEnumerable<Effect> effects)
         {
-            foreach(IEffect e in effects)
+            foreach(Effect e in effects)
                 e.End();
         }
 
-        IEnumerable<IEffect> GetEffectClones(IEffect[] effects)
+        IEnumerable<Effect> GetEffectClones(Effect[] effects)
         {
-            IEffect effect;
+            Effect effect;
 
-            IEnumerable<IEffect> effectsInList;
+            IEnumerable<Effect> effectsInList;
 
-            foreach(IGrouping<int, IEffect> effectGroup in effects.GroupBy(effect => effect.instanceId))
+            foreach(IGrouping<int, Effect> effectGroup in effects.GroupBy(effect => effect.instanceId))
             {
                 effect = effectGroup.First();
-                effect = effect.isClone ? effect : effect.CreateClone<Effect>();
+                effect = effect.isClone ? effect : effect.CreateClone();
 
                 effectsInList = _EffectList.Where(e => e.instanceId == effectGroup.Key);
 
@@ -59,11 +59,11 @@ namespace Game.Characters.Effects
         /// </summary>
         /// <param name="sender">The one who sent the effect</param>
         /// <param name="effects">The one who is casted upon</param>
-        public virtual void AddEffects(IEffectable sender, IEffectable receiver, params IEffect[] effects)
+        public virtual void AddEffects(IEffectable sender, IEffectable receiver, params Effect[] effects)
         {
             effects = GetEffectClones(effects).ToArray();
 
-            foreach(IEffect effect in effects)
+            foreach(Effect effect in effects)
             {
                 effect.StartEffect(sender, receiver);
 
@@ -71,9 +71,9 @@ namespace Game.Characters.Effects
             }
                 
             // Makes sure there are only 1 effect clone of their instance.
-            foreach(IGrouping<int, IEffect> effectGroup in _EffectList.GroupBy(effect => effect.instanceId))
+            foreach(IGrouping<int, Effect> effectGroup in _EffectList.GroupBy(effect => effect.instanceId))
             {
-                IEffect[] effectsArray = effectGroup.ToArray();
+                Effect[] effectsArray = effectGroup.ToArray();
 
                 for(int i = 1; i < effectsArray.Length; i++)
                     effectsArray[i].End();
@@ -86,9 +86,9 @@ namespace Game.Characters.Effects
         /// Removes the Effect
         /// </summary>
         /// <param name="effects"></param>
-        public virtual void RemoveEffects(params IEffect[] effects)
+        public virtual void RemoveEffects(params Effect[] effects)
         {
-            IEffect[] removedEffects = _EffectList.Where(e => effects.Contains(e)).ToArray();
+            Effect[] removedEffects = _EffectList.Where(e => effects.Contains(e)).ToArray();
 
             _EffectList.RemoveAll(e => removedEffects.Contains(e));
 

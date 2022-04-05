@@ -8,7 +8,7 @@ using Game.Characters.Effects;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Attack : CoolDownAction, IAttackAction
+    public abstract class Attack<T> : CoolDownAction<T> where T : Character
     {
         [SerializeField]
         int _Damage;
@@ -16,8 +16,7 @@ namespace Game.Characters.Actions
         float _Range;
         [SerializeField]
         float _Speed;
-        [SerializeField]
-        int _ManaGainOnHit;
+
         bool _IsRestricted = false;
 
         /// <summary>
@@ -35,11 +34,9 @@ namespace Game.Characters.Actions
         /// </summary>
         public float speed => _Speed;
 
-        public int manaGainOnHit => _ManaGainOnHit;
-
         public bool isRestricted => _IsRestricted;
 
-        public event Action<TrackActionType> onUseTrackableAction;
+        public event System.Action<TrackActionType> onUseTrackableAction;
 
         protected override void Begin()
         {
@@ -52,7 +49,7 @@ namespace Game.Characters.Actions
         /// Starts Attack.
         /// </summary>
         /// <param name="attacker"></param>
-        public virtual bool Use()
+        public bool Use()
         {
             bool canUse = !isActive && !isRestricted;
 

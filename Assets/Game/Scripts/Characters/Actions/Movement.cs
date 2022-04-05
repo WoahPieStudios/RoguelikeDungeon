@@ -4,11 +4,9 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Actions;
-
 namespace Game.Characters.Actions
 {
-    public abstract class Movement : ActorAction, IMovementAction
+    public abstract class Movement : Action<Character>
     {
         [SerializeField]
         float _Speed;
@@ -28,14 +26,13 @@ namespace Game.Characters.Actions
 
         public virtual void OnRestrict(RestrictActionType restrictActions)
         {
-            _IsRestricted = restrictActions.HasFlag(RestrictActionType.Movement); 
-
-            Debug.Log(_IsRestricted);
+            _IsRestricted = restrictActions.HasFlag(RestrictActionType.Movement);
         }
 
         public virtual bool Use()
         {
-            Begin();
+            if(!isActive)
+                Begin();
 
             return isActive;
         }

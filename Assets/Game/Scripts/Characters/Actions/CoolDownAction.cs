@@ -3,11 +3,9 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Actions;
-
 namespace Game.Characters.Actions
 {
-    public abstract class CoolDownAction : ActorAction, ICoolDownAction
+    public abstract class CoolDownAction<T> : Action<T>, ICoolDownAction where T : Character
     {
         [SerializeField]
         float _CoolDownTime;
@@ -79,6 +77,5 @@ namespace Game.Characters.Actions
             if(_CoolDownCoroutine != null)
                 StopCoroutine(_CoolDownCoroutine);
         }
-
     }
 }

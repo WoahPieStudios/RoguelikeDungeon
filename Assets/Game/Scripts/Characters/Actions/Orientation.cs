@@ -4,11 +4,9 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Actions;
-
 namespace Game.Characters.Actions
 {
-    public abstract class Orientation : ActorAction, IOrientationAction
+    public abstract class Orientation : Action<Character>
     {
         bool _IsRestricted = false;
 
@@ -31,9 +29,10 @@ namespace Game.Characters.Actions
             _IsRestricted = restrictActions.HasFlag(RestrictActionType.Orientation);
         }
 
-        public virtual bool Use()
+        public bool Use()
         {
-            Begin();
+            if(!isActive)
+                Begin();
 
             return isActive;
         }

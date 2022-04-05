@@ -3,11 +3,9 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Actions;
-
 namespace Game.Characters.Actions
 {
-    public interface ICoolDownAction : IActorAction
+    public interface ICoolDownAction
     {
         float coolDownTime { get; }
         float currentCoolDownTime { get; }
@@ -27,13 +25,13 @@ namespace Game.Characters.Actions
         RestrictActionType restrictAction { get; }
     }
 
-    public interface IRestrictableAction : IActorAction
+    public interface IRestrictableAction
     {
         bool isRestricted { get; }
         void OnRestrict(RestrictActionType restrictActions);
     }
 
-    public interface ITrackableAction : IActorAction
+    public interface ITrackableAction
     {
         event System.Action<TrackActionType> onUseTrackableAction;
     }
@@ -46,57 +44,5 @@ namespace Game.Characters.Actions
     public interface ITrackableActionsHandler
     {
         TrackActionType trackedActions { get; }
-    }
-
-    public interface IMovementAction : IActorAction, IUseAction, IRestrictableAction
-    {
-        float speed { get; }
-        Vector2 velocity { get; }
-
-        bool Move(Vector2 direction);
-    }
-
-    public interface IOrientationAction : IActorAction, IUseAction, IRestrictableAction
-    {
-        Vector2Int currentOrientation { get; }
-
-        // Direction
-        /// <summary>
-        /// Orients the Character to the direction.
-        /// </summary>
-        /// <param name="orientation"></param>
-        bool Orientate(Vector2Int orientation);
-    }
-
-    public interface IUseAction : IActorAction
-    {
-        bool Use();
-    }
-
-    public interface IAttackAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
-    {
-        int damage { get; }
-
-        /// <summary>
-        /// Range of the Attack
-        /// </summary>
-        float range { get; }
-
-        /// <summary>
-        /// Speed of the Attack. Honestly have no idea where this would fit.
-        /// </summary>
-        float speed { get; }
-
-        int manaGainOnHit { get; }
-    }
-
-    public interface ISkillAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
-    {
-
-    }
-
-    public interface IUltimateAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
-    {
-        int manaCost { get; }
     }
 }

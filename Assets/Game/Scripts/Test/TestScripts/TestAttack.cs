@@ -7,13 +7,13 @@ using Game.Characters.Actions;
 
 namespace Game.Characters.Test
 {
-    public class TestAttack : Attack
+    public class TestAttack : Attack<Character>
     {
         Coroutine _TickCoroutine;
 
         IEnumerator Tick()
         {
-            (owner as Character).FaceNearestCharacter(range);
+            owner.FaceNearestCharacter(range);
             // target.FaceNearestCharacter<CharacterBase>(range, _CharacterLayer);
 
             // Utilities.GetCharacters(Vector3.zero, 5, _CharacterLayer);

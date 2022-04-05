@@ -6,13 +6,13 @@ using UnityEngine;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Skill : CoolDownAction, ISkillAction
+    public abstract class Skill : CoolDownAction<Hero>
     {
         bool _IsRestricted = false;
 
         public bool isRestricted => _IsRestricted;
 
-        public event Action<TrackActionType> onUseTrackableAction;
+        public event System.Action<TrackActionType> onUseTrackableAction;
 
         protected override void Begin()
         {
