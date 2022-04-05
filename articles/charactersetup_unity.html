@@ -1,0 +1,980 @@
+﻿<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<html>
+  
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Hero's Journey </title>
+    <meta name="viewport" content="width=device-width">
+    <meta name="title" content="Hero's Journey ">
+    <meta name="generator" content="docfx 2.59.1.0">
+    
+    <link rel="shortcut icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/docfx.vendor.css">
+    <link rel="stylesheet" href="../styles/docfx.css">
+    <link rel="stylesheet" href="../styles/main.css">
+    <meta property="docfx:navrel" content="../toc.html">
+    <meta property="docfx:tocrel" content="toc.html">
+    
+    
+    
+  </head>
+  <body data-spy="scroll" data-target="#affix" data-offset="120">
+    <div id="wrapper">
+      <header>
+        
+        <nav id="autocollapse" class="navbar navbar-inverse ng-scope" role="navigation">
+          <div class="container">
+            <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+              
+              <a class="navbar-brand" href="../index.html">
+                <img id="logo" class="svg" src="../logo.svg" alt="">
+              </a>
+            </div>
+            <div class="collapse navbar-collapse" id="navbar">
+              <form class="navbar-form navbar-right" role="search" id="search">
+                <div class="form-group">
+                  <input type="text" class="form-control" id="search-query" placeholder="Search" autocomplete="off">
+                </div>
+              </form>
+            </div>
+          </div>
+        </nav>
+        
+        <div class="subnav navbar navbar-default">
+          <div class="container hide-when-search" id="breadcrumb">
+            <ul class="breadcrumb">
+              <li></li>
+            </ul>
+          </div>
+        </div>
+      </header>
+      <div role="main" class="container body-content hide-when-search">
+        
+        <div class="sidenav hide-when-search">
+          <a class="btn toc-toggle collapse" data-toggle="collapse" href="#sidetoggle" aria-expanded="false" aria-controls="sidetoggle">Show / Hide Table of Contents</a>
+          <div class="sidetoggle collapse" id="sidetoggle">
+            <div id="sidetoc"></div>
+          </div>
+        </div>
+        <div class="article row grid-right">
+          <div class="col-md-10">
+            <article class="content wrap" id="_content" data-uid="">
+
+<p>*Was Written on February 2022
+*May or may not reflect on the current set up of the Character System</p>
+<h1 id="heros-journey">Hero's Journey</h1>
+<p>Don't be a Hero, create the hero. Doesn't make sense but after this... you still won't understand it. If you heard of this then you've heard the 3Cs.</p>
+<ul>
+<li>Chance</li>
+<li>Change</li>
+<li>Choice</li>
+</ul>
+<p>What's my point? I don't know. Just continue reading.</p>
+<p>To understand the hero, we must first understand what he is in this play called &quot;Game&quot;.</p>
+<h2 id="actor-and-actions">Actor and Actions</h2>
+<p>The Hero is an Actor before anything else. He has properties that dictate what he is. Regardless of what they are, they are bind to him and are always there to tell him he has something, in himself, to describe about his role in the story.</p>
+<pre><code class="lang-c#">public interface IActor
+{
+    public T GetProperty&lt;T&gt;() where T : IActorProperty;
+    public T[] GetProperties&lt;T&gt;() where T : IActorProperty;
+}
+
+public interface IActorProperty
+{
+    IActor owner { get; }
+}
+
+public class Actor : MonoBehaviour, IActor
+{
+    // Gets properties within Game Object and in its children.
+    protected virtual void Awake();
+    
+    // To Add Properties internally
+    protected void AddProperty(params IActorProperty[] actorProperties); 
+
+    // To Remove Properties internally
+    protected void RemoveProperty(params IActorProperty[] actorProperties);
+
+    // Gets property
+    public T GetProperty&lt;T&gt;() where T : IActorProperty;
+
+    public T[] GetProperties&lt;T&gt;() where T : IActorProperty;
+}
+</code></pre>
+<p>In his job as an Actor, he also has to do actions that add flare and supports his properties however his actions are, too, his properties. His Actions are able to tell the Actor if it is Active and has an end. The question lies with how it starts but the story will reveal later how he is able to do his actions on stage.</p>
+<pre><code class="lang-c#">public interface IActorAction : IActorProperty
+{
+    bool isActive { get; }
+
+    void End();
+}
+
+public abstract class ActorAction : MonoBehaviour, IActorAction
+{
+    // If Action is Active
+    public bool isActive { get; }
+
+    // Owner of the Action
+    public virtual IActor owner { get; }
+
+    // Finds the owner during the call of the Awake function in the game object.
+    protected virtual void Awake();
+
+    // Activates Action internally
+    protected virtual void Begin();
+
+    // Deactivates Action
+    public virtual void End();
+}
+</code></pre>
+<p>Admittedly he is empty, a mere skeleton to what he can be however with a solid foundation he can be something great. So to spice up his story, we add to him his Character. Nameless it he may be but it is a start to his story.</p>
+<h2 id="character">Character</h2>
+<p>As a Character, he can move around, look at any direction, and, of course, has health to add some drama. He is also affected by effects.</p>
+<pre><code class="lang-c#">public class Character : Actor, ICharacterActor
+{
+    public IHealth health { get; }
+
+    public IMovementAction movement { get; }
+
+    public IOrientationAction orientation { get; }
+
+    public RestrictActionType restrictedActions { get; }
+
+    public IEffect[] effects { get; }
+    public event Action&lt;IEffect[]&gt; onAddEffectsEvent;
+    public event Action&lt;IEffect[]&gt; onRemoveEffectsEvent;
+
+    public static Character[] characters { get; }
+    
+    // Adds the Health, Movement, Orientation to his properties, lists down the restrictable Actions and subscribes on Add/Remove effects
+    protected override void Awake();
+
+    public void AddEffects(IEffectable sender, params IEffect[] effects);
+
+    public void RemoveEffects(params IEffect[] effects);
+
+    public void AddRestrictable(params IRestrictableAction[] restrictableActions);
+
+    public void RemoveRestrictable(params IRestrictableAction[] restrictableActions);
+}
+</code></pre>
+<h3 id="actions">Actions</h3>
+<p>He is given actions that give him simple actions that make him interesting ever so slightly however that little bit of detail will go a long way, to experience the world and interact with it.</p>
+<p>To answer the question of how the Actor, as a Character, could use his Actions, here is the answer.</p>
+<pre><code class="lang-c#">public interface IUseAction : IActorAction
+{
+    bool Use();
+}
+</code></pre>
+<p>He now can simply <code>Use</code> it but there's a condition to it as some actions can be used in that moment and some can't for reasons that are yet to be defined.</p>
+<h3 id="restrictable-action">Restrictable Action</h3>
+<p>Actions are not all powerful. These actions can be restricted and stop the Actor from using it.</p>
+<pre><code class="lang-c#"> public interface IRestrictableAction : IActorAction
+{
+    bool isRestricted { get; }
+    void OnRestrict(RestrictActionType restrictActions);
+}
+</code></pre>
+<p>Being the character, the Actor will have to be the one that keeps track of it. It may not be fun for him however it makes him interesting and develops features that turn him into something more.</p>
+<pre><code class="lang-c#">public interface IRestrictableActionsHandler
+{
+    RestrictActionType restrictedActions { get; }
+    void AddRestrictable(params IRestrictableAction[] restrictableActions);
+    void RemoveRestrictable(params IRestrictableAction[] restrictableActions);
+}
+</code></pre>
+<p>The action could be stopped by effects or other things that may or may not be made onto the stage.</p>
+<pre><code class="lang-c#">public interface IActionRestricter
+{
+    RestrictActionType restrictAction { get; }
+}
+</code></pre>
+<h4 id="movement">Movement</h4>
+<p>The Movement of the Character yet to be define as we are all unique and therefore many things could be done in different ways.</p>
+<pre><code class="lang-c#">public interface IMovementAction : IActorAction, IUseAction, IRestrictableAction
+{
+    float speed { get; }
+    Vector2 velocity { get; }
+
+    bool Move(Vector2 direction);
+}
+
+public abstract class Movement : ActorAction, IMovementAction
+{
+    public float speed { get; }
+
+    public abstract Vector2 velocity { get; }
+
+    public bool isRestricted { get; }
+
+    public virtual bool Move(Vector2 direction);
+
+    public virtual void OnRestrict(RestrictActionType restrictActions);
+
+    public virtual bool Use();
+}
+</code></pre>
+<h4 id="orientation">Orientation</h4>
+<p>Orientation is where the Actor will look, and how.</p>
+<pre><code class="lang-c#">public interface IOrientationAction : IActorAction, IUseAction, IRestrictableAction
+{
+    Vector2Int currentOrientation { get; }
+
+    bool Orientate(Vector2Int orientation);
+}
+
+
+public abstract class Orientation : ActorAction, IOrientationAction
+{
+    public bool isRestricted =&gt; _IsRestricted;
+
+    public abstract Vector2Int currentOrientation { get; }
+
+    public virtual bool Orientate(Vector2Int orientation);
+
+    public virtual void OnRestrict(RestrictActionType restrictActions);
+
+    public virtual bool Use();
+}
+</code></pre>
+<h3 id="property">Property</h3>
+<p>Now here we add the drama of it all, well sometimes.</p>
+<h4 id="health">Health</h4>
+<p>The Health is what makes the Actor, as the character, by definition alive. Without this, he is merely a walking corpse.</p>
+<pre><code class="lang-c#">public interface IHealth
+{
+    int maxHealth { get; }
+    int currentHealth { get; }
+    bool isAlive { get; }
+
+    event Action&lt;IHealth, int&gt; onAddHealthEvent;
+    event Action&lt;IHealth, int&gt; onDamageEvent;
+    event Action onKillEvent;
+    event Action onResetHealthEvent;
+
+    void AddHealth(int addHealth);
+
+    void Damage(int damage);
+    void Kill();
+    void ResetHealth();
+}
+
+public class Health : IHealth, IActorProperty
+{
+    public event Action&lt;IHealth, int&gt; onAddHealthEvent;
+    public event Action&lt;IHealth, int&gt; onDamageEvent;
+    public event Action onKillEvent;
+    public event Action onResetHealthEvent;
+
+    public int maxHealth { get; }
+    public int currentHealth { get; }
+    public bool isAlive { get; }
+    public IActor owner { get; set; }
+    
+    public void AddHealth(int addHealth);
+    public void Damage(int damage);
+    public void Kill();
+    public void ResetHealth();
+}
+</code></pre>
+<h3 id="effectable">Effectable</h3>
+<p>This world is not so kind. He also has to be careful he is also susceptible to effects that may come his way. There are effects that may empower him or restrain him to other Characters in this story.</p>
+<pre><code class="lang-c#">public interface IEffectable
+{
+    IEffect[] effects { get; }
+    event Action&lt;IEffect[]&gt; onAddEffectsEvent;
+    event Action&lt;IEffect[]&gt; onRemoveEffectsEvent;
+    void AddEffects(IEffectable sender, params IEffect[] effects);
+    void RemoveEffects(params IEffect[] effects);
+}
+</code></pre>
+<h3 id="effects">Effects</h3>
+<p>The things the Actor has too think of too are the effects. They may come from actions or things around them but are yet be known.</p>
+<p>The effects are first and foremost can be copied from each other. They can multiply and clone from each other but are all one and the same by their instance.</p>
+<pre><code class="lang-c#">public interface ICloneable
+{
+    int instanceId { get; }
+    bool isClone { get; }
+    T CreateClone&lt;T&gt;() where T : ICloneable;
+}
+</code></pre>
+<p>The effects that are constant with each other, besides them being clones, are that there's always a sender, who/what sent that effect and the receiver, who/what receives that effect. It can also start their start and end by the time it receives to their receivers.</p>
+<pre><code class="lang-c#">public interface IEffect : ICloneable
+{
+    IEffectable sender { get; }
+    IEffectable receiver { get; }
+
+    void StartEffect(IEffectable sender, IEffectable receiver);
+    void End();
+}
+
+public abstract class Effect : MonoBehaviour, IEffect
+{s
+    public IEffectable sender =&gt; _Sender;
+    public IEffectable receiver =&gt; _Receiver;
+    public bool isClone =&gt; _IsClone;
+    public int instanceId =&gt; _InstanceId;
+
+    public virtual void StartEffect(IEffectable sender, IEffectable receiver);
+
+    public abstract void End();
+
+    public T CreateClone&lt;T&gt;() where T : ICloneable;
+}
+</code></pre>
+<p>As Effects can be clones, there is also the option of stacking them.</p>
+<pre><code class="lang-c#">public interface IStackableEffect : IEffect
+{
+    void Stack(params IEffect[] effects);
+}
+</code></pre>
+<p>In this world, there are 2 kind of effects. The Active Effect and Passive Effect.</p>
+<h3 id="active-effects">Active Effects</h3>
+<p>Active effects are for all the Characters in this world, or until another being shows into the stage. They can restrict you but some may not. It can be used for evil purposes while others for good. It is a mere tool, and as such be defined by whoever or whatever uses them.</p>
+<pre><code class="lang-c#">public interface IActionRestricter
+{
+    RestrictActionType restrictAction { get; }
+}
+
+public interface IActiveEffect : IEffect, IActionRestricter
+{
+
+}
+
+public abstract class ActiveEffect : Effect, IActiveEffect
+{
+    public RestrictActionType restrictAction { get; }
+
+    public override void End();
+}
+</code></pre>
+<h3 id="passive-effects">Passive Effects</h3>
+<p>The passive effects are for the Heroes of this stage. They have eyes that track their actions and do according to their will.</p>
+<pre><code class="lang-c#">public interface IActionTracker
+{
+    TrackActionType trackAction { get; }
+}
+
+public interface IPassiveEffect : IEffect, IActionTracker
+{
+    bool CanUse(Hero hero);
+}
+
+public abstract class PassiveEffect : Effect, IPassiveEffect
+{
+    public TrackActionType trackAction { get; }
+
+    public abstract bool CanUse(Hero hero);
+    
+    public override void End();
+}
+</code></pre>
+<h2 id="hero">Hero</h2>
+<p>In this current world, there are only Heroes and enemies. Heroes that stand up against the enemies. The enemies are unkown as this stage has only begun. A hero is a Character that has Mana, Attack, Skill, Ultimate and Passive Effects.</p>
+<h3 id="cool-down-action">Cool Down Action</h3>
+<p>Actions such as  Attack, Skill, Ultimate may be too powerful for the stage as such requires a bit of time before being used.</p>
+<pre><code class="lang-c#">public interface ICoolDownAction : IActorAction
+{
+    float coolDownTime { get; }
+    float currentCoolDownTime { get; }
+    bool isCoolingDown { get; }
+
+    void StartCoolDown();
+    void StopCoolDown();
+}
+
+public abstract class CoolDownAction : ActorAction, ICoolDownAction
+{
+    public float coolDownTime { get; }
+    
+    public float currentCoolDownTime { get; }
+
+    public bool isCoolingDown { get; }
+
+    protected virtual IEnumerator CoolDown();
+
+    public override void End();
+
+    public virtual void StartCoolDown();
+
+    public virtual void StopCoolDown();
+}
+</code></pre>
+<h3 id="trackable-action">Trackable Action</h3>
+<p>Before talking about the exciting actions the Hero has, we must talk about why it is also tracked. Surprised? I'm guessing you're not but let my bravado fly. The actions are tracked so the Hero's passive effects will move according to their will. They are what helps these effects tell that they are doing something and tells them that its interesting. Enticing them.</p>
+<pre><code class="lang-c#">public interface ITrackableAction : IActorAction
+{
+    event System.Action&lt;TrackActionType&gt; onActionEvent;
+}
+</code></pre>
+<h4 id="attack">Attack</h4>
+<p>The attack of a Hero is powerful however it is a blank slate as like the skill and ultimate. It has the damage, the range, the speed, the Mana gain on hit (that I have no idea where to put) but all are mere floating items in a vaccum of space. Until the spark can expand the its features until it is someting to marvel at.</p>
+<pre><code class="lang-c#">public interface IAttackAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
+{
+    int damage { get; }
+    float range { get; }
+    float speed { get; }
+    int manaGainOnHit { get; }
+}
+
+public abstract class Attack : CoolDownAction, IAttackAction
+{
+    public int damage =&gt; _Damage;
+    public float range =&gt; _Range;
+    public float speed =&gt; _Speed;
+    public int manaGainOnHit =&gt; _ManaGainOnHit;
+    public bool isRestricted =&gt; _IsRestricted;
+
+    public event Action&lt;TrackActionType&gt; onActionEvent;
+
+    protected virtual void OnActionEvent(TrackActionType trackAction);
+    protected override void Begin();
+
+    public virtual bool Use();
+    public void OnRestrict(RestrictActionType restrictActions);
+}
+</code></pre>
+<h4 id="skill">Skill</h4>
+<p>The skill helps the Actor a bit more through the journey he has to face. The attack is powerful but it has its limits. The skill helps bridge the gap between it and the last action the Actor, as a hero, in its arsenal.</p>
+<pre><code class="lang-c#">public interface ISkillAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
+{
+
+}
+
+public abstract class Skill : CoolDownAction, ISkillAction
+{
+    bool _IsRestricted = false;
+
+    public bool isRestricted =&gt; _IsRestricted;
+
+    public event Action&lt;TrackActionType&gt; onActionEvent;
+
+    protected virtual void OnActionEvent(TrackActionType trackAction);
+    protected override void Begin();
+
+    public virtual bool Use();
+    public void OnRestrict(RestrictActionType restrictActions);
+}
+</code></pre>
+<h4 id="ultimate">Ultimate</h4>
+<p>The Ultimate, in the arsenal of actions the Hero has, is the most powerful of all but it wouldn't be interesting if there were no drawbacks. The cost of using this action is <code>Mana</code>. The mana is the source of power in this stage but has only limited uses. One of it is the Ultimate.</p>
+<pre><code class="lang-c#">public interface IUltimateAction : ICoolDownAction, IUseAction, ITrackableAction, IRestrictableAction
+{
+    int manaCost { get; }
+}
+</code></pre>
+<h3 id="property-1">Property</h3>
+<p>Lastly, to add to the property that makes the Hero attractive to the actor to play as is Mana.</p>
+<h4 id="mana">Mana</h4>
+<p>The power of Mana, in the palm of his hand or so a quote tells.</p>
+<pre><code class="lang-c#">public interface IMana
+{ 
+    int maxMana { get; }
+    int currentMana { get; }
+
+    event Action&lt;IMana, int&gt; onUseManaEvent;
+    event Action&lt;IMana, int&gt; onAddManaEvent;
+    event Action onDrainManaEvent;
+    event Action onResetManaEvent;
+
+    void AddMana(int mana);
+    void UseMana(int mana);
+    void ResetMana();
+    void DrainMana();
+}
+
+public class Mana : IMana, IActorProperty
+{
+    public event Action&lt;IMana, int&gt; onUseManaEvent;
+    public event Action&lt;IMana, int&gt; onAddManaEvent;
+    public event Action onDrainManaEvent;
+    public event Action onResetManaEvent;
+
+    public int maxMana =&gt; _MaxMana;
+    public int currentMana =&gt; _CurrentMana;
+    public IActor owner { get; set; }
+
+    public void AddMana(int mana);
+    public void UseMana(int mana);
+    public void ResetMana();
+    public void DrainMana();
+}
+</code></pre>
+<h1 id="gearing-up">Gearing Up</h1>
+<p>The question remains who the hero is that the Actor is going to play as. We don't know and neither does he. The Hero is made not born. As such he will change throughout this story.</p>
+<p>We will now talk in technical terms. Why only now? Shut up, I was in the mood for theatrics.</p>
+<p>Of course, you can use the Test Scripts as substitutes while the development of other Actions are in order.</p>
+<h2 id="hero-1">Hero</h2>
+<p>First Create a Gameobject and then add your Hero Class.</p>
+<p>The Hero Class is already set up with the systems created for it so you can plug it in unless you want some features for your specific Hero (But you have to read the Hero’s Journey to understand what their foundations are). I recommend adding the Test Hero Class because it already has inputs already made into it (WASD, U, I, O).</p>
+<p><img src="../Images/569ce6a2c73a5064183445a8a8ee9665fa0b2f61c9725ebe34e2738038af4002.png" alt=""></p>
+<p>Of course, set up the Max Health and Mana. The Current Health/Mana are just for debugging purposes. They are set to max health on Awake.</p>
+<p>Passive Effects are automatically tracking actions and are processed so you only have to reference, at least, 1 in the list but don't leave it as empty.</p>
+<h2 id="action">Action</h2>
+<p>These are the classic Actions of any character. These actions are <code>IUseActions</code> and <code>IRestrictableAction</code>.</p>
+<p>The Use part usually should be called in the awake function, unless it's going be called remotely, so invoke them in the <code>base.Awake()</code> function.</p>
+<pre><code class="lang-c#">protected override void Awake()
+{
+    base.Awake();
+
+    Use();
+}
+</code></pre>
+<p>The Restrictable part is already being handled so you don’t have to worry about it. Just check if it is restricted or not using the <code>isRestricted</code> property</p>
+<h2 id="movement-1">Movement</h2>
+<p>The Movement Class requires 1 properties that need to be defined and its the <code>velocity</code>.</p>
+<pre><code class="lang-c#">public class test : Movement
+{
+    public override Vector2 velocity =&gt; throw new System.NotImplementedException();
+}
+</code></pre>
+<p>I left it like that to be customizable to your needs. Where do I use it? I don’t know either XD</p>
+<p>Now, of course, how do we determine where we want to go and how fast we are going?</p>
+<p>For the speed, you can use the speed property I already set. It is serialized in the base class.</p>
+<p><img src="../Images/1e03b6f4309204630c3bdde0c590e1c253dd72f422897f2627d0a523be554edd.png" alt="picture 6"></p>
+<pre><code class="lang-c#">public class Movement : ...
+{
+    [SerializeField]
+    float _Speed;
+
+    public float speed =&gt; _Speed;
+}
+</code></pre>
+<p>For the Direction, you need to override the Move Function however you need to keep track of <code>isActive</code> and <code>isRestricted</code> as the movement inherits from the <code>ActorAction</code> and <code>IRestrainableAction</code>.</p>
+<pre><code class="lang-c#">public override bool Move(Vector2 direction)
+{
+    bool canMove = isActive &amp;&amp; isRestricted; // You can also use the base.Move(direction) since it also returns the results
+    
+    if(canMove)
+        _Direction = direction;
+
+    return canMove;
+}
+</code></pre>
+<p>Those are the 2 things you need to get the velocity. Now you can create a <code>FixedUpdate</code> function and put everything in there.</p>
+<pre><code class="lang-c#">public class Test : Movement
+{
+    Vector2 _Velocity;
+    Vector2 _Direction;
+    
+    public override Vector2 velocity =&gt; _Velocity;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Use();
+    }
+
+    void FixedUpdate()
+    {
+        if(isActive &amp;&amp; !isRestricted)
+        {
+            _Velocity = _Direction * speed * Time.fixedDeltaTime;
+
+            transform.position += (Vector3)_Velocity;
+        }
+    }
+
+    public override bool Move(Vector2 direction)
+    {
+        bool canMove = isActive &amp;&amp; !isRestricted; // You can also use the base.Move(direction) since it also returns the results
+        
+        if(canMove)
+            _Direction = direction;
+
+        return canMove;
+    }
+}
+</code></pre>
+<h2 id="orientation-1">Orientation</h2>
+<p>Like the Movement Action, the process is similar. So first you’ll need to define the <code>currentOrientation</code>.</p>
+<pre><code class="lang-c#">public class Test : Orientation
+{
+    Vector2Int _CurrentOrientation;
+    public override Vector2Int currentOrientation =&gt; _CurrentOrientation;
+}
+</code></pre>
+<p>Afterwards, override the <code>Orientate</code> function to get the orientation the player wants.</p>
+<pre><code class="lang-c#">public override bool Orientate(Vector2Int orientation)
+{
+    bool canOrientate = isActive &amp;&amp; !isRestricted; // You can also use the base.Orientate(orientation) since it also returns the results
+
+    if(canOrientate)
+        _CurrentOrientation = orientation;
+
+    return canOrientate;
+}
+</code></pre>
+<p>Of course since our game is a 2D Game and turning is instantaneous (so far) as we just flip the sprite, we need to reference the <code>Sprite Renderer</code>. In our <code>Orientate(...)</code> function, we can do our flipping there.</p>
+<pre><code class="lang-c#">[RequireComponent(typeof(SpriteRenderer))]
+public class Test : Orientation
+{
+    Vector2Int _CurrentOrientation;
+
+    SpriteRenderer _SpriteRenderer;
+
+    public override Vector2Int currentOrientation =&gt; _CurrentOrientation;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        Use();
+
+        _SpriteRenderer = GetComponent&lt;SpriteRenderer&gt;();s
+    }
+
+    public override bool Orientate(Vector2Int orientation)
+    {
+        bool canOrientate = isActive &amp;&amp; !isRestricted; // You can also use the base.Orientate(orientation) since it also returns the results
+
+        if(canOrientate)
+        {
+            _CurrentOrientation = orientation;
+
+            _SpriteRenderer.flipX = orientation.x == 0 ? _SpriteRenderer.flipX : !(Mathf.Sign(orientation.x) == 1);
+        }
+
+        return canOrientate;
+    }
+}
+</code></pre>
+<h2 id="cool-down-action-1">Cool Down Action</h2>
+<p>We now deal with the weird ones. Now these actions have cooldowns so by default (my setup) the cooldown starts automatically whenever the <code>End()</code> function is called. As the &quot;Cool Down Action&quot; you need to input the time for cooldown.</p>
+<p><img src="../Images/7b3c95f106c76ae278c983dd7e22bf35c052cd91af44f7336c3764b973eadb1c.png" alt="picture 5"></p>
+<p>Of course, we use these actions to affect other Characters so I made some utilities and method extensions to help you with getting the characters (assuming everything was inheriting from my scripts).</p>
+<pre><code class="lang-c#">public static class Utilities
+{
+    public static Tuple&lt;T, float&gt;[] GetCharactersAndDistances&lt;T&gt;(Vector3 center, float radius, params Character[] exceptCharacters) where T : Character;
+    
+    public static T[] GetCharacters&lt;T&gt;(Vector3 center, float radius, params Character[] exceptCharacters) where T : Character;
+
+    public static T GetNearestCharacter&lt;T&gt;(Vector3 center, float radius, params Character[] exceptCharacters) where T : Character;
+}
+
+public static class MethodExtensions
+{
+    public static T FaceNearestCharacter&lt;T&gt;(this Character character, float radius) where T : Character;
+    
+    public static void FaceNearestCharacter(this Character character, Character target);
+
+    public static Character FaceNearestCharacter(this Character characterBase, float radius);
+    
+    ...
+}
+</code></pre>
+<p>Lastly, you have to access these actions’ character. If you inherited from my scripts as well as the Hero and don’t forget to add the component into the same game object as the Hero script. You can simply call <code>owner</code> to get the reference of your character though you will have to cast him.</p>
+<pre><code class="lang-c#">Hero _Hero;
+
+protected override void Awake()
+{
+    base.Awake();
+
+    _Hero = owner as Hero;
+}
+</code></pre>
+<h2 id="attack-1">Attack</h2>
+<p>Firstly, of course, inherit from the Attack class. The attack's <code>damage</code>, <code>range</code>, <code>speed</code> and <code>manaGainOnHit</code>(?) is already laid out and can be accessed through the prepared properties</p>
+<p><img src="../Images/fa4334dbc0d9a7de63857b7dadd6fcc53f835d0ee08f63ca20edb698d51f0793.png" alt="picture 7"></p>
+<blockquote>
+<p>Note: You have to use them for it be of use.</p>
+</blockquote>
+<p>Afterwards, we’re going to override the Begin function so that we won't need to touch the behind the scenes stuff. In this example I’m going to start a coroutine.</p>
+<pre><code class="lang-c#">public class Test : Attack
+{
+    Hero _Hero;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _Hero = owner as Hero;
+    }
+
+    IEnumerator Tick()
+    {
+        yield return new WaitForSeconds(2);
+
+        End();
+    }
+
+    protected override void Begin()
+    {
+        base.Begin();
+
+        _TickCoroutine = StartCoroutine(Tick());
+    }
+}
+</code></pre>
+<p>If you’ll notice, I called the <code>End</code> function. You will have to call when the attack ends as normally nothing can remotely end an action unless in certain situations. So you have to consider those situations.</p>
+<pre><code class="lang-c#">public class Test : Attack
+{
+    Hero _Hero;
+
+    Coroutine _TickCoroutine;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _Hero = owner as Hero;
+    }
+
+    IEnumerator Tick()
+    {
+        yield return new WaitForSeconds(2);
+
+        End();
+    }
+
+    protected override void Begin()
+    {
+        base.Begin();
+
+        _TickCoroutine = StartCoroutine(Tick());
+    }
+
+    public override void End()
+    {
+        base.End();
+
+        if(_TickCoroutine != null)
+            StopCoroutine(_TickCoroutine);
+    }
+}
+</code></pre>
+<h2 id="skill-1">Skill</h2>
+<p>The process of setting up the skill script is also similar to the attack script. Actually all 3 of them are similar.</p>
+<p>So yeah, set up the <code>Begin</code> function, where your Skill ends and you’ve done it!</p>
+<pre><code class="lang-c#">public class Test : Skill
+{
+    Coroutine _TickCoroutine;
+    
+    Hero _Hero;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _Hero = owner as Hero;
+    }
+
+    IEnumerator Tick()
+    {
+        yield return new WaitForSeconds(2);
+
+        End();
+    }
+
+    protected override void Begin()
+    {
+        base.Begin();
+
+        _TickCoroutine = StartCoroutine(Tick());
+    }
+
+    public override void End()
+    {
+        base.End();
+
+        if(_TickCoroutine != null)
+            StopCoroutine(_TickCoroutine);
+    }
+}
+</code></pre>
+<h2 id="ultimate-1">Ultimate</h2>
+<p>Now the Ultimate... Dun dun dun... Well still the same honestly except you have to input the Mana cost.</p>
+<p><img src="../Images/ea5850a6b7d2e02fa2b84eea33dbbd2ebaec2ecaea7ba808ed7ff40f920f5c78.png" alt="picture 8"></p>
+<p>With that, I literally copy the skill script, just like I copy pasted the attack script, edit a little bit and done. You might be asking if we should add if the Hero has Mana and you would be right. Do not worry as it is already set.</p>
+<pre><code class="lang-c#">protected override void Begin()
+{
+    base.Begin();
+
+    _Hero.UseMana(manaCost);
+
+    _TickCoroutine = StartCoroutine(Tick());
+}
+</code></pre>
+<pre><code class="lang-c#">public class Test : Ultimate
+{
+    Coroutine _TickCoroutine;
+    
+    Hero _Hero;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _Hero = owner as Hero;
+    }
+
+    IEnumerator Tick()
+    {
+        yield return new WaitForSeconds(2);
+
+        End();
+    }
+
+    protected override void Begin()
+    {
+        base.Begin();
+
+        _Hero.UseMana(manaCost);
+
+        _TickCoroutine = StartCoroutine(Tick());
+    }
+
+    public override void End()
+    {
+        base.End();
+
+        if(_TickCoroutine != null)
+            StopCoroutine(_TickCoroutine);
+    }
+}
+</code></pre>
+<h2 id="in-action">In Action</h2>
+<p>Of course, those are dandy on how they are setup but what about their use case?</p>
+<p>well I'm definitely not going to write them all but here's an example of the ultimate</p>
+<pre><code class="lang-c#">public class Test : Ultimate
+{
+    Coroutine _TickCoroutine;
+    
+    Hero _Hero;
+
+    protected override void Awake()
+    {
+        base.Awake();
+
+        _Hero = owner as Hero;
+    }
+
+    IEnumerator Tick()
+    {
+        yield return new WaitForSeconds(2);
+
+        End();
+    }
+
+    protected override void Begin()
+    {
+        base.Begin();
+
+        if(_Hero.attack.isActive)
+            _Hero.attack.End();
+
+        _Hero.UseMana(manaCost);
+
+        _TickCoroutine = StartCoroutine(Tick());
+    }
+
+    public override void Use()
+    {
+        return !_Hero.skill.isActive &amp;&amp; base.Use();
+    }
+
+    public override void End()
+    {
+        base.End();
+
+        if(_TickCoroutine != null)
+            StopCoroutine(_TickCoroutine);
+    }
+}
+</code></pre>
+<p>I added a condition if the skill is not active since we can't have the Skill and Ultimate be used at the same time. I added it to the front since C# don't continue the next condition in a AND operation if the first condition is false. At least, I think it doesn't XD</p>
+<p>Then I added a condition for the Attack in the Begin function. I stopped it since the Ultimate has a higher use priority. Speaking of Priority, I removed the stuff I was doing for Priority Action since it might make it harder to make custom conditions for these kinds of things, like stopping actions, etc, so yeah XD</p>
+<p>Obviously, this is super simple and may not be of any use but its the concept that matters. Afterall, I have no idea what abilities/sequences/etc are going to be made so this is mostly a framework if you will. A relatively large framework. So yeah, cheers and do ask me if you have any questions (I know there will be afterall I suck at explaining and btw this document took a week to be made and I'm not even done writing this [at the time of writing])</p>
+<h2 id="effects-1">Effects</h2>
+<p>Fuck I forgot to write this part. Anyways The effects are designed to be things that affect the other characters without it being in direct reference to it. This time they are now prefabs instead of Scriptable Objects.</p>
+<p><img src="../Images/6fc92d26629de42b839a5d0fcc4fc80e4844d948daea7aba262875fa85f6396e.gif" alt=""></p>
+<h3 id="active-effects-1">Active Effects</h3>
+<p>To create an Active Effect, simply first inherit it and... nothing. There is nothing currently to define so that's good~</p>
+<pre><code class="lang-c#">public class Test : ActiveEffect
+{
+    
+}
+</code></pre>
+<p>Of course, we have functions to tell when the effect has started and has ended.</p>
+<pre><code class="lang-c#">public override void StartEffect(IEffectable sender, IEffectable receiver)
+{
+    base.StartEffect(sender, receiver);
+}
+
+public override void End()
+{
+    base.End();
+}
+</code></pre>
+<p>It is important that you keep the <code>base</code> functions. The start effect base function sets up the sender and receiver properties while the end is already set up to remove itself from the receiver.</p>
+<p>The <code>IEffectable</code> interface variables in the StartEffect function is currently the characters so you can cast them as such to access them.</p>
+<h2 id="passive-effects-1">Passive Effects</h2>
+<p>Passive effects are for the Heroes. The difference from the Active Effect from this one is that it tracks the actions of the Hero (Attack, Skill, and Ultimate). But its now(and I mean literally I just changed something) just the same as the Active Effect.</p>
+<pre><code class="lang-c#">public class Test : PassiveEffect
+{
+    public override void StartEffect(IEffectable sender, IEffectable receiver)
+    {
+        base.StartEffect(sender, receiver);
+    }
+
+    public override void End()
+    {
+        base.End();
+    }
+}
+</code></pre>
+<p>The difference visually is how it shows in the inspector.</p>
+<p><img src="../Images/0bd71f7a94cc6b519461ed4a0c927fbd6f7039c77813e8fa57aaeb17cfadf506.png" alt="picture 2"></p>
+<p><img src="../Images/84bb9de2552ec9eab739afa2aca6401e725fde3824b59630a078e4b697bafa91.png" alt="picture 3"></p>
+<blockquote>
+<p>Note: Ignore the Active Effect field.</p>
+</blockquote>
+</article>
+          </div>
+          
+          <div class="hidden-sm col-md-2" role="complementary">
+            <div class="sideaffix">
+              <div class="contribution">
+                <ul class="nav">
+                  <li>
+                    <a href="https://github.com/WoahPieStudios/RoguelikeDungeon/blob/main/Documentation/articles/charactersetup_unity.md/#L1" class="contribution-link">Improve this Doc</a>
+                  </li>
+                </ul>
+              </div>
+              <nav class="bs-docs-sidebar hidden-print hidden-xs hidden-sm affix" id="affix">
+                <h5>In This Article</h5>
+                <div></div>
+              </nav>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <footer>
+        <div class="grad-bottom"></div>
+        <div class="footer">
+          <div class="container">
+            <span class="pull-right">
+              <a href="#top">Back to top</a>
+            </span>
+            
+            <span>Generated by <strong>DocFX</strong></span>
+          </div>
+        </div>
+      </footer>
+    </div>
+    
+    <script type="text/javascript" src="../styles/docfx.vendor.js"></script>
+    <script type="text/javascript" src="../styles/docfx.js"></script>
+    <script type="text/javascript" src="../styles/main.js"></script>
+  </body>
+</html>

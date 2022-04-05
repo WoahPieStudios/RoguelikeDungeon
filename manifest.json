@@ -1,0 +1,1241 @@
+{
+  "homepages": [],
+  "source_base_path": "D:/a/RoguelikeDungeon/RoguelikeDungeon/Documentation",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "source_relative_path": "Images/0bd71f7a94cc6b519461ed4a0c927fbd6f7039c77813e8fa57aaeb17cfadf506.png",
+      "output": {
+        "resource": {
+          "relative_path": "Images/0bd71f7a94cc6b519461ed4a0c927fbd6f7039c77813e8fa57aaeb17cfadf506.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "Images/1e03b6f4309204630c3bdde0c590e1c253dd72f422897f2627d0a523be554edd.png",
+      "output": {
+        "resource": {
+          "relative_path": "Images/1e03b6f4309204630c3bdde0c590e1c253dd72f422897f2627d0a523be554edd.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "Images/49f20b4dc18936998bcb5c8a21b497a8d9cf6856c9138ae0a26a702f2e63c307.png",
+      "output": {
+        "resource": {
+          "relative_path": "Images/49f20b4dc18936998bcb5c8a21b497a8d9cf6856c9138ae0a26a702f2e63c307.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "Images/569ce6a2c73a5064183445a8a8ee9665fa0b2f61c9725ebe34e2738038af4002.png",
+      "output": {
+        "resource": {
+          "relative_path": "Images/569ce6a2c73a5064183445a8a8ee9665fa0b2f61c9725ebe34e2738038af4002.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "Images/6fc92d26629de42b839a5d0fcc4fc80e4844d948daea7aba262875fa85f6396e.gif",
+      "output": {
+        "resource": {
+          "relative_path": "Images/6fc92d26629de42b839a5d0fcc4fc80e4844d948daea7aba262875fa85f6396e.gif"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "Images/7b3c95f106c76ae278c983dd7e22bf35c052cd91af44f7336c3764b973eadb1c.png",
+      "output": {
+        "resource": {
+          "relative_path": "Images/7b3c95f106c76ae278c983dd7e22bf35c052cd91af44f7336c3764b973eadb1c.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "Images/84bb9de2552ec9eab739afa2aca6401e725fde3824b59630a078e4b697bafa91.png",
+      "output": {
+        "resource": {
+          "relative_path": "Images/84bb9de2552ec9eab739afa2aca6401e725fde3824b59630a078e4b697bafa91.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "Images/Hero_0.png",
+      "output": {
+        "resource": {
+          "relative_path": "Images/Hero_0.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "Images/ea5850a6b7d2e02fa2b84eea33dbbd2ebaec2ecaea7ba808ed7ff40f920f5c78.png",
+      "output": {
+        "resource": {
+          "relative_path": "Images/ea5850a6b7d2e02fa2b84eea33dbbd2ebaec2ecaea7ba808ed7ff40f920f5c78.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "Images/fa4334dbc0d9a7de63857b7dadd6fcc53f835d0ee08f63ca20edb698d51f0793.png",
+      "output": {
+        "resource": {
+          "relative_path": "Images/fa4334dbc0d9a7de63857b7dadd6fcc53f835d0ee08f63ca20edb698d51f0793.png"
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Animations.AnimationData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Animations.AnimationData.html",
+          "hash": "HUWRvMDDZZ+G0b1zZjIDEDw9Pn0uY5o4ejPMmn3/ghw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Animations.AnimationHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Animations.AnimationHandler.html",
+          "hash": "Tx17Zl7t6GV59lKekWK3pj1SKL5+cCPwoOeIWPxQkOA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Animations.AnimationTester.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Animations.AnimationTester.html",
+          "hash": "BsdF+EE3mord3c9qVEe9bMlPwi3aM6+1J2DHlemHQdw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Animations.EventTimeStamp.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Animations.EventTimeStamp.html",
+          "hash": "ZzSu7F9dvwg5KwPJ+v/lVn6BzPYxPyk9NHQI217XPUc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Animations.EventTimeType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Animations.EventTimeType.html",
+          "hash": "tzb3HyXNInzQ3iC+slYRLRD3ibV8Z6CdBKHfDPAutaI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Animations.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Animations.html",
+          "hash": "PxVEH8r+4LBsaQbl7FwxHhNWKzH4Ln17nFMfT/R0NlU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.AnimationsEditor.AnimationDataEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.AnimationsEditor.AnimationDataEditor.html",
+          "hash": "X/JK344WNrSM7Vxo0S+3ICvebbx0I+WVKORKGkGn0iI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.AnimationsEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.AnimationsEditor.html",
+          "hash": "zPD3wqgiizk4DH/kIYToeTFHV2FFfoScY7HNSaKLXU8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.Action-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.Action-1.html",
+          "hash": "U7hLSvedaCJRxM0ZNZIBOz6/sHzCMtS2Ys8Dxna7SF8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.Attack-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.Attack-1.html",
+          "hash": "bbUu/zcOWLLW62SKyn4zlarG46US+NgwgBq3s2cZyCY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.CoolDownAction-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.CoolDownAction-1.html",
+          "hash": "rRRt57Az5etgFLRY3frNfiSHM0qDN3Yf6P2XkFrW13w="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.HeroAttack.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.HeroAttack.html",
+          "hash": "OzkduN5ldzP5h5Ne5wjLQpIwKGDX9jkXL3njQgZrSVI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.IActionRestricter.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.IActionRestricter.html",
+          "hash": "P/0aZTLueiQHk5cFQVnWmhA1MuZDylk0DVrvHKmQMDA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.IActionTracker.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.IActionTracker.html",
+          "hash": "7q1OBoQEt53kmrLZ9JaGS8bEjiXixNH4NqAtBv5Ray0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.ICoolDownAction.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.ICoolDownAction.html",
+          "hash": "0y3GWywI4qBtCSHI+I92YgqDmpM5FryTupsxb8BwKiY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.IRestrictableAction.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.IRestrictableAction.html",
+          "hash": "1tWZZGgbC4VnzYXRLV4KAeESxZP+IMLkGbXcgROq+FM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.IRestrictableActionsHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.IRestrictableActionsHandler.html",
+          "hash": "X3MmZ7AQUre6wGH0ws5RfBOFfJLidBesgBRmFuHQzjc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.ITrackableAction.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.ITrackableAction.html",
+          "hash": "OdDI/y0QyH0RGhSqJW2CsSUrJWnqxuHNzU3z/ud09zw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.ITrackableActionsHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.ITrackableActionsHandler.html",
+          "hash": "rYaboIMW3OvZZiJeeOCPAmCpAm99XbtMagdfPZpaikM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.Movement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.Movement.html",
+          "hash": "7tRQZF/sKK61hpGIqGDoeT1jxbq5cgsn97GYePk4cXU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.Orientation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.Orientation.html",
+          "hash": "c42SyOLeVMzQbjjpK6RTOP6ioEjurwaS/luatLzr3j0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.RestrictableActionsHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.RestrictableActionsHandler.html",
+          "hash": "KkVo/A2Odvvdy6hYNUwuCGFOakFxWYKGXAgknmPkd6E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.Skill.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.Skill.html",
+          "hash": "QenkbmWxzOdbhMUbY51AEZE33L0UXxJctEiIG+11atA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.TestOrientation.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.TestOrientation.html",
+          "hash": "EBjL+3AHdBK3GuAT5hNAkf8NWOmD1iKt5GXbjatwhH8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.Ultimate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.Ultimate.html",
+          "hash": "pu5ApxaH1fHRHBZZ25o6a0bS8nhiUeI7TDVIcgOJcSU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Actions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Actions.html",
+          "hash": "JuqiRqn1+4yUIJxvOKrsN8FCrZ6/uuiGEcNnWvelsJk="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Character.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Character.html",
+          "hash": "TA9USc72eskfM3Fn+PZTR5VFdXqBoFSGXjqAunsCdLs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.CreatableAssetAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.CreatableAssetAttribute.html",
+          "hash": "qS0G1Lr3e3U4vScONRETVHPrLCF9/vrxlKClXvQjMrE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Effects.ActiveEffect.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Effects.ActiveEffect.html",
+          "hash": "rRECtOntNrqL5FvkIo6+YFJyXaSf0faFfM11RzkCLdc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Effects.Effect.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Effects.Effect.html",
+          "hash": "TyI0GPmbtRyMQyYRTEyh7Km6tvv2NayJLiMsMQFB+xs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Effects.EffectsHandler.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Effects.EffectsHandler.html",
+          "hash": "Bc/V+u+oTorFCtu++Ye55Us9cbyn2R9kkBsuPXgEVyY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Effects.ICloneable-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Effects.ICloneable-1.html",
+          "hash": "uTb4GrRSd02dZgWrHVrrfSh2a6L8m3vFK65OxfZ7PX4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Effects.IEffectable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Effects.IEffectable.html",
+          "hash": "W+GSB6+sYb6nF3GEDK6wRx1OcEZoTO3mzMjLozaBCA8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Effects.IStackableEffect.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Effects.IStackableEffect.html",
+          "hash": "+MyxP33C49p6xSqGW5DXd1OqNQY7UtIuURZaolhGW98="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Effects.PassiveEffect.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Effects.PassiveEffect.html",
+          "hash": "Q/B8AMWSbvxG3+9NvkoxsrKo8utlAX+jmKGGbaS76lw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Effects.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Effects.html",
+          "hash": "qppsZzy4iZxdu0MxuxvXRxCIIWnjJ6X0FgI3btIIChE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Enemy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Enemy.html",
+          "hash": "Q2Sef3sWMrZJu4tzlNCOoiAPJZky0TGrJ/hmM3a8yU4="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Hero.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Hero.html",
+          "hash": "dwnsO7KS1UaPZEey1GLAuZQIeJlFyfBI/EeQr4Tj2Fc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.IIcon.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.IIcon.html",
+          "hash": "Bq9btXV69WGt2QKhqz08hUbYTY+DakUqWhNmZec+Tl8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.MethodExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.MethodExtensions.html",
+          "hash": "OuWVrueXgc5QDHgeXBQoYZn3bueVxHEhL8CCP5o1rxY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Properties.Health.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Properties.Health.html",
+          "hash": "4QgRIvDnr/a0VgI7F4LiNoTckUS60o5h9CF1qfW19Og="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Properties.Mana.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Properties.Mana.html",
+          "hash": "XZELl8ZfU8iJPyFyX1ElPtA1YaPoqg1h7dvS9mqEU7g="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Properties.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Properties.html",
+          "hash": "/hMVemHc97/cTr+hiLHfabhN/c1ZkSKlXZNxXbhFxoU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.RestrictActionType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.RestrictActionType.html",
+          "hash": "qWMmNRW2SXRli1bLiIebcgvpLBBDYLaMGKxB+V/xHiw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Test.TestActiveEffect.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Test.TestActiveEffect.html",
+          "hash": "2Qs32h0lRcCUH1uYrSw3dMXfUv7hRfmGZknq5Xagecc="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Test.TestAttack.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Test.TestAttack.html",
+          "hash": "qmcyXADd1oSon6bd7WMY2tVNshLozyEJsOqpEL28VYo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Test.TestEnemy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Test.TestEnemy.html",
+          "hash": "UwCWwqeu0K2L+fR9AlmDivaq+iE01mlJL0NEbffUxKs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Test.TestHero.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Test.TestHero.html",
+          "hash": "+4Hc/kHd5cGd+OksKFBAbtYrCqwpf27oTAO7bTYrMDg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Test.TestMovement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Test.TestMovement.html",
+          "hash": "hE9Df6qVKVHPblhBDr3veu+w2W9+gu41jLewnqTs9CM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Test.TestPassiveEffect.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Test.TestPassiveEffect.html",
+          "hash": "cgay5ooFKkoUw4IFdSp0JTEp7Itj0OERoseYjh9JcS0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Test.TestSkill.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Test.TestSkill.html",
+          "hash": "toXAmn+YdrfAWFgAXoG6w/c2csCfTRn48wbgUjZnIXA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Test.TestUltimate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Test.TestUltimate.html",
+          "hash": "1Kyv/VKbEKqt8vfE/8+DFz3QZI6LnBR8T6jURjZ5M8s="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Test.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Test.html",
+          "hash": "6XCnvFDdyBxQfG9Wr+z9iET5xlmLF9yuAljCHAyXVAU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.TrackActionType.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.TrackActionType.html",
+          "hash": "G5B25DOs9nNwh3AB9nwXzlLBm4u0k3LultjwcmNiUUI="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.Utilities.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.Utilities.html",
+          "hash": "YioCk8fEYog/pd0Z3V++d2MYWDDrBs/iSJrEtuBhpzY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Characters.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Characters.html",
+          "hash": "zdED4263T8ywJTo+G5U4Ftn1qWCNx4E4Oeexzhl5m7s="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.AssetItem.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.AssetItem.html",
+          "hash": "uKMqutZP2rJMtT2Db3OsTCrocj96Xt/h2vHH8hnfuzQ="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.AssetUtilities.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.AssetUtilities.html",
+          "hash": "91mbeP9cgWfoihcvIN3Mz3MPQipze4c5PwwUDxJlL1I="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.CharactersEditorWindow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.CharactersEditorWindow.html",
+          "hash": "//dJDP4YkGfSlwXC79aQ9ubK63q9xeMtQTSnRMCgJrY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.CharactersUtilities.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.CharactersUtilities.html",
+          "hash": "1WACVIuuE7FcDLJrIz5aCgKMuq3FUQ7Of1J9m/Yna4Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.CreateAssetWindow.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.CreateAssetWindow.html",
+          "hash": "eOUHMsQ6SgcptpIzE1fyKRA7w1QTyX4a/vcQnOYCT8Y="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.EditorInput.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.EditorInput.html",
+          "hash": "C/4FRZ9dPMl920yrRRQuLIfZjDeE+JtYWo6qAahZVNw="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.Explorer.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.Explorer.html",
+          "hash": "GdS1NN2W+UcPOZjV8+GR+ouui6y9D+G1vYFrA4N3SrY="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.IDrawList.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.IDrawList.html",
+          "hash": "FH0Y4a6qRct2yLCHUaK0GCtmCD1sEjaXnp61eFaOqag="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.IDrawTile.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.IDrawTile.html",
+          "hash": "7t2DbuCuCgqFNIrgb5fcVoAIFGeGKamHIGjwh3KJ7xU="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.IDuplicate.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.IDuplicate.html",
+          "hash": "d/tVsyjvbkj3/BBr/wqtdkNhsBVcnMJlnKwwzjz1OvE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.IRename.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.IRename.html",
+          "hash": "Wai+neqMWDro8uTk+AwfWe8/vExWIu7JJZeQ6Z217Wg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.ISelect.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.ISelect.html",
+          "hash": "i3KKbxm2TUIxN4p/D6cfr5rKKQuOd6/OQbmw7WWt3NE="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.Inspector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.Inspector.html",
+          "hash": "WWTfYT1O7ib9PvkCu588zA4nzxxB/QIIAoU3LCkkGzA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.MethodExtensions.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.MethodExtensions.html",
+          "hash": "A9Fi5ZH1ikGDy5zWkACnMeLRdzIMDZgYPv3DBf0Nf/U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.Select.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.Select.html",
+          "hash": "Nr+5H4s/rA0EU6hT8mY3OYCxJyhAWoT7XeZty+c9WTA="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.SerializedAssetData.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.SerializedAssetData.html",
+          "hash": "6ZB2wv0FGIqq03CFibCKQleQM9yV9kxDyftweSIlkJ8="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.CharactersEditor.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.CharactersEditor.html",
+          "hash": "DSvwGIvN3FoTWCq8BvkT4VDBrlUv91IMGpXpEJInQ2A="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Enemies.Skeleton.Skeleton.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Enemies.Skeleton.Skeleton.html",
+          "hash": "Q1tFqTD7NOPSI6IUyXoPkilLmFxlxfk2Xwxs8A3YaN0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Enemies.Skeleton.SkeletonAttack.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Enemies.Skeleton.SkeletonAttack.html",
+          "hash": "Uv2ozknTCl6Moru2HAb47If6/JMJj2Ka+sMG/YNmQmo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Enemies.Skeleton.SkeletonMovement.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Enemies.Skeleton.SkeletonMovement.html",
+          "hash": "ty3e+wHAAUF0Exe7ML6d5RIyJm6EPvA3G0lwFVNPD0A="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Enemies.Skeleton.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Enemies.Skeleton.html",
+          "hash": "VgBsZwryXvTskFOgQCBix+TwkyYUlnZXJwF8//JvS1Y="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Upgrades.IUpgradeable.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Upgrades.IUpgradeable.html",
+          "hash": "JI+MFzo9VY1K0pSXSd4kMvS9eYT9scDBBqk/VFgBzzM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Upgrades.IUpgrader.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Upgrades.IUpgrader.html",
+          "hash": "8EnNW+egTvMqVBo1uobwjPaM6bTeN3afSt+74vE0q8Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Game.Upgrades.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Game.Upgrades.html",
+          "hash": "QVP1N5+RmxhiH1Zu+iQWL5hU9ptAdk0Nq/KboGFnhBs="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.UIEffectList.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.UIEffectList.html",
+          "hash": "VaS3FNOlTB5LTBbuOQV37KagXExqkYIgJhwfna4fTpo="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Global.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Global.html",
+          "hash": "J7OR0RC5GUA/9YLUY53LLYmlp765FDCbocBIZXeuZ4Q="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "api/index.md",
+      "output": {
+        ".html": {
+          "relative_path": "api/index.html",
+          "hash": "XuT6r31/kwB6Sr+uL7ORKbyBBaNAdBkV0VQQifdYG+0="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html",
+          "hash": "kG1CmEKUipmVYMRT8XlDrAeJobLC2subyMnVBFYg4ZM="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/charactersetup_unity.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/charactersetup_unity.html",
+          "hash": "emY10SV/OoL1yi9B1/ZARkuhi/EPP7cHLXeAx6AUH0U="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "articles/intro.md",
+      "output": {
+        ".html": {
+          "relative_path": "articles/intro.html",
+          "hash": "X2aNk9lZCrr4gYGlD+Kngg9Ffa2FfTI2AZYUQhKXh5E="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "articles/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "articles/toc.html",
+          "hash": "bIj0ihZlz4+eEPxT60RfZ0CfJ/3mMeU0D9R/iATXw7w="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html",
+          "hash": "xkZJFEAM7ONGh6SEaDeDQZHvz+4/5IAN//C6KpA5fGg="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html",
+          "hash": "WSuRrYiGwKKMbtdG9z8W9fXmLoCyTnGg9AxbPKLXm2Y="
+        }
+      },
+      "is_incremental": false,
+      "version": ""
+    }
+  ],
+  "incremental_info": [
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot build incrementally because last build info is missing.",
+        "incrementalPhase": "build",
+        "total_file_count": 0,
+        "skipped_file_count": 0,
+        "full_build_reason_code": "NoAvailableBuildCache"
+      },
+      "processors": {
+        "ConceptualDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 4,
+          "skipped_file_count": 0
+        },
+        "ManagedReferenceDocumentProcessor": {
+          "can_incremental": false,
+          "incrementalPhase": "build",
+          "total_file_count": 82,
+          "skipped_file_count": 0
+        },
+        "ResourceDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor ResourceDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        },
+        "TocDocumentProcessor": {
+          "can_incremental": false,
+          "details": "Processor TocDocumentProcessor cannot support incremental build because the processor doesn't implement ISupportIncrementalDocumentProcessor interface.",
+          "incrementalPhase": "build",
+          "total_file_count": 0,
+          "skipped_file_count": 0
+        }
+      }
+    },
+    {
+      "status": {
+        "can_incremental": false,
+        "details": "Cannot support incremental post processing, the reason is: last post processor info is null.",
+        "incrementalPhase": "postProcessing",
+        "total_file_count": 0,
+        "skipped_file_count": 0
+      },
+      "processors": {}
+    }
+  ],
+  "version_info": {},
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}
