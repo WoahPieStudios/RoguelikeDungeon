@@ -11,14 +11,14 @@ namespace Game.Characters.Actions
     public abstract class Ultimate : CoolDownAction<Hero>
     {
         [SerializeField]
-        int _ManaCost;
+        float _ManaCost;
         
         bool _IsRestricted = false;
 
         /// <summary>
         /// Mana cost of the Ultimatex
         /// </summary>
-        public int manaCost => _ManaCost;
+        public float manaCost => _ManaCost;
 
         public bool isRestricted => _IsRestricted;
 
@@ -52,6 +52,19 @@ namespace Game.Characters.Actions
         public void OnRestrict(RestrictActionType restrictActions)
         {
             _IsRestricted = restrictActions.HasFlag(RestrictActionType.Ultimate);
+        }
+
+        public override void Upgrade(string property, object value)
+        {
+            base.Upgrade(property, value);
+
+            switch(property)
+            {
+                case "manaCost":
+                    if(value is float v)
+                        _ManaCost = v;
+                    break;
+            }
         }
     }
 }

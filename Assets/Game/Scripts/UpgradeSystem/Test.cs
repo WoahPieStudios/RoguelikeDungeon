@@ -14,10 +14,10 @@ public class TestUpgradeable : IUpgradeable
     }
 }
 
-public class TestUpgrader : IUpgrader
+public class TestUpgrader : IUpgrader<Hero>
 {
-    public void Upgrade(Hero hero)
+    public void Upgrade(Hero character)
     {
-        
+        character.attack.Upgrade("speed", character.attack.speed + character.attack.speed * 0.1f);
     }
 }

@@ -12,8 +12,8 @@ namespace Game.Upgrades
         void Upgrade(string property, object value);
     }
 
-    public interface IUpgrader
+    public interface IUpgrader<T> where T : Character
     {
-        void Upgrade(Hero hero);
+        void Upgrade(T character);
     }
 }
