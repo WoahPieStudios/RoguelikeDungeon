@@ -22,8 +22,6 @@ namespace Game.Enemies.Skeleton
         Vector2 _Velocity;
         Vector2 _Direction;
 
-        AnimationHandler _AnimationHandler;
-
         bool _IsMoving = false;
 
         public override Vector2 velocity => _Velocity;
@@ -32,17 +30,15 @@ namespace Game.Enemies.Skeleton
         {
             base.Awake();
 
-            _AnimationHandler = GetComponent<AnimationHandler>();
-
             Use();
         }
 
         private void Start() 
         {
-            _AnimationHandler.AddAnimationData(_IdleData);
-            _AnimationHandler.AddAnimationData(_WalkData);    
+            animationHandler.AddAnimationData(_IdleData);
+            animationHandler.AddAnimationData(_WalkData);    
 
-            _AnimationHandler.Play(_IdleData);
+            animationHandler.Play(_IdleData);
         }
 
         private void FixedUpdate() 
@@ -58,14 +54,14 @@ namespace Game.Enemies.Skeleton
             {
                 _IsMoving = true;
 
-                _AnimationHandler.CrossFadePlay(_WalkData, 0.05f);
+                animationHandler.CrossFadePlay(_WalkData, 0.05f);
             }
 
             else if(_Velocity.magnitude <= 0.05f && _IsMoving)
             {
                 _IsMoving = false;
 
-                _AnimationHandler.CrossFadePlay(_IdleData, 0.05f);
+                animationHandler.CrossFadePlay(_IdleData, 0.05f);
             }
         }
 

@@ -1,11 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using Game.Upgrades;
 using UnityEngine;
 
 namespace Game.Characters.Actions
 {
-    public abstract class CoolDownAction<T> : Action<T>, ICoolDownAction where T : Character
+    public abstract class CoolDownAction<T> : Action<T>, ICoolDownAction, IUpgradeable where T : Character
     {
         [SerializeField]
         float _CoolDownTime;
@@ -76,6 +76,17 @@ namespace Game.Characters.Actions
                 
             if(_CoolDownCoroutine != null)
                 StopCoroutine(_CoolDownCoroutine);
+        }
+
+        public virtual void Upgrade(string property, object value)
+        {
+            switch(property)
+            {
+                case "coolDownTime":
+                    if(value is float v)
+                        _CoolDownTime = v;
+                    break;
+            }
         }
     }
 }

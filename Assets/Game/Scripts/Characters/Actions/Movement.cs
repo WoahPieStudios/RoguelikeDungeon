@@ -4,9 +4,11 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Game.Upgrades;
+
 namespace Game.Characters.Actions
 {
-    public abstract class Movement : Action<Character>
+    public abstract class Movement : Action<Character>, IUpgradeable
     {
         [SerializeField]
         float _Speed;
@@ -35,6 +37,17 @@ namespace Game.Characters.Actions
                 Begin();
 
             return isActive;
+        }
+
+        public virtual void Upgrade(string property, object value)
+        {
+            switch(property)
+            {
+                case "speed":
+                    if(value is float v)
+                        _Speed = v;
+                    break;
+            }
         }
     }
 }
