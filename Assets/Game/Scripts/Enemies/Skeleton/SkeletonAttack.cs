@@ -9,12 +9,28 @@ using Game.Characters;
 
 namespace Game.Enemies.Skeleton
 {
-    public class SkeletonAttack : Attack<Enemy>
+    public class SkeletonAttack : Attack<Skeleton>
     {
+        [SerializeField]
+        float _Damage;
+        [SerializeField]
+        float _Range;
+        [SerializeField]
+        float _Speed;
+        [SerializeField]
+        float _CoolDownTime;
         [SerializeField]
         private AnimationData _AttackTopData;
         [SerializeField]
         private AnimationData _AttackBottomData;
+
+        public override float damage => _Damage;
+
+        public override float range => _Range;
+
+        public override float speed => _Speed;
+
+        public override float coolDownTime => _CoolDownTime;
 
         protected override void Awake()
         {
@@ -29,7 +45,7 @@ namespace Game.Enemies.Skeleton
 
         private void Update() 
         {
-            if(!isActive)
+            if(!isActive && isRestricted)
                 return;
                 
             if(owner.movement.velocity.magnitude > 0.001f)
@@ -44,9 +60,9 @@ namespace Game.Enemies.Skeleton
             }
         }
 
-        protected override void Begin()
+        protected override void OnUse()
         {
-            base.Begin();
+            base.OnUse();
 
             animationHandler.CrossFadePlay(_AttackTopData, 0.1f);
             

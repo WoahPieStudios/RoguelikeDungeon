@@ -8,7 +8,7 @@ using Game.Characters.Properties;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Ultimate : CoolDownAction<Hero>
+    public abstract class Ultimate<T> : HeroCoolDownAction<T>, IUltimateAction where T : Hero
     {
         [SerializeField]
         float _ManaCost;
@@ -24,9 +24,18 @@ namespace Game.Characters.Actions
 
         public event System.Action<TrackActionType> onUseTrackableAction;
 
-        protected override void Begin()
+        public const string ManaCostProperty = "manaCost";
+
+        protected override void Awake()
         {
-            base.Begin();
+            base.Awake();
+            
+            SetPropertyStartValue(ManaCostProperty, _ManaCost);
+        }
+
+        protected override void OnUse()
+        {
+            base.OnUse();
 
             Mana mana = owner.mana;
 
@@ -35,36 +44,23 @@ namespace Game.Characters.Actions
             onUseTrackableAction?.Invoke(TrackActionType.Ultimate);
         }
 
-        /// <summary>
-        /// Activates the Ultimate.
-        /// </summary>
-        /// <param name="hero">The Hero who will use the Ultimate</param>
-        public virtual bool Use()
+        protected override bool CanUse()
         {
-            bool canUse = !isActive && !isRestricted && !isCoolingDown && owner.mana.currentMana >= manaCost;
-
-            if(canUse)
-                Begin();
-
-            return canUse;
+            return base.CanUse() && !isRestricted && !isCoolingDown && owner.mana.currentMana >= manaCost;
         }
-
+        
         public void OnRestrict(RestrictActionType restrictActions)
         {
             _IsRestricted = restrictActions.HasFlag(RestrictActionType.Ultimate);
         }
 
-        public override void Upgrade(string property, object value)
+        public override bool Contains(string property)
         {
-            base.Upgrade(property, value);
-
-            switch(property)
+            return base.Contains(property) || property switch
             {
-                case "manaCost":
-                    if(value is float v)
-                        _ManaCost = v;
-                    break;
-            }
+                ManaCostProperty => true,
+                _ => false 
+            };
         }
     }
 }

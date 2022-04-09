@@ -357,10 +357,8 @@ Animation:
   m_Animation: {fileID: 0}
   m_Animations:
   - {fileID: 7400000, guid: d8bb74163034bc14c8893ecefc5dcab2, type: 2}
-  - {fileID: 7400000, guid: a2bbe6bfa1129f3478f0ba90c2672d31, type: 2}
   - {fileID: 7400000, guid: e70a74946bf71ac459319a89efb185e3, type: 2}
   - {fileID: 7400000, guid: 09f0f1d0262884246b42f270e23e8f74, type: 2}
-  - {fileID: 7400000, guid: bdcf1f4cadcd642409962da997eccad5, type: 2}
   - {fileID: 7400000, guid: b3df9b284d03d534aa22dfa01d9fc89a, type: 2}
   m_WrapMode: 0
   m_PlayAutomatically: 0
@@ -422,11 +420,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ace0a8ba7f21dd46842b3cef084d776, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _CoolDownTime: 1
   _Damage: 0
   _Range: 0
   _Speed: 0
-  _ManaGainOnHit: 0
-  _AttackData: {fileID: 11400000, guid: a9ab3b2d2fb97214b85a182d07934162, type: 2}
+  _CoolDownTime: 1
   _AttackTopData: {fileID: 11400000, guid: e70ae4230236bfd4ea42783cc1c448b5, type: 2}
   _AttackBottomData: {fileID: 11400000, guid: 5e8cf8c1d38a9b944873723875518bcf, type: 2}

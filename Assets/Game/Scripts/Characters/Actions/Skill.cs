@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Skill : CoolDownAction<Hero>
+    public abstract class Skill<T> : HeroCoolDownAction<T>, ISkillAction where T : Hero
     {
         bool _IsRestricted = false;
 
@@ -14,25 +14,16 @@ namespace Game.Characters.Actions
 
         public event System.Action<TrackActionType> onUseTrackableAction;
 
-        protected override void Begin()
+        protected override void OnUse()
         {
-            base.Begin();
+            base.OnUse();
             
             onUseTrackableAction?.Invoke(TrackActionType.Skill);
         }
 
-        /// <summary>
-        /// Start Skill.
-        /// </summary>
-        /// <param name="hero">The Hero who will use the Skill</param>
-        public virtual bool Use()
+        protected override bool CanUse()
         {
-            bool canUse = !isActive && !isRestricted && !isCoolingDown;
-
-            if(canUse)
-                Begin();
-
-            return canUse;
+            return base.CanUse() && !isRestricted;
         }
         
         public void OnRestrict(RestrictActionType restrictActions)

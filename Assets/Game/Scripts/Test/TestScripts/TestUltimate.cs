@@ -7,7 +7,7 @@ using Game.Characters.Actions;
 
 namespace Game.Characters.Test
 {
-    public class TestUltimate : Ultimate
+    public class TestUltimate : Ultimate<Hero>
     {
         Coroutine _TickCoroutine;
 
@@ -18,9 +18,9 @@ namespace Game.Characters.Test
             End();
         }
 
-        protected override void Begin()
+        protected override void OnUse()
         {
-            base.Begin();
+            base.OnUse();
 
             _TickCoroutine = StartCoroutine(Tick());
         }

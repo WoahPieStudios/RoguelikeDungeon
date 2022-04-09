@@ -8,55 +8,39 @@ using Game.Characters.Effects;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Attack<T> : CoolDownAction<T> where T : Character
+    public abstract class Attack<T> : CoolDownAction<T>, IAttackAction where T : Character
     {
-        [SerializeField]
-        int _Damage;
-        [SerializeField]
-        float _Range;
-        [SerializeField]
-        float _Speed;
-
         bool _IsRestricted = false;
 
         /// <summary>
         /// Damage of the Attack.
         /// </summary>
-        public int damage => _Damage;
+        public abstract float damage { get; }
 
         /// <summary>
         /// Range of the Attack
         /// </summary>
-        public float range => _Range;
+        public abstract float range { get; }
 
         /// <summary>
         /// Speed of the Attack. Honestly have no idea where this would fit.
         /// </summary>
-        public float speed => _Speed;
+        public abstract float speed { get; }
 
         public bool isRestricted => _IsRestricted;
 
         public event System.Action<TrackActionType> onUseTrackableAction;
 
-        protected override void Begin()
+        protected override void OnUse()
         {
-            base.Begin();
+            base.OnUse();
 
             onUseTrackableAction?.Invoke(TrackActionType.Attack);
         }
 
-        /// <summary>
-        /// Starts Attack.
-        /// </summary>
-        /// <param name="attacker"></param>
-        public bool Use()
+        protected override bool CanUse()
         {
-            bool canUse = !isActive && !isRestricted;
-
-            if(canUse)
-                Begin();
-
-            return canUse;
+            return base.CanUse() && !isRestricted;
         }
 
         public void OnRestrict(RestrictActionType restrictActions)

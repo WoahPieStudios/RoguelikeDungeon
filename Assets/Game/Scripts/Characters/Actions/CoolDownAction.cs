@@ -5,11 +5,8 @@ using UnityEngine;
 
 namespace Game.Characters.Actions
 {
-    public abstract class CoolDownAction<T> : Action<T>, ICoolDownAction, IUpgradeable where T : Character
+    public abstract class CoolDownAction<T> : Action<T>, ICoolDownAction where T : Character
     {
-        [SerializeField]
-        float _CoolDownTime;
-        
         float _CurrentCoolDownTime;
 
         bool _IsCoolingDown = false;
@@ -19,7 +16,7 @@ namespace Game.Characters.Actions
         /// <summary>
         /// Cool Down Time after ending the Action.
         /// </summary>
-        public float coolDownTime => _CoolDownTime;
+        public abstract float coolDownTime { get; }
         /// <summary>
         /// Current Time of the cooldown;
         /// </summary>
@@ -29,6 +26,11 @@ namespace Game.Characters.Actions
         /// Determines if the Actino is Coolin Down.
         /// </summary>
         public bool isCoolingDown => _IsCoolingDown;
+
+        protected override bool CanUse()
+        {
+            return base.CanUse() && !isCoolingDown;
+        }
 
         /// <summary>
         /// Cool Down Sequence.
@@ -76,17 +78,6 @@ namespace Game.Characters.Actions
                 
             if(_CoolDownCoroutine != null)
                 StopCoroutine(_CoolDownCoroutine);
-        }
-
-        public virtual void Upgrade(string property, object value)
-        {
-            switch(property)
-            {
-                case "coolDownTime":
-                    if(value is float v)
-                        _CoolDownTime = v;
-                    break;
-            }
         }
     }
 }

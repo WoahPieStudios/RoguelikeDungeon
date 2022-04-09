@@ -12,14 +12,15 @@ using Game.Characters.Properties;
 
 namespace Game.Characters
 {
-    public class Character : MonoBehaviour, IEffectable, IRestrictableActionsHandler
+    public abstract class Character : MonoBehaviour, IEffectable, IRestrictableActionsHandler
     {
         [SerializeField]
         Health _Health;
 
+        IMovementAction _Movement;
+
         EffectsHandler _EffectsHandler = new EffectsHandler();
-        Movement _Movement;
-        Orientation _Orientation;
+        IOrientationAction _Orientation;
 
         RestrictableActionsHandler _RestrictableActionsHandler = new RestrictableActionsHandler();
         
@@ -27,8 +28,8 @@ namespace Game.Characters
 
         public Health health => _Health;
 
-        public Movement movement => _Movement;
-        public Orientation orientation => _Orientation;
+        public IMovementAction movement => _Movement;
+        public IOrientationAction orientation => _Orientation;
 
         public Effect[] effects => _EffectsHandler.effects;
 
@@ -47,8 +48,8 @@ namespace Game.Characters
 
             _Health.SetCurrentHealthWithoutEvent(_Health.maxHealth);
 
-            _Movement = GetComponent<Movement>();
-            _Orientation = GetComponent<Orientation>();
+            _Movement = GetComponent<IMovementAction>();
+            _Orientation = GetComponent<IOrientationAction>();
 
             restrictableActionsHandler.AddRestrictableAction(GetComponents<IRestrictableAction>());
 

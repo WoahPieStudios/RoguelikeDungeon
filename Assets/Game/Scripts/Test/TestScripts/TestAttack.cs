@@ -11,6 +11,14 @@ namespace Game.Characters.Test
     {
         Coroutine _TickCoroutine;
 
+        public override float damage => throw new System.NotImplementedException();
+
+        public override float range => throw new System.NotImplementedException();
+
+        public override float speed => throw new System.NotImplementedException();
+
+        public override float coolDownTime => throw new System.NotImplementedException();
+
         IEnumerator Tick()
         {
             owner.FaceNearestCharacter(range);
@@ -25,9 +33,9 @@ namespace Game.Characters.Test
             End();
         }
 
-        protected override void Begin()
+        protected override void OnUse()
         {
-            base.Begin();
+            base.OnUse();
 
             _TickCoroutine = StartCoroutine(Tick());
         }

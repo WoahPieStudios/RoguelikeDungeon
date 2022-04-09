@@ -9,15 +9,15 @@ namespace Game.Characters
 {
     public class Enemy : Character
     {
-        Attack<Enemy> _Attack;
+        IAttackAction _Attack;
 
-        public Attack<Enemy> attack => _Attack;
+        public IAttackAction attack => _Attack;
 
         protected override void Awake()
         {
             base.Awake();
 
-            _Attack = GetComponent<Attack<Enemy>>();
+            _Attack = GetComponent<IAttackAction>();
         }
     }
 }

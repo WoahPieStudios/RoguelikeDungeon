@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Game.Characters.Actions
 {
     [RequireComponent(typeof(SpriteRenderer))]
-    public class TestOrientation : Orientation
+    public class TestOrientation : Orientation<Character>
     {
         Vector2Int _CurrentOrientation;
         SpriteRenderer _SpriteRenderer;

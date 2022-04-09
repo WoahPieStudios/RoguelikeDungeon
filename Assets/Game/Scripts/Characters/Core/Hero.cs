@@ -23,23 +23,23 @@ namespace Game.Characters
 
         Dictionary<TrackActionType, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackActionType, PassiveEffect[]>();
 
-        HeroAttack _Attack;
-        Skill _Skill;
-        Ultimate _Ultimate;
+        IHeroAttackAction _Attack;
+        ISkillAction _Skill;
+        IUltimateAction _Ultimate;
 
         public Mana mana => _Mana;
 
-        public HeroAttack attack => _Attack;
+        public IHeroAttackAction attack => _Attack;
         
         /// <summary>
         /// Skill of the Hero
         /// </summary>
-        public Skill skill => _Skill;
+        public ISkillAction skill => _Skill;
 
         /// <summary>
         /// Ultimate of the Hero
         /// </summary>
-        public Ultimate ultimate => _Ultimate;
+        public IUltimateAction ultimate => _Ultimate;
 
         public TrackActionType trackedActions => _TrackAction;
 
@@ -49,9 +49,9 @@ namespace Game.Characters
 
             _Mana.ResetMana();
 
-            _Attack = GetComponent<HeroAttack>();
-            _Skill = GetComponent<Skill>();
-            _Ultimate = GetComponent<Ultimate>();
+            _Attack = GetComponent<IHeroAttackAction>();
+            _Skill = GetComponent<ISkillAction>();
+            _Ultimate = GetComponent<IUltimateAction>();
 
             SegregatePassiveEffects(_PassiveEffects);
 

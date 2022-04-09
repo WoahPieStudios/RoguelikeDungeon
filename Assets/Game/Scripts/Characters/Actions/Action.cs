@@ -8,7 +8,7 @@ using Game.Animations;
 namespace Game.Characters.Actions
 {
     [RequireComponent(typeof(AnimationHandler))]
-    public abstract class Action<T> : MonoBehaviour where T : Character
+    public abstract class Action<T> : MonoBehaviour, IAction where T : Character
     {
         bool _IsActive = false;
 
@@ -27,9 +27,20 @@ namespace Game.Characters.Actions
             _Owner = GetComponent<T>();
         }
 
-        protected virtual void Begin()
+        protected virtual void OnUse()
         {
             _IsActive = true;
+        }
+
+        protected virtual bool CanUse()
+        {
+            return !_IsActive;
+        }
+
+        public void Use()
+        {
+            if(CanUse())
+                OnUse();
         }
 
         public virtual void End()

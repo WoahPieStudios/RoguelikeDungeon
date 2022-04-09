@@ -9,7 +9,7 @@ using Game.Animations;
 
 namespace Game.Enemies.Skeleton
 {
-    public class SkeletonMovement : Movement
+    public class SkeletonMovement : EnemyMovement<Skeleton>
     {
         [Header("Animation Clips")]
         [SerializeField]
@@ -43,7 +43,7 @@ namespace Game.Enemies.Skeleton
 
         private void FixedUpdate() 
         {
-            if(isActive && !isRestricted)
+            if(CanUse())
             {
                 _Velocity = Vector2.Lerp(velocity, _Direction * speed * Time.fixedDeltaTime, _LerpTime);
 

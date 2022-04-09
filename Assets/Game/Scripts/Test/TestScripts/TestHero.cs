@@ -29,13 +29,13 @@ namespace Game.Characters.Test
             movement.Move(_Input);
 
             if(Input.GetKeyDown(KeyCode.U))
-                Debug.Log("Attack " + attack.Use());
+                attack.Use();
 
             if(Input.GetKeyDown(KeyCode.I))
-                Debug.Log("Skill " + skill.Use());
+                skill.Use();
 
             if(Input.GetKeyDown(KeyCode.O))
-                Debug.Log("Ultimate " + ultimate.Use());
+                ultimate.Use();
         }
     }
 }

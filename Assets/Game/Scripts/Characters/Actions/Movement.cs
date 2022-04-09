@@ -4,18 +4,13 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Upgrades;
-
 namespace Game.Characters.Actions
 {
-    public abstract class Movement : Action<Character>, IUpgradeable
+    public abstract class Movement<T> : Action<T>, IMovementAction where T : Character
     {
-        [SerializeField]
-        float _Speed;
-        
         bool _IsRestricted = false;
 
-        public float speed => _Speed;
+        public abstract float speed { get; }
 
         public abstract Vector2 velocity { get; }
 
@@ -23,31 +18,12 @@ namespace Game.Characters.Actions
 
         public virtual bool Move(Vector2 direction)
         {
-            return isActive && !isRestricted;
+            return isActive;
         }
 
         public virtual void OnRestrict(RestrictActionType restrictActions)
         {
             _IsRestricted = restrictActions.HasFlag(RestrictActionType.Movement);
-        }
-
-        public virtual bool Use()
-        {
-            if(!isActive)
-                Begin();
-
-            return isActive;
-        }
-
-        public virtual void Upgrade(string property, object value)
-        {
-            switch(property)
-            {
-                case "speed":
-                    if(value is float v)
-                        _Speed = v;
-                    break;
-            }
         }
     }
 }

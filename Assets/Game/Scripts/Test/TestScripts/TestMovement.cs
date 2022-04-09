@@ -8,7 +8,7 @@ using Game.Characters.Actions;
 
 namespace Game.Characters.Test
 {
-    public class TestMovement : Movement
+    public class TestMovement : HeroMovement<Hero>
     {
         [SerializeField]
         float _LerpTime;
