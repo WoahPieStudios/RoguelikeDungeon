@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Game.Characters.Actions;
-using Game.Characters.Effects;
+using Game.Effects;
 using Game.Characters.Properties;
 
 

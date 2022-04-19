@@ -1,21 +1,27 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
+using Game.Upgrades;
 using Game.Properties;
-using Game.Actions;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Movement : Action, IMovementAction
+    public abstract class HeroMovement<T> : HeroAction<T>, IMovementAction where T : Hero
     {
+        [SerializeField]
+        Property _Speed = new Property(SpeedProperty);
+
         bool _IsRestricted = false;
 
-        public abstract Property speed { get; }
+        public Property speed => _Speed;
 
         public abstract Vector2 velocity { get; }
 
         public bool isRestricted => _IsRestricted;
+
+        public const string SpeedProperty = "speed";
 
         protected override void Awake()
         {
@@ -26,10 +32,10 @@ namespace Game.Characters.Actions
 
         public virtual bool Move(Vector2 direction)
         {
-            return isActive;
+            return isActive && !isRestricted;
         }
 
-        public virtual void OnRestrict(RestrictActionType restrictActions)
+        public void OnRestrict(RestrictActionType restrictActions)
         {
             _IsRestricted = restrictActions.HasFlag(RestrictActionType.Movement);
         }

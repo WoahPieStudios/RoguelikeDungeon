@@ -9,12 +9,7 @@ namespace Game.Characters.Test
 {
     public class TestSkill : Skill<Hero>
     {
-        [SerializeField]
-        float _CoolDownTime;
-        
         Coroutine _TickCoroutine;
-
-        public override float coolDownTime => _CoolDownTime;
 
         IEnumerator Tick()
         {
@@ -36,11 +31,6 @@ namespace Game.Characters.Test
 
             if(_TickCoroutine != null)
                 StopCoroutine(_TickCoroutine);
-        }
-
-        public override bool Contains(string property)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

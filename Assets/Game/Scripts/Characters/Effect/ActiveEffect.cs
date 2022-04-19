@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Game.Characters.Actions;
+using Game.Effects;
 
 namespace Game.Characters.Effects
 {

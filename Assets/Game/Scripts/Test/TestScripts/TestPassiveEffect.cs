@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Game.Effects;
 using Game.Characters.Effects;
 
 namespace Game.Characters.Test

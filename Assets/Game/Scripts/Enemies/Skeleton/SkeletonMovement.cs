@@ -43,7 +43,7 @@ namespace Game.Enemies.Skeleton
 
         private void FixedUpdate() 
         {
-            if(CanUse())
+            if(isActive && !isRestricted)
             {
                 _Velocity = Vector2.Lerp(velocity, _Direction * speed * Time.fixedDeltaTime, _LerpTime);
 

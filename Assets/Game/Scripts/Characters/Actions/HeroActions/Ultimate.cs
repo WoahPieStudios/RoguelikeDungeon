@@ -5,20 +5,21 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Game.Characters.Properties;
+using Game.Properties;
 
 namespace Game.Characters.Actions
 {
     public abstract class Ultimate<T> : HeroCoolDownAction<T>, IUltimateAction where T : Hero
     {
         [SerializeField]
-        float _ManaCost;
+        Property _ManaCost;
         
         bool _IsRestricted = false;
 
         /// <summary>
         /// Mana cost of the Ultimatex
         /// </summary>
-        public float manaCost => _ManaCost;
+        public Property manaCost => _ManaCost;
 
         public bool isRestricted => _IsRestricted;
 
@@ -29,8 +30,8 @@ namespace Game.Characters.Actions
         protected override void Awake()
         {
             base.Awake();
-            
-            SetPropertyStartValue(ManaCostProperty, _ManaCost);
+
+            propertyList.Add(manaCost);
         }
 
         protected override void OnUse()
@@ -52,15 +53,6 @@ namespace Game.Characters.Actions
         public void OnRestrict(RestrictActionType restrictActions)
         {
             _IsRestricted = restrictActions.HasFlag(RestrictActionType.Ultimate);
-        }
-
-        public override bool Contains(string property)
-        {
-            return base.Contains(property) || property switch
-            {
-                ManaCostProperty => true,
-                _ => false 
-            };
         }
     }
 }

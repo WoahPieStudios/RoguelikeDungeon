@@ -4,9 +4,11 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Game.Actions;
+
 namespace Game.Characters.Actions
 {
-    public abstract class Orientation<T> : Action<Character>, IOrientationAction where T : Character
+    public abstract class Orientation<T> : Action, IOrientationAction where T : Character
     {
         public abstract Vector2Int currentOrientation { get; }
 

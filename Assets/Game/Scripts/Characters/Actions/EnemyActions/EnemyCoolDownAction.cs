@@ -1,11 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
-using Game.Upgrades;
+
 using UnityEngine;
+
+using Game.Upgrades;
+using Game.Properties;
+using Game.Actions;
 
 namespace Game.Characters.Actions
 {
-    public abstract class CoolDownAction<T> : Action<T>, ICoolDownAction where T : Character
+    public abstract class EnemyCoolDownAction<T> : EnemyAction<T>, ICoolDownAction where T : Enemy
     {
         float _CurrentCoolDownTime;
 
@@ -16,7 +20,7 @@ namespace Game.Characters.Actions
         /// <summary>
         /// Cool Down Time after ending the Action.
         /// </summary>
-        public abstract float coolDownTime { get; }
+        public abstract Property coolDownTime { get; }
         /// <summary>
         /// Current Time of the cooldown;
         /// </summary>
@@ -26,6 +30,13 @@ namespace Game.Characters.Actions
         /// Determines if the Actino is Coolin Down.
         /// </summary>
         public bool isCoolingDown => _IsCoolingDown;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            propertyList.Add(coolDownTime);
+        }
 
         protected override bool CanUse()
         {

@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 using Game.Characters;
 using Game.Characters.Effects;
+using Game.Effects;
 
 public class UIEffectList : MonoBehaviour
 {

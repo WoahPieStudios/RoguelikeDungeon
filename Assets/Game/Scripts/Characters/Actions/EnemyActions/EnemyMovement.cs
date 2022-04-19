@@ -1,17 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 using Game.Properties;
-using Game.Actions;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Movement : Action, IMovementAction
+    public abstract class EnemyMovement<T> : EnemyAction<T>, IMovementAction where T : Enemy
     {
+        [SerializeField]
+        Property _Speed;
+        
         bool _IsRestricted = false;
 
-        public abstract Property speed { get; }
+        public Property speed => _Speed;
 
         public abstract Vector2 velocity { get; }
 
@@ -26,7 +29,7 @@ namespace Game.Characters.Actions
 
         public virtual bool Move(Vector2 direction)
         {
-            return isActive;
+            return isActive && !isRestricted;
         }
 
         public virtual void OnRestrict(RestrictActionType restrictActions)

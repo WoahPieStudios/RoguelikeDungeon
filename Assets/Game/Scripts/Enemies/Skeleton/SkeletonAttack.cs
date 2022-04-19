@@ -6,36 +6,32 @@ using UnityEngine;
 using Game.Animations;
 using Game.Characters.Actions;
 using Game.Characters;
+using Game.Properties;
 
 namespace Game.Enemies.Skeleton
 {
-    public class SkeletonAttack : Attack<Skeleton>
+    public class SkeletonAttack : EnemyAttack<Skeleton>
     {
         [SerializeField]
-        float _Damage;
+        Property _Damage;
         [SerializeField]
-        float _Range;
+        Property _Range;
         [SerializeField]
-        float _Speed;
+        Property _Speed;
         [SerializeField]
-        float _CoolDownTime;
+        Property _CoolDownTime;
         [SerializeField]
         private AnimationData _AttackTopData;
         [SerializeField]
         private AnimationData _AttackBottomData;
 
-        public override float damage => _Damage;
+        public override Property damage => _Damage;
 
-        public override float range => _Range;
+        public override Property range => _Range;
 
-        public override float speed => _Speed;
+        public override Property speed => _Speed;
 
-        public override float coolDownTime => _CoolDownTime;
-
-        protected override void Awake()
-        {
-            base.Awake();
-        }
+        public override Property coolDownTime => _CoolDownTime;
 
         private void Start() 
         {
@@ -45,7 +41,7 @@ namespace Game.Enemies.Skeleton
 
         private void Update() 
         {
-            if(!isActive && isRestricted)
+            if(!isActive || isRestricted)
                 return;
                 
             if(owner.movement.velocity.magnitude > 0.001f)

@@ -4,18 +4,19 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Game.Upgrades;
+using Game.Properties;
+using Game.Actions;
 
 namespace Game.Characters.Actions
 {
-    public interface IAction
+    public interface ICharacterAction<T> where T : Character
     {
-        void Use();
-        void End();
+        T owner { get; }
     }
 
     public interface IMovementAction : IAction, IRestrictableAction
     {
-        float speed { get; }
+        Property speed { get; }
         Vector2 velocity { get; }
         bool Move(Vector2 direction);
     }
@@ -28,29 +29,29 @@ namespace Game.Characters.Actions
 
     public interface IAttackAction : ICoolDownAction, IRestrictableAction
     {
-        float speed { get; }
-        float damage { get; }
-        float range { get; }
+        Property speed { get; }
+        Property damage { get; }
+        Property range { get; }
     }
 
-    public interface IHeroAttackAction : IAttackAction, IUpgradeable
+    public interface IHeroAttackAction : IAttackAction, ITrackableAction, IUpgradeable
     {
-        float manaGainOnHit { get; }
+        Property manaGainOnHit { get; }
     }
 
-    public interface ISkillAction : ICoolDownAction, IRestrictableAction, IUpgradeable
+    public interface ISkillAction : ICoolDownAction, ITrackableAction, IRestrictableAction, IUpgradeable
     {
 
     }
 
-    public interface IUltimateAction : ICoolDownAction, IRestrictableAction, IUpgradeable
+    public interface IUltimateAction : ICoolDownAction, ITrackableAction, IRestrictableAction, IUpgradeable
     {
-        float manaCost { get; }
+        Property manaCost { get; }
     }
 
     public interface ICoolDownAction : IAction
     {
-        float coolDownTime { get; }
+        Property coolDownTime { get; }
         float currentCoolDownTime { get; }
         bool isCoolingDown { get; }
 

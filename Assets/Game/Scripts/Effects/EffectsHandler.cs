@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace Game.Characters.Effects
+namespace Game.Effects
 {
     public class EffectsHandler
     {

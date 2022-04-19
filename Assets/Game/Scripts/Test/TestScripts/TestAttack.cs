@@ -4,20 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 using Game.Characters.Actions;
+using Game.Properties;
 
 namespace Game.Characters.Test
 {
-    public class TestAttack : Attack<Character>
+    public class TestAttack : HeroAttack<Hero>
     {
         Coroutine _TickCoroutine;
-
-        public override float damage => throw new System.NotImplementedException();
-
-        public override float range => throw new System.NotImplementedException();
-
-        public override float speed => throw new System.NotImplementedException();
-
-        public override float coolDownTime => throw new System.NotImplementedException();
 
         IEnumerator Tick()
         {

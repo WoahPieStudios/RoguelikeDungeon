@@ -5,6 +5,7 @@ using UnityEngine;
 
 using Game.Characters.Actions;
 using Game.Characters;
+using Game.Properties;
 
 namespace Game.Enemies.Skeleton
 {

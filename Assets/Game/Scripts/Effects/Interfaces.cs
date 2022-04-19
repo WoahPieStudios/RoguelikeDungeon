@@ -4,10 +4,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Characters;
-using Game.Characters.Actions;
-
-namespace Game.Characters.Effects
+namespace Game.Effects
 {
     public interface ICloneable<T> where T : MonoBehaviour
     {

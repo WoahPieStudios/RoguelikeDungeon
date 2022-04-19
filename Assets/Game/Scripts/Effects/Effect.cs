@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-namespace Game.Characters.Effects
+namespace Game.Effects
 {
     public abstract class Effect : MonoBehaviour, ICloneable<Effect>
     {

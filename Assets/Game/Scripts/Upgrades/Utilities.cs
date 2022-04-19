@@ -8,7 +8,7 @@ namespace Game.Upgrades
     {
         public static bool DebugAssertProperty(IUpgradeable upgradeable, string property)
         {
-            if(!upgradeable.Contains(property))
+            if(!upgradeable.ContainsProperty(property))
             {
                 Debug.LogAssertion($"[Movement Upgrade Error] {property} does not exist in {upgradeable.GetType()}!");
                 
