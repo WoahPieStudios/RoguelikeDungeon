@@ -5,15 +5,20 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Game.Upgrades;
+using Game.Properties;
+
 namespace Game.Characters.Properties
 {
     [Serializable]
-    public class Mana
+    public class Mana : IUpgradeable
     {
         [SerializeField]
-        float _MaxMana = 0;
+        Property _MaxMana = new Property(maxManaProperty);
         [SerializeField]
         float _CurrentMana = 0;
+
+        List<IProperty> _PropertyList = new List<IProperty>();
 
         public event Action<Mana, float> onUseManaEvent;
         public event Action<Mana, float> onAddManaEvent;
@@ -21,13 +26,22 @@ namespace Game.Characters.Properties
         public event Action<Mana> onResetManaEvent;
         public event Action<Mana> onNewMaxManaEvent;
 
-        public float maxMana => _MaxMana;
+        public Property maxMana => _MaxMana;
 
         public float currentMana => _CurrentMana;
 
+        public IProperty[] properties => _PropertyList.ToArray();
+
+        public const string maxManaProperty = "maxMana";
+
+        public Mana()
+        {
+            _PropertyList.Add(maxMana);
+        }
+
         public void SetMaxManaWithoutEvent(float newMaxMana)
         {
-            _MaxMana = newMaxMana > 0 ? newMaxMana : 0;
+            _MaxMana.startValue = newMaxMana > 0 ? newMaxMana : 0;
         }
 
         public void SetMaxMana(float newMaxMana)
@@ -76,6 +90,16 @@ namespace Game.Characters.Properties
             _CurrentMana = 0;
 
             onDrainManaEvent?.Invoke(this);
+        }
+
+        public bool ContainsProperty(string property)
+        {
+            return _PropertyList.Any(p => p.name == property);
+        }
+
+        public IProperty GetProperty(string property)
+        {
+            return _PropertyList.FirstOrDefault(p => p.name == property);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace Game.Characters.Actions
     public abstract class Ultimate<T> : CoolDownAction<T>, IUltimateAction where T : Hero
     {
         [SerializeField]
-        Property _ManaCost;
+        Property _ManaCost = new Property(ManaCostProperty);
         
         bool _IsRestricted = false;
 

@@ -9,7 +9,7 @@ namespace Game.Items
 {
     public interface IItem
     {
-        int quantity { get; }
+        int quantity { get; set; }
         void Use(Party party);
     }
 }

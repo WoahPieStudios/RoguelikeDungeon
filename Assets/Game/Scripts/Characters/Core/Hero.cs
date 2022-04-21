@@ -31,7 +31,9 @@ namespace Game.Characters
         ISkillAction _Skill;
         IUltimateAction _Ultimate;
 
-        Dictionary<IUpgradeable, Dictionary<IProperty, float>> _Upgradeables = new Dictionary<IUpgradeable, Dictionary<IProperty, float>>();
+        Dictionary<IProperty, float> _UpgradedProperties = new Dictionary<IProperty, float>();
+
+        List<IUpgradeable> _Upgradeables = new List<IUpgradeable>();
 
         public Mana mana => _Mana;
 
@@ -67,7 +69,10 @@ namespace Game.Characters
             AddTrackable(GetComponents<ITrackableAction>());
 
             foreach(IUpgradeable u in GetComponents<IUpgradeable>())
-                _Upgradeables.Add(u, new Dictionary<IProperty, float>());
+                _Upgradeables.Add(u);
+
+            _Upgradeables.Add(health);
+            _Upgradeables.Add(mana);
         }
 
         void AddTrackable(params ITrackableAction[] trackables)
@@ -125,7 +130,7 @@ namespace Game.Characters
 
         public void Upgrade(IUpgradeable upgradeable, string property, float value)
         {
-            if(!_Upgradeables.ContainsKey(upgradeable))
+            if(!_Upgradeables.Contains(upgradeable))
             {
                 Debug.LogAssertion($"[Upgrade Error] {upgradeable.GetType()} does not exist in {name}!");
                 
@@ -141,19 +146,19 @@ namespace Game.Characters
 
             IProperty p = upgradeable.GetProperty(property);
 
-            if(!_Upgradeables[upgradeable].ContainsKey(p))
-                _Upgradeables[upgradeable].Add(p, 0);
+            if(!_UpgradedProperties.ContainsKey(p))
+                _UpgradedProperties.Add(p, 0);
 
-            float difference = value - _Upgradeables[upgradeable][p];
+            float difference = value - _UpgradedProperties[p];
                 
-            _Upgradeables[upgradeable][p] += difference;
+            _UpgradedProperties[p] += difference;
 
             p.valueAdded += difference;
         }
 
         public void Revert(IUpgradeable upgradeable, string property)
         {
-            if(!_Upgradeables.ContainsKey(upgradeable))
+            if(!_Upgradeables.Contains(upgradeable))
             {
                 Debug.LogAssertion($"[Upgrade Error] {upgradeable.GetType()} does not exist in {name}!");
                 
@@ -169,9 +174,9 @@ namespace Game.Characters
 
             IProperty p = upgradeable.GetProperty(property);
 
-            p.valueAdded -= _Upgradeables[upgradeable][p];
+            p.valueAdded -= _UpgradedProperties[p];
 
-            _Upgradeables[upgradeable][p] = 0;
+            _UpgradedProperties[p] = 0;
         }
     }
 }

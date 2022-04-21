@@ -1,18 +1,24 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
 
+using Game.Upgrades;
+using Game.Properties;
+
 namespace Game.Characters.Properties
 {
     [Serializable]
-    public class Health
+    public class Health : IUpgradeable
     {
         [SerializeField]
-        float _MaxHealth = 0;
+        Property _MaxHealth = new Property(maxHealthProperty);
         [SerializeField]
         float _CurrentHealth = 0;
+
+        List<IProperty> _PropertyList = new List<IProperty>();
 
         public event Action<Health, float> onAddHealthEvent;
         public event Action<Health, float> onDamageEvent;
@@ -20,10 +26,19 @@ namespace Game.Characters.Properties
         public event Action<Health> onResetHealthEvent;
         public event Action<Health> onNewMaxHealthEvent;
 
-        public float maxHealth => _MaxHealth;
+        public Property maxHealth => _MaxHealth;
         public float currentHealth => _CurrentHealth;
 
         public bool isAlive => _CurrentHealth > 0;
+
+        public IProperty[] properties => _PropertyList.ToArray();
+
+        public const string maxHealthProperty = "maxHealth";
+
+        public Health()
+        {
+            _PropertyList.Add(maxHealth);
+        }
 
         public void SetCurrentHealthWithoutEvent(float newHealth)
         {
@@ -39,7 +54,7 @@ namespace Game.Characters.Properties
 
         public void SetMaxHealthWithoutEvent(float newMaxHealth)
         {
-            _MaxHealth = newMaxHealth > 0 ? newMaxHealth : 0;
+            _MaxHealth.startValue = newMaxHealth > 0 ? newMaxHealth : 0;
         }
 
         public void SetMaxHealth(float newMaxHealth)
@@ -83,6 +98,16 @@ namespace Game.Characters.Properties
             _CurrentHealth = _MaxHealth;
 
             onResetHealthEvent?.Invoke(this);
+        }
+
+        public bool ContainsProperty(string property)
+        {
+            return _PropertyList.Any(p => p.name == property);
+        }
+
+        public IProperty GetProperty(string property)
+        {
+            return _PropertyList.FirstOrDefault(p => p.name == property);
         }
     }
 }

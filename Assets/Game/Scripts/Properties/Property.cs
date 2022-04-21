@@ -16,7 +16,7 @@ namespace Game.Properties
 
         public string name => _Name;
 
-        public float startValue => _StartValue;
+        public float startValue { get => _StartValue; set => _StartValue = value; }
         public float valueAdded { get; set; } = 0;
 
         public Property(string name)

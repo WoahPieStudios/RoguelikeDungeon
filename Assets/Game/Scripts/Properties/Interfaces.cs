@@ -15,7 +15,7 @@ namespace Game.Properties
     public interface IProperty
     {
         string name { get; }
-        float startValue { get; }
+        float startValue { get; set; }
         float valueAdded { get; set; }
     }
 }
