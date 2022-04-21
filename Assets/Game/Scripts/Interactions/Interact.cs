@@ -11,7 +11,7 @@ using Game.Parties;
 
 namespace Game.Interactions
 {
-    public class Interact : Action, IInteractAction
+    public class Interact : Action
     {
         [SerializeField]
         float _Range;
