@@ -51,8 +51,6 @@ namespace Game.Characters
 
         protected virtual void Awake()
         {
-            _CharacterList.Add(this);
-
             _Health.SetCurrentHealthWithoutEvent(_Health.maxHealth);
 
             _AnimationHandler = GetComponent<AnimationHandler>();
@@ -67,7 +65,12 @@ namespace Game.Characters
             _EffectsHandler.onRemoveEffectsEvent += OnRemoveEffects;
         }
 
-        protected virtual void OnDestroy() 
+        protected virtual void OnEnable()
+        {
+            _CharacterList.Add(this);
+        }
+
+        protected virtual void OnDisable() 
         {
             _CharacterList.Remove(this);
         }

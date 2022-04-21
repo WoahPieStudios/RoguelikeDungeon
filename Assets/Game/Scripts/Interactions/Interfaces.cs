@@ -16,9 +16,4 @@ namespace Game.Interactions
         
         void OnInteract(Party party);
     }
-
-    public interface IInteractAction : IAction
-    {
-        Party party { set; }
-    }
 }

@@ -8,7 +8,7 @@ using Game.Actions;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Orientation<T> : Action, IOrientationAction where T : Character
+    public abstract class Orientation<T> : CharacterAction<T>, IOrientationAction where T : Character
     {
         public abstract Vector2Int currentOrientation { get; }
 

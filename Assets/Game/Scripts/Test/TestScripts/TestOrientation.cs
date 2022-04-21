@@ -14,8 +14,10 @@ namespace Game.Characters.Actions
 
         public override Vector2Int currentOrientation => _CurrentOrientation;
 
-        protected void Awake()
+        protected override void Awake()
         {
+            base.Awake();
+            
             Use();
             
             _SpriteRenderer = GetComponent<SpriteRenderer>();

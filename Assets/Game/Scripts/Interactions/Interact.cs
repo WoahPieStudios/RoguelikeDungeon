@@ -20,7 +20,10 @@ namespace Game.Interactions
 
         IInteractable _ClosestInteractable;
 
-        public Party party { set => _Party = value; }
+        private void Awake() 
+        {
+            _Party = GetComponent<Party>();    
+        }
 
         void Update() 
         {
@@ -31,7 +34,7 @@ namespace Game.Interactions
                 return;
             }
 
-            _ClosestInteractable = Interactable.interactables.Where(i => i.canInteract).OrderBy(i => _Party.currentHero.transform.position - i.position).FirstOrDefault();
+            _ClosestInteractable = Interactable.interactables.Where(i => i.canInteract).OrderBy(i => (_Party.currentHero.transform.position - i.position).magnitude).FirstOrDefault();
         }
 
         protected override void OnUse()
@@ -40,6 +43,8 @@ namespace Game.Interactions
 
             if(_ClosestInteractable != null)
                 _ClosestInteractable.OnInteract(_Party);
+
+            End();
         }
     }
 }

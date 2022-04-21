@@ -12,7 +12,7 @@ namespace Game.Parties
     {
         Hero _CurrentHero;
 
-        List<Hero> _Heroes;
+        List<Hero> _Heroes = new List<Hero>();
 
         public Hero currentHero => _CurrentHero;
         public Hero[] heroes => _Heroes.ToArray();
