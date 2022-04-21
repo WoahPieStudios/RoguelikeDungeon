@@ -9,7 +9,12 @@ namespace Game.Upgrades
 {
     public interface IUpgradeable : IPropertyHandler
     {
-        void Revert(string property);
-        void Upgrade(string property, float value);
+        
+    }
+
+    public interface IUpgradeHandler
+    {
+        void Upgrade(IUpgradeable upgradeable, string property, float value);
+        void Revert(IUpgradeable upgradeable, string property);
     }
 }

@@ -7,16 +7,14 @@ using Game.Actions;
 
 namespace Game.Characters.Actions
 {
-    public class EnemyAction<T> : Action, ICharacterAction<T> where T : Enemy
+    public class CharacterAction<T> : Action where T : Character
     {
         T _Owner;
 
         public T owner => _Owner;
 
-        protected override void Awake()
+        protected virtual void Awake()
         {
-            base.Awake();
-
             _Owner = GetComponent<T>();
         }
     }

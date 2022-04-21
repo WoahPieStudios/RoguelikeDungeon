@@ -10,24 +10,15 @@ using Game.Properties;
 
 namespace Game.Actions
 {
-    [RequireComponent(typeof(AnimationHandler))]
     public abstract class Action : MonoBehaviour, IAction
     {
         bool _IsActive = false;
 
-        AnimationHandler _AnimationHandler;
-
         protected List<IProperty> propertyList => new List<IProperty>();
 
         public bool isActive => _IsActive;
-        public AnimationHandler animationHandler => _AnimationHandler;
 
         public IProperty[] properties => propertyList.ToArray();
-
-        protected virtual void Awake()
-        {
-            _AnimationHandler = GetComponent<AnimationHandler>();
-        }
 
         protected virtual void OnUse()
         {

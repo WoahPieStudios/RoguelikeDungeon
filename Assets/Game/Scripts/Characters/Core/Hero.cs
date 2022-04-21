@@ -5,13 +5,15 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
+using Game.Upgrades;
 using Game.Characters.Actions;
 using Game.Characters.Effects;
 using Game.Characters.Properties;
+using Game.Properties;
 
 namespace Game.Characters
 {
-    public class Hero : Character, ITrackableActionsHandler
+    public class Hero : Character, ITrackableActionsHandler, IUpgradeHandler
     {
         [SerializeField]
         Mana _Mana;
@@ -19,17 +21,23 @@ namespace Game.Characters
         PassiveEffect[] _PassiveEffects;
 
         TrackActionType _TrackAction;
+
         List<ITrackableAction> _TrackableActionList = new List<ITrackableAction>();
 
         Dictionary<TrackActionType, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackActionType, PassiveEffect[]>();
 
         IHeroAttackAction _Attack;
+        IHeroMovementAction _Movement; 
         ISkillAction _Skill;
         IUltimateAction _Ultimate;
+
+        Dictionary<IUpgradeable, Dictionary<IProperty, float>> _Upgradeables = new Dictionary<IUpgradeable, Dictionary<IProperty, float>>();
 
         public Mana mana => _Mana;
 
         public IHeroAttackAction attack => _Attack;
+
+        public IHeroMovementAction movement => _Movement;
         
         /// <summary>
         /// Skill of the Hero
@@ -50,12 +58,16 @@ namespace Game.Characters
             _Mana.ResetMana();
 
             _Attack = GetComponent<IHeroAttackAction>();
+            _Movement = GetComponent<IHeroMovementAction>();
             _Skill = GetComponent<ISkillAction>();
             _Ultimate = GetComponent<IUltimateAction>();
 
             SegregatePassiveEffects(_PassiveEffects);
 
             AddTrackable(GetComponents<ITrackableAction>());
+
+            foreach(IUpgradeable u in GetComponents<IUpgradeable>())
+                _Upgradeables.Add(u, new Dictionary<IProperty, float>());
         }
 
         void AddTrackable(params ITrackableAction[] trackables)
@@ -109,6 +121,57 @@ namespace Game.Characters
                     return;
                 }
             }
+        }
+
+        public void Upgrade(IUpgradeable upgradeable, string property, float value)
+        {
+            if(!_Upgradeables.ContainsKey(upgradeable))
+            {
+                Debug.LogAssertion($"[Upgrade Error] {upgradeable.GetType()} does not exist in {name}!");
+                
+                return;
+            }
+                
+            if(!upgradeable.ContainsProperty(property))
+            {
+                Debug.LogAssertion($"[Upgrade Error] {property} does not exist in {upgradeable.GetType()}!");
+                
+                return;
+            }
+
+            IProperty p = upgradeable.GetProperty(property);
+
+            if(!_Upgradeables[upgradeable].ContainsKey(p))
+                _Upgradeables[upgradeable].Add(p, 0);
+
+            float difference = value - _Upgradeables[upgradeable][p];
+                
+            _Upgradeables[upgradeable][p] += difference;
+
+            p.valueAdded += difference;
+        }
+
+        public void Revert(IUpgradeable upgradeable, string property)
+        {
+            if(!_Upgradeables.ContainsKey(upgradeable))
+            {
+                Debug.LogAssertion($"[Upgrade Error] {upgradeable.GetType()} does not exist in {name}!");
+                
+                return;
+            }
+                
+            if(!upgradeable.ContainsProperty(property))
+            {
+                Debug.LogAssertion($"[Upgrade Error] {property} does not exist in {upgradeable.GetType()}!");
+                
+                return;
+            }
+
+            IProperty p = upgradeable.GetProperty(property);
+
+            p.valueAdded -= _Upgradeables[upgradeable][p];
+
+            _Upgradeables[upgradeable][p] = 0;
         }
     }
 }

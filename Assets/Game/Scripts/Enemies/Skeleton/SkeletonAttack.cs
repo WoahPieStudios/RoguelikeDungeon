@@ -13,30 +13,14 @@ namespace Game.Enemies.Skeleton
     public class SkeletonAttack : EnemyAttack<Skeleton>
     {
         [SerializeField]
-        Property _Damage;
-        [SerializeField]
-        Property _Range;
-        [SerializeField]
-        Property _Speed;
-        [SerializeField]
-        Property _CoolDownTime;
-        [SerializeField]
         private AnimationData _AttackTopData;
         [SerializeField]
         private AnimationData _AttackBottomData;
 
-        public override Property damage => _Damage;
-
-        public override Property range => _Range;
-
-        public override Property speed => _Speed;
-
-        public override Property coolDownTime => _CoolDownTime;
-
         private void Start() 
         {
-            animationHandler.AddAnimationData(_AttackTopData, End);
-            animationHandler.AddAnimationData(_AttackBottomData, End);
+            owner.animationHandler.AddAnimationData(_AttackTopData, End);
+            owner.animationHandler.AddAnimationData(_AttackBottomData, End);
         }
 
         private void Update() 
@@ -46,13 +30,13 @@ namespace Game.Enemies.Skeleton
                 
             if(owner.movement.velocity.magnitude > 0.001f)
             {
-                animationHandler.Stop(_AttackBottomData);
+                owner.animationHandler.Stop(_AttackBottomData);
             }
 
-            else if(!animationHandler.IsAnimationPlaying(_AttackBottomData))
+            else if(!owner.animationHandler.IsAnimationPlaying(_AttackBottomData))
             {
-                animationHandler.Play(_AttackBottomData);
-                animationHandler.SyncAnimations(_AttackTopData, _AttackBottomData);
+                owner.animationHandler.Play(_AttackBottomData);
+                owner.animationHandler.SyncAnimations(_AttackTopData, _AttackBottomData);
             }
         }
 
@@ -60,18 +44,18 @@ namespace Game.Enemies.Skeleton
         {
             base.OnUse();
 
-            animationHandler.CrossFadePlay(_AttackTopData, 0.1f);
+            owner.animationHandler.CrossFadePlay(_AttackTopData, 0.1f);
             
             if(owner.movement.velocity.magnitude <= 0.001f)
-                animationHandler.CrossFadePlay(_AttackBottomData, 0.1f);
+                owner.animationHandler.CrossFadePlay(_AttackBottomData, 0.1f);
         }
 
         public override void End()
         {
             base.End();
             
-            animationHandler.Stop(_AttackTopData);
-            animationHandler.Stop(_AttackBottomData);
+            owner.animationHandler.Stop(_AttackTopData);
+            owner.animationHandler.Stop(_AttackBottomData);
         }
     }
 }

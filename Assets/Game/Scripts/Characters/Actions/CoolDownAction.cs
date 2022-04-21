@@ -9,8 +9,11 @@ using Game.Actions;
 
 namespace Game.Characters.Actions
 {
-    public abstract class EnemyCoolDownAction<T> : EnemyAction<T>, ICoolDownAction where T : Enemy
+    public abstract class CoolDownAction<T> : CharacterAction<T>, ICoolDownAction where T : Character
     {
+        [SerializeField]
+        Property _CoolDownTime = new Property(CoolDownTimeProperty);
+
         float _CurrentCoolDownTime;
 
         bool _IsCoolingDown = false;
@@ -20,7 +23,7 @@ namespace Game.Characters.Actions
         /// <summary>
         /// Cool Down Time after ending the Action.
         /// </summary>
-        public abstract Property coolDownTime { get; }
+        public Property coolDownTime => _CoolDownTime;
         /// <summary>
         /// Current Time of the cooldown;
         /// </summary>
@@ -30,11 +33,13 @@ namespace Game.Characters.Actions
         /// Determines if the Actino is Coolin Down.
         /// </summary>
         public bool isCoolingDown => _IsCoolingDown;
+        
+        public const string CoolDownTimeProperty = "coolDownTime";
 
         protected override void Awake()
         {
             base.Awake();
-
+            
             propertyList.Add(coolDownTime);
         }
 

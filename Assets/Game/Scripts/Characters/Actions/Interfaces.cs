@@ -9,11 +9,6 @@ using Game.Actions;
 
 namespace Game.Characters.Actions
 {
-    public interface ICharacterAction<T> where T : Character
-    {
-        T owner { get; }
-    }
-
     public interface IMovementAction : IAction, IRestrictableAction
     {
         Property speed { get; }
@@ -32,21 +27,6 @@ namespace Game.Characters.Actions
         Property speed { get; }
         Property damage { get; }
         Property range { get; }
-    }
-
-    public interface IHeroAttackAction : IAttackAction, ITrackableAction, IUpgradeable
-    {
-        Property manaGainOnHit { get; }
-    }
-
-    public interface ISkillAction : ICoolDownAction, ITrackableAction, IRestrictableAction, IUpgradeable
-    {
-
-    }
-
-    public interface IUltimateAction : ICoolDownAction, ITrackableAction, IRestrictableAction, IUpgradeable
-    {
-        Property manaCost { get; }
     }
 
     public interface ICoolDownAction : IAction

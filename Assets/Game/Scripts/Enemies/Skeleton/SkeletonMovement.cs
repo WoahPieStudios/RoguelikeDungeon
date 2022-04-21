@@ -35,10 +35,10 @@ namespace Game.Enemies.Skeleton
 
         private void Start() 
         {
-            animationHandler.AddAnimationData(_IdleData);
-            animationHandler.AddAnimationData(_WalkData);    
+            owner.animationHandler.AddAnimationData(_IdleData);
+            owner.animationHandler.AddAnimationData(_WalkData);    
 
-            animationHandler.Play(_IdleData);
+            owner.animationHandler.Play(_IdleData);
         }
 
         private void FixedUpdate() 
@@ -54,14 +54,14 @@ namespace Game.Enemies.Skeleton
             {
                 _IsMoving = true;
 
-                animationHandler.CrossFadePlay(_WalkData, 0.05f);
+                owner.animationHandler.CrossFadePlay(_WalkData, 0.05f);
             }
 
             else if(_Velocity.magnitude <= 0.05f && _IsMoving)
             {
                 _IsMoving = false;
 
-                animationHandler.CrossFadePlay(_IdleData, 0.05f);
+                owner.animationHandler.CrossFadePlay(_IdleData, 0.05f);
             }
         }
 

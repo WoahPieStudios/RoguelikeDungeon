@@ -5,38 +5,45 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Characters.Actions;
 using Game.Effects;
+using Game.Animations;
+using Game.Characters.Actions;
 using Game.Characters.Properties;
 
 
 namespace Game.Characters
 {
+    [RequireComponent(typeof(AnimationHandler), typeof(AudioSource))]
     public abstract class Character : MonoBehaviour, IEffectable, IRestrictableActionsHandler
     {
         [SerializeField]
         Health _Health;
 
-        IMovementAction _Movement;
-
         EffectsHandler _EffectsHandler = new EffectsHandler();
         IOrientationAction _Orientation;
+
+        AnimationHandler _AnimationHandler;
+
+        AudioSource _AudioSource;
 
         RestrictableActionsHandler _RestrictableActionsHandler = new RestrictableActionsHandler();
         
         protected RestrictableActionsHandler restrictableActionsHandler => _RestrictableActionsHandler;
+        
+        public AnimationHandler animationHandler => _AnimationHandler;
+
+        public AudioSource audioSource => _AudioSource;
 
         public Health health => _Health;
 
-        public IMovementAction movement => _Movement;
         public IOrientationAction orientation => _Orientation;
 
         public Effect[] effects => _EffectsHandler.effects;
 
         public RestrictActionType restrictedActions => _RestrictableActionsHandler.restrictedActions;
 
-        public event System.Action<Effect[]> onAddEffectsEvent;
-        public event System.Action<Effect[]> onRemoveEffectsEvent;
+        public event Action<Effect[]> onAddEffectsEvent;
+        public event Action<Effect[]> onRemoveEffectsEvent;
 
         static List<Character> _CharacterList = new List<Character>();
 
@@ -48,7 +55,10 @@ namespace Game.Characters
 
             _Health.SetCurrentHealthWithoutEvent(_Health.maxHealth);
 
-            _Movement = GetComponent<IMovementAction>();
+            _AnimationHandler = GetComponent<AnimationHandler>();
+
+            _AudioSource = GetComponent<AudioSource>();
+
             _Orientation = GetComponent<IOrientationAction>();
 
             restrictableActionsHandler.AddRestrictableAction(GetComponents<IRestrictableAction>());

@@ -9,7 +9,7 @@ using Game.Properties;
 
 namespace Game.Characters.Actions
 {
-    public abstract class Ultimate<T> : HeroCoolDownAction<T>, IUltimateAction where T : Hero
+    public abstract class Ultimate<T> : CoolDownAction<T>, IUltimateAction where T : Hero
     {
         [SerializeField]
         Property _ManaCost;
@@ -23,7 +23,7 @@ namespace Game.Characters.Actions
 
         public bool isRestricted => _IsRestricted;
 
-        public event System.Action<TrackActionType> onUseTrackableAction;
+        public event Action<TrackActionType> onUseTrackableAction;
 
         public const string ManaCostProperty = "manaCost";
 

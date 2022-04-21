@@ -11,13 +11,18 @@ namespace Game.Characters
     {
         IAttackAction _Attack;
 
+        IMovementAction _Movement; 
+
         public IAttackAction attack => _Attack;
+
+        public IMovementAction movement => _Movement;
 
         protected override void Awake()
         {
             base.Awake();
 
             _Attack = GetComponent<IAttackAction>();
+            _Movement = GetComponent<IMovementAction>();
         }
     }
 }
