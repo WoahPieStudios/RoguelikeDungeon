@@ -27,14 +27,15 @@ namespace Game.Interactions
 
         void Update() 
         {
-            if(_Party == null || _Party.currentHero == null && _ClosestInteractable != null)
+            if(_Party == null || _Party.currentHero == null)
             {
-                _ClosestInteractable = null;
+                if(_ClosestInteractable != null)
+                    _ClosestInteractable = null;
 
                 return;
             }
 
-            _ClosestInteractable = Interactable.interactables.Where(i => i.canInteract).OrderBy(i => (_Party.currentHero.transform.position - i.position).magnitude).FirstOrDefault();
+            _ClosestInteractable = Interactable.interactables?.Where(i => i.canInteract)?.OrderBy(i => (_Party.currentHero.transform.position - i.position).magnitude).FirstOrDefault();
         }
 
         protected override void OnUse()

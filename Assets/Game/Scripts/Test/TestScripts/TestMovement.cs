@@ -12,7 +12,7 @@ namespace Game.Characters.Test
     {
         [SerializeField]
         float _LerpTime;
-
+        
         Vector2 _Velocity;
         Vector2 _Direction;
 

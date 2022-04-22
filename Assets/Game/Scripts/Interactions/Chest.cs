@@ -19,8 +19,11 @@ namespace Game.Interactions
         {
             _CanInteract = false;
 
-            foreach(IItem i in items)
-                i.Use(party);
+            if(items == null)
+                return;
+
+            for(int i = 0; i < items.Length; i++)
+                items[i].Use(party);
         }
     }
 }
