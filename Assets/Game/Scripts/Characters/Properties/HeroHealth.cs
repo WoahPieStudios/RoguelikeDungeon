@@ -4,61 +4,18 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-using Game.Characters.Properties;
+using Game.Upgrades;
 using Game.Properties;
 
-namespace Game.Characters.Actions
+namespace Game.Characters.Properties
 {
-    public abstract class Ultimate<T> : CoolDownAction<T>, IUltimateAction where T : Hero
+    public class HeroHealth : Health, IUpgradeable
     {
-        [SerializeField]
-        Property _ManaCost = new Property(ManaCostProperty);
-
-        Dictionary<IProperty, float> _UpgradedProperties = new Dictionary<IProperty, float>();
-        
-        bool _IsRestricted = false;
-
-        /// <summary>
-        /// Mana cost of the Ultimatex
-        /// </summary>
-        public Property manaCost => _ManaCost;
-
-        public bool isRestricted => _IsRestricted;
-
-        public event Action<TrackActionType> onUseTrackableAction;
         public event Action<IProperty, float> onUpgradePropertyEvent;
         public event Action<IProperty> onRevertPropertyEvent;
 
-        public const string ManaCostProperty = "manaCost";
-
-        protected override void Awake()
-        {
-            base.Awake();
-
-            propertyList.Add(manaCost);
-        }
-
-        protected override void OnUse()
-        {
-            base.OnUse();
-
-            Mana mana = owner.mana;
-
-            mana.UseMana(manaCost);
-
-            onUseTrackableAction?.Invoke(TrackActionType.Ultimate);
-        }
-
-        protected override bool CanUse()
-        {
-            return base.CanUse() && !isRestricted && !isCoolingDown && owner.mana.currentMana >= manaCost;
-        }
+        Dictionary<IProperty, float> _UpgradedProperties = new Dictionary<IProperty, float>();
         
-        public void OnRestrict(RestrictActionType restrictActions)
-        {
-            _IsRestricted = restrictActions.HasFlag(RestrictActionType.Ultimate);
-        }
-
         public void Upgrade(string property, float value)
         {    
             if(!ContainsProperty(property))

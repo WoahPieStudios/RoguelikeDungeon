@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,12 +10,9 @@ namespace Game.Upgrades
 {
     public interface IUpgradeable : IPropertyHandler
     {
-        
-    }
-
-    public interface IUpgradeHandler
-    {
-        void Upgrade(IUpgradeable upgradeable, string property, float value);
-        void Revert(IUpgradeable upgradeable, string property);
+        event Action<IProperty, float> onUpgradePropertyEvent;
+        event Action<IProperty> onRevertPropertyEvent;
+        void Upgrade(string property, float value);
+        void Revert(string property);
     }
 }

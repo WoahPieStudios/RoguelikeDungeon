@@ -19,12 +19,12 @@ namespace Game.Characters.Actions
         Property manaGainOnHit { get; }
     }
 
-    public interface ISkillAction : ICoolDownAction, IUpgradeable, ITrackableAction, IRestrictableAction
+    public interface ISkillAction : ICoolDownAction, IUpgradeable, ITrackableAction
     {
 
     }
 
-    public interface IUltimateAction : ICoolDownAction, IUpgradeable, ITrackableAction, IRestrictableAction
+    public interface IUltimateAction : ICoolDownAction, IUpgradeable, ITrackableAction
     {
         Property manaCost { get; }
     }

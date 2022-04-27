@@ -13,8 +13,10 @@ using Game.Properties;
 
 namespace Game.Characters
 {
-    public class Hero : Character, ITrackableActionsHandler, IUpgradeHandler
+    public class Hero : Character, ITrackableActionsHandler
     {
+        [SerializeField]
+        HeroHealth _Health;
         [SerializeField]
         Mana _Mana;
         [SerializeField]
@@ -26,14 +28,12 @@ namespace Game.Characters
 
         Dictionary<TrackActionType, PassiveEffect[]> _TrackActionPassiveEffects = new Dictionary<TrackActionType, PassiveEffect[]>();
 
+        public HeroHealth health => _Health;
+
         IHeroAttackAction _Attack;
         IHeroMovementAction _Movement; 
         ISkillAction _Skill;
         IUltimateAction _Ultimate;
-
-        Dictionary<IProperty, float> _UpgradedProperties = new Dictionary<IProperty, float>();
-
-        List<IUpgradeable> _Upgradeables = new List<IUpgradeable>();
 
         public Mana mana => _Mana;
 
@@ -56,8 +56,10 @@ namespace Game.Characters
         protected override void Awake()
         {
             base.Awake();
+            
+            _Health.SetCurrentHealthWithoutEvent(_Health.maxHealth);
 
-            _Mana.ResetMana();
+            _Mana.SetCurrentManaWithoutNotify(_Mana.maxMana);
 
             _Attack = GetComponent<IHeroAttackAction>();
             _Movement = GetComponent<IHeroMovementAction>();
@@ -67,12 +69,6 @@ namespace Game.Characters
             SegregatePassiveEffects(_PassiveEffects);
 
             AddTrackable(GetComponents<ITrackableAction>());
-
-            foreach(IUpgradeable u in GetComponents<IUpgradeable>())
-                _Upgradeables.Add(u);
-
-            _Upgradeables.Add(health);
-            _Upgradeables.Add(mana);
         }
 
         void AddTrackable(params ITrackableAction[] trackables)
@@ -126,57 +122,6 @@ namespace Game.Characters
                     return;
                 }
             }
-        }
-
-        public void Upgrade(IUpgradeable upgradeable, string property, float value)
-        {
-            if(!_Upgradeables.Contains(upgradeable))
-            {
-                Debug.LogAssertion($"[Upgrade Error] {upgradeable.GetType()} does not exist in {name}!");
-                
-                return;
-            }
-                
-            if(!upgradeable.ContainsProperty(property))
-            {
-                Debug.LogAssertion($"[Upgrade Error] {property} does not exist in {upgradeable.GetType()}!");
-                
-                return;
-            }
-
-            IProperty p = upgradeable.GetProperty(property);
-
-            if(!_UpgradedProperties.ContainsKey(p))
-                _UpgradedProperties.Add(p, 0);
-
-            float difference = value - _UpgradedProperties[p];
-                
-            _UpgradedProperties[p] += difference;
-
-            p.valueAdded += difference;
-        }
-
-        public void Revert(IUpgradeable upgradeable, string property)
-        {
-            if(!_Upgradeables.Contains(upgradeable))
-            {
-                Debug.LogAssertion($"[Upgrade Error] {upgradeable.GetType()} does not exist in {name}!");
-                
-                return;
-            }
-                
-            if(!upgradeable.ContainsProperty(property))
-            {
-                Debug.LogAssertion($"[Upgrade Error] {property} does not exist in {upgradeable.GetType()}!");
-                
-                return;
-            }
-
-            IProperty p = upgradeable.GetProperty(property);
-
-            p.valueAdded -= _UpgradedProperties[p];
-
-            _UpgradedProperties[p] = 0;
         }
     }
 }

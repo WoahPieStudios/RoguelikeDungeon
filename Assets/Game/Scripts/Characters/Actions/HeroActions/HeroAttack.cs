@@ -17,6 +17,8 @@ namespace Game.Characters.Actions
         public const string ManaGainOnHitProperty = "manaGainOnHit";
 
         public event Action<TrackActionType> onUseTrackableAction;
+        public event Action<IProperty, float> onUpgradePropertyEvent;
+        public event Action<IProperty> onRevertPropertyEvent;
 
         public Property manaGainOnHit => _ManaGainOnHit;
 
@@ -25,9 +27,6 @@ namespace Game.Characters.Actions
             base.Awake();
 
             propertyList.Add(manaGainOnHit);
-            propertyList.Add(range);
-            propertyList.Add(speed);
-            propertyList.Add(damage);
         }
 
         protected override void OnUse()
@@ -35,6 +34,50 @@ namespace Game.Characters.Actions
             base.OnUse();
 
             onUseTrackableAction?.Invoke(TrackActionType.Attack);
+        }
+
+        Dictionary<IProperty, float> _UpgradedProperties = new Dictionary<IProperty, float>();
+
+
+        public void Upgrade(string property, float value)
+        {    
+            if(!ContainsProperty(property))
+            {
+                Debug.LogAssertion($"[Upgrade Error] {property} does not exist in {this}!");
+                
+                return;
+            }
+
+            IProperty p = GetProperty(property);
+
+            if(!_UpgradedProperties.ContainsKey(p))
+                _UpgradedProperties.Add(p, 0);
+
+            float difference = value - _UpgradedProperties[p];
+                
+            _UpgradedProperties[p] += difference;
+
+            p.valueAdded += difference;
+
+            onUpgradePropertyEvent?.Invoke(p, difference);
+        }
+
+        public void Revert(string property)
+        {
+            if(!ContainsProperty(property))
+            {
+                Debug.LogAssertion($"[Upgrade Error] {property} does not exist in {this}!");
+                
+                return;
+            }
+
+            IProperty p = GetProperty(property);
+
+            p.valueAdded -= _UpgradedProperties[p];
+
+            _UpgradedProperties[p] = 0;
+
+            onRevertPropertyEvent?.Invoke(p);
         }
     }
 }

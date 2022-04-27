@@ -503,7 +503,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _Health:
     _MaxHealth:
-      _StartValue: 0
+      _StartValue: 10
     _CurrentHealth: 0
   _Mana:
     _MaxMana:

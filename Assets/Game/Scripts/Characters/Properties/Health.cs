@@ -11,10 +11,10 @@ using Game.Properties;
 namespace Game.Characters.Properties
 {
     [Serializable]
-    public class Health : IUpgradeable
+    public class Health : IPropertyHandler
     {
         [SerializeField]
-        Property _MaxHealth = new Property(maxHealthProperty);
+        Property _MaxHealth = new Property(MaxHealthProperty);
         [SerializeField]
         float _CurrentHealth = 0;
 
@@ -26,18 +26,18 @@ namespace Game.Characters.Properties
         public event Action<Health> onResetHealthEvent;
         public event Action<Health> onNewMaxHealthEvent;
 
-        public Property maxHealth => _MaxHealth;
+        public float maxHealth => _MaxHealth;
         public float currentHealth => _CurrentHealth;
 
         public bool isAlive => _CurrentHealth > 0;
 
         public IProperty[] properties => _PropertyList.ToArray();
 
-        public const string maxHealthProperty = "maxHealth";
+        public const string MaxHealthProperty = "maxHealth";
 
         public Health()
         {
-            _PropertyList.Add(maxHealth);
+            _PropertyList.Add(_MaxHealth);
         }
 
         public void SetCurrentHealthWithoutEvent(float newHealth)
@@ -50,18 +50,6 @@ namespace Game.Characters.Properties
             
             else
                 _CurrentHealth = newHealth;
-        }
-
-        public void SetMaxHealthWithoutEvent(float newMaxHealth)
-        {
-            _MaxHealth.startValue = newMaxHealth > 0 ? newMaxHealth : 0;
-        }
-
-        public void SetMaxHealth(float newMaxHealth)
-        {
-            SetMaxHealthWithoutEvent(newMaxHealth);
-
-            onNewMaxHealthEvent?.Invoke(this);
         }
         
         /// <summary>

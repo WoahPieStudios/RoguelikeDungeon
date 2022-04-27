@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +18,8 @@ public class TestChest : Chest
 
     SpriteRenderer _SpriteRenderer;
 
+    Func<int, int> test;
+
     private void Awake() 
     {
         _SpriteRenderer = GetComponent<SpriteRenderer>();
@@ -26,13 +29,13 @@ public class TestChest : Chest
 
     public override void OnInteract(Party party)
     {
-        Debug.Log(party.currentHero.health.maxHealth.startValue + party.currentHero.health.maxHealth.valueAdded);
-
+        Debug.Log(party.currentHero.health.maxHealth);
+        
         base.OnInteract(party);
 
         if(!canInteract)
             _SpriteRenderer.sprite = _OpenChest;
 
-        Debug.Log(party.currentHero.health.maxHealth.startValue + party.currentHero.health.maxHealth.valueAdded);
+        Debug.Log(party.currentHero.health.maxHealth);
     }
 }

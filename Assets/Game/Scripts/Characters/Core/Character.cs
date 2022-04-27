@@ -8,7 +8,6 @@ using UnityEngine;
 using Game.Effects;
 using Game.Animations;
 using Game.Characters.Actions;
-using Game.Characters.Properties;
 
 
 namespace Game.Characters
@@ -16,8 +15,6 @@ namespace Game.Characters
     [RequireComponent(typeof(AnimationHandler), typeof(AudioSource))]
     public abstract class Character : MonoBehaviour, IEffectable, IRestrictableActionsHandler
     {
-        [SerializeField]
-        Health _Health;
 
         EffectsHandler _EffectsHandler = new EffectsHandler();
         IOrientationAction _Orientation;
@@ -34,8 +31,6 @@ namespace Game.Characters
 
         public AudioSource audioSource => _AudioSource;
 
-        public Health health => _Health;
-
         public IOrientationAction orientation => _Orientation;
 
         public Effect[] effects => _EffectsHandler.effects;
@@ -51,8 +46,6 @@ namespace Game.Characters
 
         protected virtual void Awake()
         {
-            _Health.SetCurrentHealthWithoutEvent(_Health.maxHealth);
-
             _AnimationHandler = GetComponent<AnimationHandler>();
 
             _AudioSource = GetComponent<AudioSource>();
