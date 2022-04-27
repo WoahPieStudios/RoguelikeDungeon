@@ -13,7 +13,7 @@ using Game.Properties;
 
 namespace Game.Characters
 {
-    public class Hero : Character, ITrackableActionsHandler
+    public class Hero : ActiveCharacter, ITrackableActionsHandler
     {
         [SerializeField]
         HeroHealth _Health;
@@ -57,9 +57,9 @@ namespace Game.Characters
         {
             base.Awake();
             
-            _Health.SetCurrentHealthWithoutEvent(_Health.maxHealth);
+            _Health.SetCurrentValueWithoutEvent(_Health.maxValue);
 
-            _Mana.SetCurrentManaWithoutNotify(_Mana.maxMana);
+            _Mana.SetCurrentValueWithoutEvent(_Mana.maxValue);
 
             _Attack = GetComponent<IHeroAttackAction>();
             _Movement = GetComponent<IHeroMovementAction>();

@@ -44,14 +44,14 @@ namespace Game.Characters.Actions
 
             Mana mana = owner.mana;
 
-            mana.UseMana(manaCost);
+            mana.ReduceValue(manaCost);
 
             onUseTrackableAction?.Invoke(TrackActionType.Ultimate);
         }
 
         protected override bool CanUse()
         {
-            return base.CanUse() && !isRestricted && !isCoolingDown && owner.mana.currentMana >= manaCost;
+            return base.CanUse() && !isRestricted && !isCoolingDown && owner.mana.currentValue >= manaCost;
         }
         
         public void OnRestrict(RestrictActionType restrictActions)

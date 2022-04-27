@@ -8,7 +8,7 @@ using Game.Characters.Properties;
 
 namespace Game.Characters
 {
-    public class Enemy : Character
+    public class Enemy : ActiveCharacter
     {
         [SerializeField]
         Health _Health;
@@ -27,7 +27,7 @@ namespace Game.Characters
         {
             base.Awake();
 
-            _Health.SetCurrentHealthWithoutEvent(_Health.maxHealth);
+            _Health.SetCurrentValueWithoutEvent(_Health.maxValue);
 
             _Attack = GetComponent<IAttackAction>();
             _Movement = GetComponent<IMovementAction>();

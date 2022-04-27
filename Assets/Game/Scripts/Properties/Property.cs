@@ -10,13 +10,13 @@ namespace Game.Properties
     public class Property : IProperty
     {
         [SerializeField]
-        float _StartValue;
+        float _BaseValue;
 
         string _Name;
 
         public string name => _Name;
 
-        public float startValue { get => _StartValue; set => _StartValue = value; }
+        public float baseValue { get => _BaseValue; set => _BaseValue = value; }
         public float valueAdded { get; set; } = 0;
 
         public Property(string name)
@@ -26,7 +26,7 @@ namespace Game.Properties
 
         public static implicit operator float (Property property)
         {
-            return property.startValue + property.valueAdded;
+            return property.baseValue + property.valueAdded;
         }
     }
 }

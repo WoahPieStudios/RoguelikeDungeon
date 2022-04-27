@@ -29,13 +29,13 @@ public class TestChest : Chest
 
     public override void OnInteract(Party party)
     {
-        Debug.Log(party.currentHero.health.maxHealth);
+        Debug.Log(party.currentHero.health.maxValue);
         
         base.OnInteract(party);
 
         if(!canInteract)
             _SpriteRenderer.sprite = _OpenChest;
 
-        Debug.Log(party.currentHero.health.maxHealth);
+        Debug.Log(party.currentHero.health.maxValue);
     }
 }

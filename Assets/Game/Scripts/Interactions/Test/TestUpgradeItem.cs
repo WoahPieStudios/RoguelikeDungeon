@@ -13,6 +13,6 @@ public class TestUpgradeItem : UpgradeItem
 {
     public override void Use(Party party)
     {
-        party.currentHero.health.Upgrade(Health.MaxHealthProperty, 5);
+        party.currentHero.health.Upgrade(Health.MaxValueProperty, 5);
     }
 }

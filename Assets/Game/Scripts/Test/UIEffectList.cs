@@ -13,7 +13,7 @@ public class UIEffectList : MonoBehaviour
     [SerializeField]
     Text _Text;
     [SerializeField]
-    Character _Character;
+    ActiveCharacter _Character;
 
     // Update is called once per frame
     void Update()
