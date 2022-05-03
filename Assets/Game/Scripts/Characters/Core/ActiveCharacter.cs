@@ -30,6 +30,8 @@ namespace Game.Characters
 
         protected override void Awake()
         {
+            base.Awake();
+            
             restrictableActionsHandler.AddRestrictableAction(GetComponents<IRestrictableAction>());
 
             _EffectsHandler.onAddEffectsEvent += OnAddEffects;

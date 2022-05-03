@@ -9,6 +9,7 @@ using Game.Properties;
 
 namespace Game.Characters.Properties
 {
+    [Serializable]
     public class HeroHealth : Health, IUpgradeable
     {
         public event Action<IProperty, float> onUpgradePropertyEvent;

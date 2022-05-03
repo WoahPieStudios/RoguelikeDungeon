@@ -24,7 +24,6 @@ namespace Game.Characters.Properties
 
         public float currentValue { get => _CurrentValue; set => _CurrentValue = value; }
 
-
         public event Action<float> onCurrentValueChangeEvent;
 
         public const string MaxValueProperty = "maxValue";

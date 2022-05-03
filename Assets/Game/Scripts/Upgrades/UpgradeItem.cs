@@ -12,6 +12,8 @@ namespace Game.Upgrades
     {
         public int quantity { get; set; }
 
+        public abstract Sprite icon { get; }
+
         public abstract void Use(Party party);
     }
 }

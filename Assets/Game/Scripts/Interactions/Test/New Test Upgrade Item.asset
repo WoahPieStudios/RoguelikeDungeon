@@ -12,3 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9412caec17740d42b23bb0ac29b7938, type: 3}
   m_Name: New Test Upgrade Item
   m_EditorClassIdentifier: 
+  _Icon: {fileID: -560627336539432676, guid: a37f677dfb526654081d0a65078f7704, type: 3}

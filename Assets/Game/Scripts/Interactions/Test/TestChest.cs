@@ -20,8 +20,10 @@ public class TestChest : Chest
 
     Func<int, int> test;
 
-    private void Awake() 
+    protected override void Awake() 
     {
+        base.Awake();
+        
         _SpriteRenderer = GetComponent<SpriteRenderer>();
 
         items = new Game.Items.IItem[] { _UpgradeItem };
@@ -29,13 +31,9 @@ public class TestChest : Chest
 
     public override void OnInteract(Party party)
     {
-        Debug.Log(party.currentHero.health.maxValue);
-        
         base.OnInteract(party);
 
         if(!canInteract)
             _SpriteRenderer.sprite = _OpenChest;
-
-        Debug.Log(party.currentHero.health.maxValue);
     }
 }

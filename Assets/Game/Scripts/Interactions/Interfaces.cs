@@ -8,6 +8,18 @@ using Game.Actions;
 
 namespace Game.Interactions
 {
+    public interface IDroppable : IInteractable
+    {        
+        void OnDrop();
+    }
+
+    public interface IOpenClose
+    {
+        bool isOpen { get; }
+        void Open();
+        void Close();
+    }
+
     public interface IInteractable
     {
         Vector3 position { get; }

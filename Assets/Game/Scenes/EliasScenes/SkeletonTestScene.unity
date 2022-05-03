@@ -487,7 +487,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Speed:
-    _StartValue: 5
+    _BaseValue: 5
   _LerpTime: 0.1
 --- !u!114 &1304169138
 MonoBehaviour:
@@ -502,13 +502,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Health:
-    _MaxHealth:
-      _StartValue: 10
-    _CurrentHealth: 0
+    _MaxValue:
+      _BaseValue: 0
+    _CurrentValue: 0
   _Mana:
-    _MaxMana:
-      _StartValue: 0
-    _CurrentMana: 0
+    _MaxValue:
+      _BaseValue: 0
+    _CurrentValue: 0
   _PassiveEffects: []
   _InputLerpTime: 0.2
 --- !u!1 &1406252076
@@ -627,6 +627,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97873a35691cefe49a9cdf0aeecbc72a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _DropItemPrefab: {fileID: 2490526947100513321, guid: 20de9f9f07ebce047a655bf695229efd, type: 3}
+  _OpenAnimData: {fileID: 0}
+  _CloseAnimData: {fileID: 0}
+  _OpenSFX: {fileID: 0}
+  _CloseSFX: {fileID: 0}
   _OpenChest: {fileID: 1015078740379331377, guid: a37f677dfb526654081d0a65078f7704, type: 3}
   _UpgradeItem: {fileID: 11400000, guid: 71adf2877a592da4aaf3d427180d9abd, type: 2}
 --- !u!212 &1919633265
